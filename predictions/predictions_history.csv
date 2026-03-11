@@ -1,0 +1,80 @@
+﻿match_date,competition,home_team,away_team,prediction,confidence,score_prediction,result,correct,generated_at,prediction_id
+,CHI1,Union La Calera,Ñublense,2,75,0-2,2,True,2026-02-19T20:14:04.641405+00:00,CHI1__Union_La_Calera_vs_Ñublense
+,CHI1,Deportes Concepción,Cobresal,2,75,0-2,X,False,2026-02-19T20:14:04.641405+00:00,CHI1__Deportes_Concepción_vs_Cobresal
+,CHI1,Huachipato,Palestino,1,66,2-0,1,True,2026-02-19T20:14:04.641405+00:00,CHI1__Huachipato_vs_Palestino
+,CHI1,O'Higgins,Colo Colo,X,52,1-1,2,False,2026-02-19T20:14:04.641405+00:00,CHI1__O'Higgins_vs_Colo_Colo
+,CHI1,Universidad Católica (CHI),Coquimbo Unido,2,75,0-2,1,False,2026-02-19T20:14:04.641405+00:00,CHI1__Universidad_Católica_(CHI)_vs_Coquimbo_Unido
+,CHI1,La Serena,Universidad de Concepción,2,61,0-2,X,False,2026-02-19T20:14:04.641405+00:00,CHI1__La_Serena_vs_Universidad_de_Concepción
+,CHI1,Audax Italiano,Everton de Viña del Mar,1,75,2-0,1,True,2026-02-19T20:14:04.641405+00:00,CHI1__Audax_Italiano_vs_Everton_de_Viña_del_Mar
+,CHI1,Universidad de Chile,Deportes Limache,2,66,0-2,X,False,2026-02-19T20:14:04.641405+00:00,CHI1__Universidad_de_Chile_vs_Deportes_Limache
+,UCL,Club Atlético de Madrid,Club Brugge KV,1,60,2-0,X,False,2026-02-19T20:14:04.641405+00:00,UCL__Club_Atlético_de_Madrid_vs_Club_Brugge_KV
+,UCL,Bayer 04 Leverkusen,PAE Olympiakos SFP,X,52,1-1,1,False,2026-02-19T20:14:04.641405+00:00,UCL__Bayer_04_Leverkusen_vs_PAE_Olympiakos_SFP
+,UCL,FC Internazionale Milano,FK Bodø/Glimt,1,68,2-0,2,False,2026-02-19T20:14:04.641405+00:00,UCL__FC_Internazionale_Milano_vs_FK_Bodø/Glimt
+,UCL,Atalanta BC,Borussia Dortmund,X,52,1-1,1,False,2026-02-19T20:14:04.641405+00:00,UCL__Atalanta_BC_vs_Borussia_Dortmund
+,UCL,Real Madrid CF,Sport Lisboa e Benfica,1,70,2-0,2,False,2026-02-19T20:14:04.641405+00:00,UCL__Real_Madrid_CF_vs_Sport_Lisboa_e_Benfica
+,UCL,Paris Saint-Germain FC,AS Monaco FC,1,65,2-0,2,False,2026-02-19T20:14:04.641405+00:00,UCL__Paris_Saint-Germain_FC_vs_AS_Monaco_FC
+,UCL,Juventus FC,Galatasaray SK,1,62,2-0,1,True,2026-02-19T20:14:04.641405+00:00,UCL__Juventus_FC_vs_Galatasaray_SK
+2025-01-01,TEST,Team A,Team B,1,70,2-0,,,2026-02-19T20:25:37.850871+00:00,TEST_2025-01-01_Team_A_vs_Team_B
+,UCL,Club Atlético de Madrid,Club Brugge KV,1,61,2-1,X,False,2026-02-19T20:42:41.524302+00:00,UCL_?_Club_Atlético_de_Madrid_vs_Club_Brugge_KV
+,UCL,Bayer 04 Leverkusen,PAE Olympiakos SFP,1,58,1-0,1,True,2026-02-19T20:42:41.524302+00:00,UCL_?_Bayer_04_Leverkusen_vs_PAE_Olympiakos_SFP
+,UCL,FC Internazionale Milano,FK Bodø/Glimt,1,73,2-0,2,False,2026-02-19T20:42:41.524302+00:00,UCL_?_FC_Internazionale_Milano_vs_FK_Bodø/Glimt
+,UCL,Atalanta BC,Borussia Dortmund,X,59,1-1,1,False,2026-02-19T20:42:41.524302+00:00,UCL_?_Atalanta_BC_vs_Borussia_Dortmund
+,UCL,Real Madrid CF,Sport Lisboa e Benfica,1,64,2-1,2,False,2026-02-19T20:42:41.524302+00:00,UCL_?_Real_Madrid_CF_vs_Sport_Lisboa_e_Benfica
+,UCL,Paris Saint-Germain FC,AS Monaco FC,1,77,3-1,2,False,2026-02-19T20:42:41.524302+00:00,UCL_?_Paris_Saint-Germain_FC_vs_AS_Monaco_FC
+,UCL,Juventus FC,Galatasaray SK,X,57,1-1,1,False,2026-02-19T20:42:41.524302+00:00,UCL_?_Juventus_FC_vs_Galatasaray_SK
+,CHI1,Union La Calera,Ñublense,X,62,0-0,2,False,2026-02-19T20:43:59.333174+00:00,CHI1_?_Union_La_Calera_vs_Ñublense
+,CHI1,Deportes Concepción,Cobresal,2,59,0-1,X,False,2026-02-19T20:43:59.333174+00:00,CHI1_?_Deportes_Concepción_vs_Cobresal
+,CHI1,Huachipato,Palestino,1,66,2-1,1,True,2026-02-19T20:43:59.333174+00:00,CHI1_?_Huachipato_vs_Palestino
+,CHI1,O'Higgins,Colo Colo,X,58,1-1,2,False,2026-02-19T20:43:59.333174+00:00,CHI1_?_O'Higgins_vs_Colo_Colo
+,CHI1,Universidad Católica (CHI),Coquimbo Unido,1,62,2-1,1,True,2026-02-19T20:43:59.333174+00:00,CHI1_?_Universidad_Católica_(CHI)_vs_Coquimbo_Unido
+,CHI1,La Serena,Universidad de Concepción,2,61,0-1,X,False,2026-02-19T20:43:59.333174+00:00,CHI1_?_La_Serena_vs_Universidad_de_Concepción
+,CHI1,Audax Italiano,Everton de Viña del Mar,1,60,1-0,1,True,2026-02-19T20:43:59.333174+00:00,CHI1_?_Audax_Italiano_vs_Everton_de_Viña_del_Mar
+,CHI1,Universidad de Chile,Deportes Limache,X,59,1-1,X,True,2026-02-19T20:43:59.333174+00:00,CHI1_?_Universidad_de_Chile_vs_Deportes_Limache
+,UCL,Atlético Madrid,Club Brugge,1,74,2-0,X,False,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-24_Atlético_Madrid_vs_Club_Brugge
+,UCL,Bayer Leverkusen,Olympiakos Piraeus,1,63,2-1,X,False,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-24_Bayer_Leverkusen_vs_Olympiakos_Piraeus
+,UCL,Inter Milan,Bodø/Glimt,1,86,3-0,2,False,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-24_Inter_Milan_vs_Bodø/Glimt
+,UCL,Newcastle United,Qarabağ FK,1,89,3-0,1,True,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-24_Newcastle_United_vs_Qarabağ_FK
+,UCL,Atalanta BC,Borussia Dortmund,X,60,1-1,1,False,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-25_Atalanta_BC_vs_Borussia_Dortmund
+,UCL,Paris Saint Germain,AS Monaco,1,82,3-1,X,False,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-25_Paris_Saint_Germain_vs_AS_Monaco
+,UCL,Real Madrid,Benfica,1,68,2-1,1,True,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-25_Real_Madrid_vs_Benfica
+,UCL,Juventus,Galatasaray,X,62,1-1,1,False,2026-02-20T19:52:18.950131+00:00,UCL_2026-02-25_Juventus_vs_Galatasaray
+,CHI1,Union La Calera,Ñublense,X,61,1-1,2,False,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-20_Union_La_Calera_vs_Ñublense
+,CHI1,Deportes Concepción,Cobresal,2,58,1-2,X,False,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-20_Deportes_Concepción_vs_Cobresal
+,CHI1,Huachipato,Palestino,1,63,2-1,1,True,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-21_Huachipato_vs_Palestino
+,CHI1,O'Higgins,Colo Colo,X,60,1-1,2,False,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-21_O'Higgins_vs_Colo_Colo
+,CHI1,Universidad Católica (CHI),Coquimbo Unido,1,64,2-1,1,True,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-21_Universidad_Católica_(CHI)_vs_Coquimbo_Unido
+,CHI1,La Serena,Universidad de Concepción,2,59,1-2,X,False,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-22_La_Serena_vs_Universidad_de_Concepción
+,CHI1,Audax Italiano,Everton de Viña del Mar,1,62,2-0,1,True,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-22_Audax_Italiano_vs_Everton_de_Viña_del_Mar
+,CHI1,Universidad de Chile,Deportes Limache,1,68,2-1,X,False,2026-02-20T19:53:50.638182+00:00,CHI1_2026-02-22_Universidad_de_Chile_vs_Deportes_Limache
+,CHI1,Cobresal,La Serena,1,64,2-1,2,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-02-27_Cobresal_vs_La_Serena
+,CHI1,Union La Calera,Audax Italiano,X,61,1-1,1,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-02-27_Union_La_Calera_vs_Audax_Italiano
+,CHI1,Coquimbo Unido,Deportes Concepción,1,68,2-1,2,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-02-28_Coquimbo_Unido_vs_Deportes_Concepción
+,CHI1,Deportes Limache,Huachipato,X,60,1-1,1,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-02-28_Deportes_Limache_vs_Huachipato
+,CHI1,Palestino,O'Higgins,X,59,1-1,1,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-02-28_Palestino_vs_O'Higgins
+,CHI1,Universidad de Concepción,Everton de Viña del Mar,1,71,2-0,2,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-03-01_Universidad_de_Concepción_vs_Everton_de_Viña_del_Mar
+,CHI1,Colo Colo,Universidad de Chile,1,58,1-0,2,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-03-01_Colo_Colo_vs_Universidad_de_Chile
+,CHI1,Ñublense,Universidad Católica (CHI),X,60,1-1,2,False,2026-02-23T03:03:28.585993+00:00,CHI1_2026-03-01_Ñublense_vs_Universidad_Católica_(CHI)
+,UCL,Bayer Leverkusen,Arsenal,2,74,0-2,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Bayer_Leverkusen_vs_Arsenal
+,UCL,Atalanta BC,Bayern Munich,2,66,1-2,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Atalanta_BC_vs_Bayern_Munich
+,UCL,Atlético Madrid,Tottenham Hotspur,1,69,2-1,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Atlético_Madrid_vs_Tottenham_Hotspur
+,UCL,Bodø/Glimt,Sporting Lisbon,X,62,1-1,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Bodø/Glimt_vs_Sporting_Lisbon
+,UCL,Galatasaray,Liverpool,2,66,1-2,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Galatasaray_vs_Liverpool
+,UCL,Real Madrid,Manchester City,X,62,1-1,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Real_Madrid_vs_Manchester_City
+,UCL,Newcastle United,Barcelona,X,63,1-1,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Newcastle_United_vs_Barcelona
+,UCL,Paris Saint Germain,Chelsea,1,69,2-1,,,2026-02-27T13:01:50.108007+00:00,UCL_2026-03-10_Paris_Saint_Germain_vs_Chelsea
+,UCL,Bayer Leverkusen,Arsenal,2,74,1-2,,,2026-02-27T18:26:21.198283+00:00,UCL_2026-03-11_Bayer_Leverkusen_vs_Arsenal
+,UCL,Bodø/Glimt,Sporting Lisbon,1,61,2-1,,,2026-02-27T18:26:21.198283+00:00,UCL_2026-03-11_Bodø/Glimt_vs_Sporting_Lisbon
+,UCL,Paris Saint Germain,Chelsea,1,64,2-1,,,2026-02-27T18:26:21.198283+00:00,UCL_2026-03-11_Paris_Saint_Germain_vs_Chelsea
+,UCL,Real Madrid,Manchester City,X,64,1-1,,,2026-02-27T18:26:21.198283+00:00,UCL_2026-03-11_Real_Madrid_vs_Manchester_City
+,CHI1,La Serena,Union La Calera,X,62,1-1,1,False,2026-02-28T03:24:19.652752+00:00,CHI1_2026-03-06_La_Serena_vs_Union_La_Calera
+,CHI1,Deportes Concepción,Ñublense,2,46,1-2,2,True,2026-03-02T15:25:14.023123+00:00,CHI1_2026-03-06_Deportes_Concepción_vs_Ñublense
+,CHI1,Huachipato,Coquimbo Unido,2,46,1-2,2,True,2026-03-02T15:25:14.023123+00:00,CHI1_2026-03-07_Huachipato_vs_Coquimbo_Unido
+,CHI1,Everton de Viña del Mar,Deportes Limache,2,45,0-1,1,False,2026-03-02T15:25:14.023123+00:00,CHI1_2026-03-07_Everton_de_Viña_del_Mar_vs_Deportes_Limache
+,CHI1,Audax Italiano,Colo Colo,2,55,0-1,2,True,2026-03-02T15:25:14.023123+00:00,CHI1_2026-03-07_Audax_Italiano_vs_Colo_Colo
+,CHI1,O'Higgins,Universidad Católica (CHI),2,47,0-1,1,False,2026-03-02T15:25:14.023123+00:00,CHI1_2026-03-07_O'Higgins_vs_Universidad_Católica_(CHI)
+,CHI1,Palestino,Cobresal,1,55,2-1,1,True,2026-03-02T15:25:14.023123+00:00,CHI1_2026-03-08_Palestino_vs_Cobresal
+,CHI1,Universidad de Chile,Universidad de Concepción,1,61,2-1,,,2026-03-02T15:25:14.023123+00:00,CHI1_2026-03-09_Universidad_de_Chile_vs_Universidad_de_Concepción
+,UCL,Barcelona,Newcastle United,1,53,2-1,,,2026-03-11T02:48:38.197306+00:00,UCL_2026-03-18_Barcelona_vs_Newcastle_United
+,UCL,Bayern Munich,Atalanta BC,1,60,2-0,,,2026-03-11T02:48:38.197306+00:00,UCL_2026-03-18_Bayern_Munich_vs_Atalanta_BC
+,UCL,Tottenham Hotspur,Atlético Madrid,2,40,1-2,,,2026-03-11T02:48:38.197306+00:00,UCL_2026-03-18_Tottenham_Hotspur_vs_Atlético_Madrid
+,UCL,Liverpool,Galatasaray,1,60,2-0,,,2026-03-11T02:48:38.197306+00:00,UCL_2026-03-18_Liverpool_vs_Galatasaray

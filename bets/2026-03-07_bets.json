@@ -1,0 +1,16 @@
+[
+  {
+    "tip_id": "TIP_CHI1_2026-03-07_O'Higgins_vs_Universidad_Católica_(CHI)",
+    "type": "value_bet",
+    "strategy": "bank",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "pick": "2",
+    "odds": 1.85,
+    "bookmaker": "LeoVegas (SE)",
+    "confidence": 57,
+    "implied_prob": 54.1,
+    "edge_pct": 2.9,
+    "stake_units": 0.6,
+    "rationale": "Value detectado: Modelo (57%) vs Mercado (54.1% @ 1.85). Edge: 2.9%"
+  }
+]

@@ -1,0 +1,344 @@
+[
+  {
+    "type": "value_bet",
+    "match": "Galatasaray vs Liverpool",
+    "pick": "2",
+    "odds": 1.87,
+    "bookmaker": "Betfair",
+    "confidence": 70,
+    "implied_prob": 53.5,
+    "edge_pct": 16.5,
+    "stake_units": 2.2,
+    "rationale": "Valor detectado: Modelo (70%) vs Mercado (53.5% @ 1.87). Edge: 16.5%",
+    "tip_id": "TIP_UCL_2026-03-10_Galatasaray_vs_Liverpool"
+  },
+  {
+    "type": "value_bet",
+    "match": "Bayer Leverkusen vs Arsenal",
+    "pick": "2",
+    "odds": 1.6,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 76,
+    "implied_prob": 62.5,
+    "edge_pct": 13.5,
+    "stake_units": 1.9,
+    "rationale": "Valor detectado: Modelo (76%) vs Mercado (62.5% @ 1.6). Edge: 13.5%",
+    "tip_id": "TIP_UCL_2026-03-10_Bayer_Leverkusen_vs_Arsenal"
+  },
+  {
+    "type": "value_bet",
+    "match": "Atalanta BC vs Bayern Munich",
+    "pick": "2",
+    "odds": 1.68,
+    "bookmaker": "BetOnline.ag",
+    "confidence": 71,
+    "implied_prob": 59.5,
+    "edge_pct": 11.5,
+    "stake_units": 1.6,
+    "rationale": "Valor detectado: Modelo (71%) vs Mercado (59.5% @ 1.68). Edge: 11.5%",
+    "tip_id": "TIP_UCL_2026-03-10_Atalanta_BC_vs_Bayern_Munich"
+  },
+  {
+    "type": "value_bet",
+    "match": "Atlético Madrid vs Tottenham Hotspur",
+    "pick": "1",
+    "odds": 1.7,
+    "bookmaker": "1xBet",
+    "confidence": 68,
+    "implied_prob": 58.8,
+    "edge_pct": 9.2,
+    "stake_units": 1.4,
+    "rationale": "Valor detectado: Modelo (68%) vs Mercado (58.8% @ 1.7). Edge: 9.2%",
+    "tip_id": "TIP_UCL_2026-03-10_Atlético_Madrid_vs_Tottenham_Hotspur"
+  },
+  {
+    "type": "value_bet",
+    "match": "Bodø/Glimt vs Sporting Lisbon",
+    "pick": "X",
+    "odds": 3.85,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 60,
+    "implied_prob": 26.0,
+    "edge_pct": 34.0,
+    "stake_units": 3.9,
+    "rationale": "Valor detectado: Modelo (60%) vs Mercado (26.0% @ 3.85). Edge: 34.0%",
+    "tip_id": "TIP_UCL_2026-03-10_Bodø/Glimt_vs_Sporting_Lisbon"
+  },
+  {
+    "type": "value_bet",
+    "match": "Real Madrid vs Manchester City",
+    "pick": "2",
+    "odds": 2.4,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 64,
+    "implied_prob": 41.7,
+    "edge_pct": 22.3,
+    "stake_units": 2.7,
+    "rationale": "Valor detectado: Modelo (64%) vs Mercado (41.7% @ 2.4). Edge: 22.3%",
+    "tip_id": "TIP_UCL_2026-03-10_Real_Madrid_vs_Manchester_City"
+  },
+  {
+    "type": "value_bet",
+    "match": "Newcastle United vs Barcelona",
+    "pick": "2",
+    "odds": 2.55,
+    "bookmaker": "Coolbet",
+    "confidence": 61,
+    "implied_prob": 39.2,
+    "edge_pct": 21.8,
+    "stake_units": 2.7,
+    "rationale": "Valor detectado: Modelo (61%) vs Mercado (39.2% @ 2.55). Edge: 21.8%",
+    "tip_id": "TIP_UCL_2026-03-10_Newcastle_United_vs_Barcelona"
+  },
+  {
+    "type": "value_bet",
+    "match": "Paris Saint Germain vs Chelsea",
+    "pick": "1",
+    "odds": 1.79,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 68,
+    "implied_prob": 55.9,
+    "edge_pct": 12.1,
+    "stake_units": 1.7,
+    "rationale": "Valor detectado: Modelo (68%) vs Mercado (55.9% @ 1.79). Edge: 12.1%",
+    "tip_id": "TIP_UCL_2026-03-10_Paris_Saint_Germain_vs_Chelsea"
+  },
+  {
+    "type": "value_bet",
+    "match": "Bayer Leverkusen vs Arsenal",
+    "pick": "2",
+    "odds": 1.6,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 74,
+    "implied_prob": 62.5,
+    "edge_pct": 11.5,
+    "stake_units": 1.6,
+    "rationale": "Valor detectado: Modelo (74%) vs Mercado (62.5% @ 1.6). Edge: 11.5%",
+    "tip_id": "TIP_UCL_2026-03-11_Bayer_Leverkusen_vs_Arsenal"
+  },
+  {
+    "type": "value_bet",
+    "match": "Bodø/Glimt vs Sporting Lisbon",
+    "pick": "X",
+    "odds": 3.85,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 60,
+    "implied_prob": 26.0,
+    "edge_pct": 34.0,
+    "stake_units": 3.9,
+    "rationale": "Valor detectado: Modelo (60%) vs Mercado (26.0% @ 3.85). Edge: 34.0%",
+    "tip_id": "TIP_UCL_2026-03-11_Bodø/Glimt_vs_Sporting_Lisbon"
+  },
+  {
+    "type": "value_bet",
+    "match": "Paris Saint Germain vs Chelsea",
+    "pick": "1",
+    "odds": 1.79,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 63,
+    "implied_prob": 55.9,
+    "edge_pct": 7.1,
+    "stake_units": 1.2,
+    "rationale": "Valor detectado: Modelo (63%) vs Mercado (55.9% @ 1.79). Edge: 7.1%",
+    "tip_id": "TIP_UCL_2026-03-11_Paris_Saint_Germain_vs_Chelsea"
+  },
+  {
+    "type": "value_bet",
+    "match": "Real Madrid vs Manchester City",
+    "pick": "2",
+    "odds": 2.4,
+    "bookmaker": "Unibet (NL)",
+    "confidence": 63,
+    "implied_prob": 41.7,
+    "edge_pct": 21.3,
+    "stake_units": 2.6,
+    "rationale": "Valor detectado: Modelo (63%) vs Mercado (41.7% @ 2.4). Edge: 21.3%",
+    "tip_id": "TIP_UCL_2026-03-11_Real_Madrid_vs_Manchester_City"
+  },
+  {
+    "type": "value_bet",
+    "match": "Coquimbo Unido vs Deportes Concepción",
+    "pick": "1",
+    "odds": 1.73,
+    "bookmaker": "Betfair",
+    "confidence": 64,
+    "implied_prob": 57.8,
+    "edge_pct": 6.2,
+    "stake_units": 1.1,
+    "rationale": "Valor detectado: Modelo (64%) vs Mercado (57.8% @ 1.73). Edge: 6.2%",
+    "tip_id": "TIP_CHI1_2026-02-28_Coquimbo_Unido_vs_Deportes_Concepción"
+  },
+  {
+    "type": "value_bet",
+    "match": "Deportes Limache vs Huachipato",
+    "pick": "X",
+    "odds": 3.55,
+    "bookmaker": "Pinnacle",
+    "confidence": 61,
+    "implied_prob": 28.2,
+    "edge_pct": 32.8,
+    "stake_units": 3.8,
+    "rationale": "Valor detectado: Modelo (61%) vs Mercado (28.2% @ 3.55). Edge: 32.8%",
+    "tip_id": "TIP_CHI1_2026-02-28_Deportes_Limache_vs_Huachipato"
+  },
+  {
+    "type": "value_bet",
+    "match": "Palestino vs O'Higgins",
+    "pick": "1",
+    "odds": 2.1,
+    "bookmaker": "Betfair",
+    "confidence": 64,
+    "implied_prob": 47.6,
+    "edge_pct": 16.4,
+    "stake_units": 2.1,
+    "rationale": "Valor detectado: Modelo (64%) vs Mercado (47.6% @ 2.1). Edge: 16.4%",
+    "tip_id": "TIP_CHI1_2026-02-28_Palestino_vs_O'Higgins"
+  },
+  {
+    "type": "value_bet",
+    "match": "Universidad de Concepción vs Everton de Viña del Mar",
+    "pick": "1",
+    "odds": 2.11,
+    "bookmaker": "1xBet",
+    "confidence": 70,
+    "implied_prob": 47.4,
+    "edge_pct": 22.6,
+    "stake_units": 2.8,
+    "rationale": "Valor detectado: Modelo (70%) vs Mercado (47.4% @ 2.11). Edge: 22.6%",
+    "tip_id": "TIP_CHI1_2026-03-01_Universidad_de_Concepción_vs_Everton_de_Viña_del_Mar"
+  },
+  {
+    "type": "value_bet",
+    "match": "Colo Colo vs Universidad de Chile",
+    "pick": "1",
+    "odds": 2.38,
+    "bookmaker": "Betsson",
+    "confidence": 64,
+    "implied_prob": 42.0,
+    "edge_pct": 22.0,
+    "stake_units": 2.7,
+    "rationale": "Valor detectado: Modelo (64%) vs Mercado (42.0% @ 2.38). Edge: 22.0%",
+    "tip_id": "TIP_CHI1_2026-03-01_Colo_Colo_vs_Universidad_de_Chile"
+  },
+  {
+    "type": "value_bet",
+    "match": "Ñublense vs Universidad Católica (CHI)",
+    "pick": "2",
+    "odds": 2.35,
+    "bookmaker": "GTbets",
+    "confidence": 60,
+    "implied_prob": 42.6,
+    "edge_pct": 17.4,
+    "stake_units": 2.2,
+    "rationale": "Valor detectado: Modelo (60%) vs Mercado (42.6% @ 2.35). Edge: 17.4%",
+    "tip_id": "TIP_CHI1_2026-03-01_Ñublense_vs_Universidad_Católica_(CHI)"
+  },
+  {
+    "type": "value_bet",
+    "match": "La Serena vs Union La Calera",
+    "pick": "X",
+    "odds": 3.26,
+    "bookmaker": "Pinnacle",
+    "confidence": 62,
+    "implied_prob": 30.7,
+    "edge_pct": 31.3,
+    "stake_units": 3.6,
+    "rationale": "Valor detectado: Modelo (62%) vs Mercado (30.7% @ 3.26). Edge: 31.3%",
+    "tip_id": "TIP_CHI1_2026-03-06_La_Serena_vs_Union_La_Calera"
+  },
+  {
+    "tip_id": "COMBO_1",
+    "type": "combo_2",
+    "total_odds": 2.99,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Galatasaray vs Liverpool",
+        "pick": "2",
+        "odds": 1.87
+      },
+      {
+        "match": "Bayer Leverkusen vs Arsenal",
+        "pick": "2",
+        "odds": 1.6
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 2.99"
+  },
+  {
+    "tip_id": "COMBO_2",
+    "type": "combo_2",
+    "total_odds": 3.14,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Galatasaray vs Liverpool",
+        "pick": "2",
+        "odds": 1.87
+      },
+      {
+        "match": "Atalanta BC vs Bayern Munich",
+        "pick": "2",
+        "odds": 1.68
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 3.14"
+  },
+  {
+    "tip_id": "COMBO_3",
+    "type": "combo_2",
+    "total_odds": 3.18,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Galatasaray vs Liverpool",
+        "pick": "2",
+        "odds": 1.87
+      },
+      {
+        "match": "Atlético Madrid vs Tottenham Hotspur",
+        "pick": "1",
+        "odds": 1.7
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 3.18"
+  },
+  {
+    "tip_id": "COMBO_4",
+    "type": "combo_2",
+    "total_odds": 3.35,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Galatasaray vs Liverpool",
+        "pick": "2",
+        "odds": 1.87
+      },
+      {
+        "match": "Paris Saint Germain vs Chelsea",
+        "pick": "1",
+        "odds": 1.79
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 3.35"
+  },
+  {
+    "tip_id": "COMBO_5",
+    "type": "combo_2",
+    "total_odds": 2.99,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Galatasaray vs Liverpool",
+        "pick": "2",
+        "odds": 1.87
+      },
+      {
+        "match": "Bayer Leverkusen vs Arsenal",
+        "pick": "2",
+        "odds": 1.6
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 2.99"
+  }
+]

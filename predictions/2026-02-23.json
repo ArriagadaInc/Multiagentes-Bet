@@ -1,0 +1,368 @@
+[
+  {
+    "prediction_id": "UCL_2026-02-24_Atlético_Madrid_vs_Club_Brugge",
+    "home_team": "Atlético Madrid",
+    "away_team": "Club Brugge",
+    "prediction": "1",
+    "confidence": 72,
+    "score_prediction": "2-1",
+    "rationale": "Atlético llega con mejor puntaje y DG (+9) y juega en casa, con cuotas que lo respaldan claramente (1.35). Brugge tiene DG negativo y ha sido más permeable. Partido con opciones del local, aunque con algún sufrimiento.",
+    "key_factors": [
+      "Localía y mayor solidez global",
+      "Diferencia de goles +9 vs -2",
+      "Cuotas de mercado favorables (1.35)"
+    ],
+    "risk_factors": [
+      "Posible rotación por calendario UCL",
+      "Balón parado de Brugge puede equilibrar"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-24_Bayer_Leverkusen_vs_Olympiakos_Piraeus",
+    "home_team": "Bayer Leverkusen",
+    "away_team": "Olympiakos Piraeus",
+    "prediction": "1",
+    "confidence": 64,
+    "score_prediction": "2-1",
+    "rationale": "Partido parejo en números, pero Leverkusen es favorito en casa (1.74) y debería imponer algo más de ritmo. Olympiakos anota poco (10 GF) y fuera puede sufrir.",
+    "key_factors": [
+      "Ventaja de localía",
+      "Olympiakos con baja producción ofensiva",
+      "Mercado inclina al local"
+    ],
+    "risk_factors": [
+      "Leverkusen concede con facilidad (14 GC)",
+      "Contragolpe griego puede hacer daño"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-24_Inter_Milan_vs_Bodø/Glimt",
+    "home_team": "Inter Milan",
+    "away_team": "Bodø/Glimt",
+    "prediction": "1",
+    "confidence": 84,
+    "score_prediction": "2-0",
+    "rationale": "Inter combina solidez defensiva (7 GC) con mejor DG (+8) y factor casa, mientras el mercado lo ve muy superior (1.22). Bodø/Glimt tiene DG negativo y sufre más atrás ante rivales de élite.",
+    "key_factors": [
+      "Defensa del Inter, solo 7 GC",
+      "Localía y jerarquía",
+      "Bodø/Glimt con DG negativo"
+    ],
+    "risk_factors": [
+      "Transiciones rápidas del rival",
+      "Posible rotación por calendario"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-24_Newcastle_United_vs_Qarabağ_FK",
+    "home_team": "Newcastle United",
+    "away_team": "Qarabağ FK",
+    "prediction": "1",
+    "confidence": 89,
+    "score_prediction": "3-0",
+    "rationale": "Newcastle muestra un DG +10 con defensa muy fiable (7 GC) y es ampliamente favorito (1.11). Qarabağ ha encajado 21 goles en 8 partidos, tendencia peligrosa en este escenario.",
+    "key_factors": [
+      "Gran balance de Newcastle (+10)",
+      "Qarabağ concede en exceso (21 GC)",
+      "Apoyo del mercado muy marcado"
+    ],
+    "risk_factors": [
+      "Bloque bajo rival que alargue el 0-0",
+      "Rotaciones del local"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Atalanta_BC_vs_Borussia_Dortmund",
+    "home_team": "Atalanta BC",
+    "away_team": "Borussia Dortmund",
+    "prediction": "X",
+    "confidence": 59,
+    "score_prediction": "1-1",
+    "rationale": "Encuentro muy equilibrado: Atalanta es más sólida atrás (10 GC), Dortmund produce más (19 GF) pero concede (17 GC). Las cuotas son cercanas; el reparto de puntos encaja con los perfiles.",
+    "key_factors": [
+      "Paridad estadística entre ambos",
+      "Solidez defensiva de Atalanta",
+      "Potencial ofensivo de Dortmund"
+    ],
+    "risk_factors": [
+      "Gol tempranero que rompa el plan",
+      "Chispazo individual de Dortmund"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Paris_Saint_Germain_vs_AS_Monaco",
+    "home_team": "Paris Saint Germain",
+    "away_team": "AS Monaco",
+    "prediction": "1",
+    "confidence": 83,
+    "score_prediction": "3-1",
+    "rationale": "PSG llega con +10 en DG y 21 goles a favor, dominando a nivel ofensivo y con fuerte favoritismo (1.24). Monaco presenta DG -6 y sufre atrás ante ataques de alto ritmo.",
+    "key_factors": [
+      "Potencia ofensiva del PSG",
+      "Localía en un cruce exigente",
+      "Monaco concede más de lo deseable"
+    ],
+    "risk_factors": [
+      "Transiciones de Monaco",
+      "Rotación/gestión de cargas del PSG"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Real_Madrid_vs_Benfica",
+    "home_team": "Real Madrid",
+    "away_team": "Benfica",
+    "prediction": "1",
+    "confidence": 67,
+    "score_prediction": "2-1",
+    "rationale": "El Madrid es favorito en casa (1.4), con mayor calidad global y 21 goles anotados. Benfica ya lo superó 4-2 con presión alta; se espera un Madrid más preparado, pero el plan luso es una amenaza.",
+    "key_factors": [
+      "Localía y jerarquía individual del Madrid",
+      "Consenso del mercado favorable",
+      "Motivación de revancha tras la derrota previa"
+    ],
+    "risk_factors": [
+      "Presión y vértigo de Benfica pueden incomodar de nuevo",
+      "Detalles a balón parado"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Juventus_vs_Galatasaray",
+    "home_team": "Juventus",
+    "away_team": "Galatasaray",
+    "prediction": "1",
+    "confidence": 70,
+    "score_prediction": "2-1",
+    "rationale": "Juventus encaja poco (10 GC) y en casa suele gestionar bien ventajas; el mercado le da favoritismo (1.5). Galatasaray anota poco (9 GF), aunque cuenta con amenaza puntual en punta.",
+    "key_factors": [
+      "Solidez defensiva de Juventus",
+      "Ventaja de localía",
+      "Galatasaray con DG negativo y baja producción"
+    ],
+    "risk_factors": [
+      "Calidad individual del 9 rival puede decidir",
+      "Partido de márgenes estrechos"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-23T03:01:28.573615+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-27_Cobresal_vs_La_Serena",
+    "home_team": "Cobresal",
+    "away_team": "La Serena",
+    "prediction": "1",
+    "confidence": 64,
+    "score_prediction": "2-1",
+    "rationale": "Cobresal suma 7 pts y en casa debe imponerse ante una La Serena aún sin victorias y con poco gol (3 GF/4 PJ). Las cuotas respaldan al local y la visita viene con racha negativa. Partido disputado pero con mayor eficacia local.",
+    "key_factors": [
+      "Mejor arranque y localía de Cobresal (7 pts vs 2)",
+      "La Serena sin triunfos y racha floja",
+      "Mercado inclina al local (cuota 2.12)"
+    ],
+    "risk_factors": [
+      "Cobresal ha recibido 6 goles en 4 fechas",
+      "La Serena generó buen volumen ofensivo en su último juego"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-27_Union_La_Calera_vs_Audax_Italiano",
+    "home_team": "Union La Calera",
+    "away_team": "Audax Italiano",
+    "prediction": "X",
+    "confidence": 61,
+    "score_prediction": "1-1",
+    "rationale": "Partido muy equilibrado en cuotas y rendimientos. La Calera llega de un 3-1 con impulso anímico, pero Audax es el equipo más sólido atrás (1 GC en 4). Se perfila un duelo cerrado y de pocas chances claras.",
+    "key_factors": [
+      "Paridad de mercado y rendimientos recientes",
+      "Audax: solidez defensiva (1 GC en 4 PJ)",
+      "La Calera compite bien en casa y llega de victoria clara"
+    ],
+    "risk_factors": [
+      "El buen momento ofensivo de La Calera puede romper el empate",
+      "Audax sufre de falta de gol (4 GF) y podría quedarse corto"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-28_Coquimbo_Unido_vs_Deportes_Concepción",
+    "home_team": "Coquimbo Unido",
+    "away_team": "Deportes Concepción",
+    "prediction": "1",
+    "confidence": 68,
+    "score_prediction": "2-1",
+    "rationale": "Coquimbo es amplio favorito en mercado y viene de un 3-1 con autoridad, mostrando pegada incluso con inferioridad numérica. Deportes Concepción llega invicto, pero la localía y la inercia del ‘pirata’ pesan.",
+    "key_factors": [
+      "Cuotas muy favorables al local (1.61)",
+      "Coquimbo con buena racha y eficacia ofensiva",
+      "Fortaleza en su estadio"
+    ],
+    "risk_factors": [
+      "Deportes Concepción invicto y con 8 goles a favor",
+      "Posible baja por sanción puede resentir a Coquimbo"
+    ],
+    "entities_impact": [
+      {
+        "player": "Elvis Hernandez",
+        "team": "Coquimbo Unido",
+        "status": "sancionado",
+        "impact": "medio"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-28_Deportes_Limache_vs_Huachipato",
+    "home_team": "Deportes Limache",
+    "away_team": "Huachipato",
+    "prediction": "X",
+    "confidence": 60,
+    "score_prediction": "1-1",
+    "rationale": "Limache está invicto y compite bien; Huachipato lidera con solidez (7 GF, 3 GC) y viene de tumbar a la U. Cuotas apretadas sugieren reparto de puntos en un trámite físico y táctico.",
+    "key_factors": [
+      "Limache invicto (2-2-0)",
+      "Huachipato: defensa firme y jerarquía de líder",
+      "Mercado muy balanceado"
+    ],
+    "risk_factors": [
+      "Huachipato puede imponer calidad en transiciones",
+      "Muestra corta de Limache aún genera incertidumbre"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-28_Palestino_vs_O'Higgins",
+    "home_team": "Palestino",
+    "away_team": "O'Higgins",
+    "prediction": "X",
+    "confidence": 59,
+    "score_prediction": "1-1",
+    "rationale": "Palestino no gana pero genera volumen (65% posesión y 7 remates al arco en su última salida). O’Higgins es irregular pero competitivo. Con cuotas parejas, el empate luce el desenlace más probable.",
+    "key_factors": [
+      "Paridad en cuotas y nivel global",
+      "Palestino produce ocasiones pese a los resultados",
+      "O’Higgins compite hasta el final (gol tardío en su último triunfo)"
+    ],
+    "risk_factors": [
+      "Fragilidad defensiva de Palestino puede costarle",
+      "O’Higgins puede volver a resolver en los minutos finales"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-01_Universidad_de_Concepción_vs_Everton_de_Viña_del_Mar",
+    "home_team": "Universidad de Concepción",
+    "away_team": "Everton de Viña del Mar",
+    "prediction": "1",
+    "confidence": 71,
+    "score_prediction": "2-0",
+    "rationale": "UdeC tiene buena producción ofensiva (9 GF) y 7 puntos. Everton llega colista, con 0 goles a favor y 4 derrotas seguidas; las cuotas también favorecen al local. Escenario ideal para que UdeC imponga condiciones.",
+    "key_factors": [
+      "Everton: 0 GF y 4 derrotas",
+      "UdeC con ataque en forma (9 GF)",
+      "Localía y mercado a favor (2.15)"
+    ],
+    "risk_factors": [
+      "Posible reacción defensiva de Everton",
+      "UdeC ha recibido 6 goles y puede conceder"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-01_Colo_Colo_vs_Universidad_de_Chile",
+    "home_team": "Colo Colo",
+    "away_team": "Universidad de Chile",
+    "prediction": "1",
+    "confidence": 58,
+    "score_prediction": "1-0",
+    "rationale": "Colo Colo llega con mejor racha reciente y juega en el Monumental, donde suele hacerse fuerte. La U compite, pero ha encajado 6 goles; el clásico apunta a ser cerrado y puede definirse por detalles a favor del local.",
+    "key_factors": [
+      "Momento y localía de Colo Colo",
+      "U de Chile concede más de lo ideal (6 GC)",
+      "Partido de alto voltaje, márgenes finos"
+    ],
+    "risk_factors": [
+      "Alta volatilidad típica de un clásico",
+      "La U puede golpear en transiciones y balón parado"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-01_Ñublense_vs_Universidad_Católica_(CHI)",
+    "home_team": "Ñublense",
+    "away_team": "Universidad Católica (CHI)",
+    "prediction": "X",
+    "confidence": 60,
+    "score_prediction": "1-1",
+    "rationale": "Ñublense está invicto y muy sólido atrás (2 GC), mientras la UC es más punzante en ataque pero visita. Cuotas muy parejas y antecedentes recientes sugieren un duelo tenso y equilibrado.",
+    "key_factors": [
+      "Ñublense: solidez defensiva (2 GC en 4)",
+      "UC con mayor poder de fuego (9 GF)",
+      "Equilibrio de mercado"
+    ],
+    "risk_factors": [
+      "Zampedri puede decantar el partido con su eficacia",
+      "Ñublense generó mucho pero fue poco preciso en el último juego"
+    ],
+    "entities_impact": [
+      {
+        "player": "Clemente Montes",
+        "team": "Universidad Católica (CHI)",
+        "status": "sancionado",
+        "impact": "medio"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-02-23T03:03:28.585993+00:00",
+    "missing_data": []
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "tip_id": "TIP_UCL_2026-03-11_Paris_Saint_Germain_vs_Chelsea",
+    "type": "value_bet",
+    "strategy": "bank",
+    "match": "Paris Saint Germain vs Chelsea",
+    "pick": "1",
+    "odds": 2.0,
+    "bookmaker": "Betfair",
+    "confidence": 52,
+    "implied_prob": 50.0,
+    "edge_pct": 2.0,
+    "stake_units": 0.4,
+    "rationale": "Value detectado: Modelo (52%) vs Mercado (50.0% @ 2.0). Edge: 2.0%"
+  }
+]

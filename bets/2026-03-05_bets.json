@@ -1,0 +1,47 @@
+[
+  {
+    "type": "value_bet",
+    "match": "La Serena vs Union La Calera",
+    "pick": "1",
+    "odds": 2.34,
+    "bookmaker": "Betfair",
+    "confidence": 70,
+    "implied_prob": 42.7,
+    "market_prob": 42.7,
+    "edge_pct": 27.3,
+    "stake_units": 1.5,
+    "rationale": "Value detectado: Modelo (70%) vs Mercado (42.7% @ 2.34). Edge: 27.3%",
+    "warning": "contra_mercado_baja_conf",
+    "tip_id": "TIP_CHI1_2026-03-06_La_Serena_vs_Union_La_Calera"
+  },
+  {
+    "type": "value_bet",
+    "match": "Deportes Concepción vs Ñublense",
+    "pick": "2",
+    "odds": 2.75,
+    "bookmaker": "Unibet (SE)",
+    "confidence": 70,
+    "implied_prob": 36.4,
+    "market_prob": 36.4,
+    "edge_pct": 33.6,
+    "stake_units": 1.8,
+    "rationale": "Value detectado: Modelo (70%) vs Mercado (36.4% @ 2.75). Edge: 33.6%",
+    "warning": "contra_mercado_baja_conf",
+    "tip_id": "TIP_CHI1_2026-03-06_Deportes_Concepción_vs_Ñublense"
+  },
+  {
+    "type": "value_bet",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "pick": "2",
+    "odds": 2.82,
+    "bookmaker": "Betfair",
+    "confidence": 70,
+    "implied_prob": 35.5,
+    "market_prob": 35.5,
+    "edge_pct": 34.5,
+    "stake_units": 1.8,
+    "rationale": "Value detectado: Modelo (70%) vs Mercado (35.5% @ 2.82). Edge: 34.5%",
+    "warning": "contra_mercado_baja_conf",
+    "tip_id": "TIP_CHI1_2026-03-07_Everton_de_Viña_del_Mar_vs_Deportes_Limache"
+  }
+]

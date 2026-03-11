@@ -1,0 +1,59 @@
+{
+  "ok": true,
+  "started_at": "2026-03-05T17:29:20.440679+00:00",
+  "completed_at": "2026-03-05T17:29:28.027757+00:00",
+  "model": "gpt-4.1",
+  "tool_type": "web_search",
+  "data": {
+    "as_of_date": "2026-03-05",
+    "match_id": "TEST_U_EVERTON",
+    "lookback_days": 2,
+    "trigger_reason": "check_recent_libertadores_result",
+    "checks": [
+      {
+        "question": "¿Qué pasó ayer en el partido entre Universidad de Chile y Palestino por Copa Libertadores?",
+        "status": "not_found",
+        "answer_summary": "No se encontró registro de ningún partido entre Universidad de Chile y Palestino por Copa Libertadores en los últimos dos días (03–04 de marzo de 2026). El enfrentamiento informado correspondió a la Copa Sudamericana, no Libertadores.",
+        "context_signals": [],
+        "sources": [
+          {
+            "title": "La U cae ante Palestino de manera agónica y es eliminada de la Copa Sudamericana",
+            "url": "https://www.emol.com/noticias/Deportes/2026/03/04/1193371/u-palestino-sudamericana-gol-grupo.html",
+            "publisher": "Emol",
+            "published_at": "2026-03-05"
+          }
+        ],
+        "confidence": 0.8
+      },
+      {
+        "question": "¿Cómo afecta este resultado el ánimo o las bajas de la U de Chile para su próximo partido?",
+        "status": "confirmed",
+        "answer_summary": "El resultado negativo (derrota 2‑1 ante Palestino por Copa Sudamericana el 4 de marzo de 2026) representa un fuerte golpe anímico para la U, que queda sin competencia internacional en el año y aún sin victoria como local esta temporada. No se mencionan lesiones, expulsiones, sanciones ni bajas médicas derivadas del partido.",
+        "context_signals": [
+          {
+            "type": "disciplinary_issue",
+            "signal": "sin sanciones reportadas",
+            "evidence": "No se menciona expulsiones, suspendidos ni sanciones tras el partido del 4 de marzo de 2026.",
+            "date": "2026-03-04",
+            "confidence": 0.9,
+            "is_rumor": false,
+            "provenance": [
+              "analyst_web_check"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "title": "La U cae ante Palestino de manera agónica y es eliminada de la Copa Sudamericana",
+            "url": "https://www.emol.com/noticias/Deportes/2026/03/04/1193371/u-palestino-sudamericana-gol-grupo.html",
+            "publisher": "Emol",
+            "published_at": "2026-03-05"
+          }
+        ],
+        "confidence": 0.9
+      }
+    ]
+  },
+  "validation_errors": [],
+  "raw_text": "{\n  \"as_of_date\": \"2026-03-05\",\n  \"match_id\": \"TEST_U_EVERTON\",\n  \"lookback_days\": 2,\n  \"trigger_reason\": \"check_recent_libertadores_result\",\n  \"checks\": [\n    {\n      \"question\": \"¿Qué pasó ayer en el partido entre Universidad de Chile y Palestino por Copa Libertadores?\",\n      \"status\": \"not_found\",\n      \"answer_summary\": \"No se encontró registro de ningún partido entre Universidad de Chile y Palestino por Copa Libertadores en los últimos dos días (03–04 de marzo de 2026). El enfrentamiento informado correspondió a la Copa Sudamericana, no Libertadores.\",\n      \"context_signals\": [],\n      \"sources\": [\n        {\n          \"title\": \"La U cae ante Palestino de manera agónica y es eliminada de la Copa Sudamericana\",\n          \"url\": \"https://www.emol.com/noticias/Deportes/2026/03/04/1193371/u-palestino-sudamericana-gol-grupo.html\",\n          \"publisher\": \"Emol\",\n          \"published_at\": \"2026-03-05\"\n        }\n      ],\n      \"confidence\": 0.8\n    },\n    {\n      \"question\": \"¿Cómo afecta este resultado el ánimo o las bajas de la U de Chile para su próximo partido?\",\n      \"status\": \"confirmed\",\n      \"answer_summary\": \"El resultado negativo (derrota 2‑1 ante Palestino por Copa Sudamericana el 4 de marzo de 2026) representa un fuerte golpe anímico para la U, que queda sin competencia internacional en el año y aún sin victoria como local esta temporada. No se mencionan lesiones, expulsiones, sanciones ni bajas médicas derivadas del partido.\",\n      \"context_signals\": [\n        {\n          \"type\": \"disciplinary_issue\",\n          \"signal\": \"sin sanciones reportadas\",\n          \"evidence\": \"No se menciona expulsiones, suspendidos ni sanciones tras el partido del 4 de marzo de 2026.\",\n          \"date\": \"2026-03-04\",\n          \"confidence\": 0.9,\n          \"is_rumor\": false,\n          \"provenance\": [\"analyst_web_check\"]\n        }\n      ],\n      \"sources\": [\n        {\n          \"title\": \"La U cae ante Palestino de manera agónica y es eliminada de la Copa Sudamericana\",\n          \"url\": \"https://www.emol.com/noticias/Deportes/2026/03/04/1193371/u-palestino-sudamericana-gol-grupo.html\",\n          \"publisher\": \"Emol\",\n          \"published_at\": \"2026-03-05\"\n        }\n      ],\n      \"confidence\": 0.9\n    }\n  ]\n}"
+}

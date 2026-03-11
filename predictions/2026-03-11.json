@@ -1,0 +1,314 @@
+[
+  {
+    "prediction_id": "UCL_2026-03-11_Bayer_Leverkusen_vs_Arsenal",
+    "home_team": "Bayer Leverkusen",
+    "away_team": "Arsenal",
+    "prediction": "2",
+    "confidence": 59,
+    "market_prob_used": "65.8",
+    "score_prediction": "0-2",
+    "rationale": "El mercado hace a Arsenal favorito claro (1.52 ≈ 65.8%), señal sólida en UCL. Leverkusen llega con volatilidad defensiva (3-3 vs Freiburg) y sin consolidación reciente, vulnerable ante un rival que castiga errores. La moral de Arsenal es alta por la final doméstica cercana y el contexto competitivo. Posibles bajas locales (Badé fuera, Tillman duda) inclinan aún más el matchup hacia la visita.",
+    "key_factors": [
+      "Favoritismo de mercado contundente para el visitante (cuota 1.52)",
+      "Leverkusen muestra irregularidad y goles encajados recientes",
+      "Baja en defensa (Loïc Badé) y duda en ataque (Malik Tillman) en Leverkusen; Arsenal con buen impulso anímico"
+    ],
+    "risk_factors": [
+      "Localía en eliminatoria UCL: un gol tempranero puede cambiar el guion",
+      "Falta de XI confirmadas; si Tillman juega y Leverkusen ajusta atrás, reduce la ventaja"
+    ],
+    "entities_impact": [
+      {
+        "player": "Loïc Badé",
+        "team": "Bayer Leverkusen",
+        "status": "lesionado",
+        "impact": "medio"
+      },
+      {
+        "player": "Malik Tillman",
+        "team": "Bayer Leverkusen",
+        "status": "duda",
+        "impact": "medio"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-03-11_Bodø/Glimt_vs_Sporting_Lisbon",
+    "home_team": "Bodø/Glimt",
+    "away_team": "Sporting Lisbon",
+    "prediction": "1",
+    "confidence": 34,
+    "market_prob_used": "37.8%",
+    "score_prediction": "2-1",
+    "rationale": "El mercado marca a Bodø/Glimt como ligero favorito en una línea muy equilibrada; sin señales duras para desviarnos, debemos respetar ese prior. La localía en Bodo (viaje/lógica climática) suele añadir un plus competitivo. Hay antecedentes de fortaleza europea reciente del local, pero sin datos frescos de forma/lesiones. Partido de ida y cuotas parejas elevan la probabilidad de un guion cerrado, por lo que la confianza es contenida.",
+    "key_factors": [
+      "Ligero favoritismo de mercado hacia Bodø/Glimt (cuota 2.50 vs 2.55).",
+      "Factor local en entorno nórdico con desplazamiento exigente para el rival.",
+      "Historial reciente del club en Europa con resultados sorpresa en casa (ej. eliminación a Inter en playoffs)."
+    ],
+    "risk_factors": [
+      "Cuotas casi simétricas (co-favoritos): un detalle de rendimiento o balón parado puede volcar el partido.",
+      "Falta de información reciente y confirmada de forma/lesiones para ambos equipos, elevando la varianza."
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-03-11_Paris_Saint_Germain_vs_Chelsea",
+    "home_team": "Paris Saint Germain",
+    "away_team": "Chelsea",
+    "prediction": "1",
+    "confidence": 52,
+    "market_prob_used": "49.9%",
+    "score_prediction": "2-1",
+    "rationale": "El mercado hace favorito ajustado a PSG (~50%), ancla prioritaria en UCL. Pese al 1-3 vs Mónaco y la presión, no hay bajas clave confirmadas que muevan la línea significativamente (Dembélé y Fabián en duda, sin confirmación de ausencia decisiva). Chelsea llega con señales mixtas de forma reciente y menor continuidad competitiva; en París, PSG suele imponer su calidad ofensiva. Mantengo margen de incertidumbre por vulnerabilidad en transiciones.",
+    "key_factors": [
+      "Mercado firme con PSG favorito cercano al 50%, sin señales duras que contradigan el cierre.",
+      "Factor local en eliminatoria UCL: PSG acostumbra a producir más xG en casa ante bloques intermedios.",
+      "Chelsea con forma y ritmo poco claros; señales recientes mixtas (empate vs Leeds y goleada aislada)."
+    ],
+    "risk_factors": [
+      "PSG mostró desajustes defensivos recientes (1-3 vs Mónaco), vulnerabilidad a transiciones rápidas.",
+      "Incertidumbre de disponibilidad de Dembélé/Achraf; cualquier ausencia reduce amenaza por banda y equilibrio."
+    ],
+    "entities_impact": [
+      {
+        "player": "Fabián Ruiz",
+        "team": "Paris Saint Germain",
+        "status": "lesionado/duda",
+        "impact": "medio"
+      },
+      {
+        "player": "Ousmane Dembélé",
+        "team": "Paris Saint Germain",
+        "status": "duda",
+        "impact": "medio"
+      },
+      {
+        "player": "Achraf Hakimi",
+        "team": "Paris Saint Germain",
+        "status": "duda (tema disciplinario, no suspensión confirmada)",
+        "impact": "medio"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-03-11_Real_Madrid_vs_Manchester_City",
+    "home_team": "Real Madrid",
+    "away_team": "Manchester City",
+    "prediction": "2",
+    "confidence": 45,
+    "market_prob_used": "47.7",
+    "score_prediction": "0-1",
+    "rationale": "El mercado hace favorito claro al City (~47.7%), señal fuerte en una eliminatoria de élite. Real Madrid llega muy mermado en ataque (Mbappé, Bellingham y Rodrygo fuera), lo que reduce su amenaza y eleva el valor del control visitante. City, sin señales negativas recientes en disponibilidad, suele gestionar mejor los tiempos fuera de casa. Aun así, la localía y el gen competitivo del Madrid en UCL obligan a mantener confianza moderada.",
+    "key_factors": [
+      "Mercado anclado en City como favorito (cuota 1.98 ≈ 47.7%).",
+      "Bajas de alto impacto en Real Madrid: Mbappé, Bellingham y Rodrygo (merma ofensiva evidente).",
+      "City con plan de control y ritmo bajo Guardiola; sin señales operativas de bajas relevantes."
+    ],
+    "risk_factors": [
+      "Bernabéu y resiliencia histórica del Madrid en eliminatorias pueden elevar su rendimiento.",
+      "Información de forma reciente limitada y posible incertidumbre en alineaciones de última hora."
+    ],
+    "entities_impact": [
+      {
+        "player": "Kylian Mbappé",
+        "team": "Real Madrid",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Jude Bellingham",
+        "team": "Real Madrid",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Rodrygo",
+        "team": "Real Madrid",
+        "status": "lesionado",
+        "impact": "alto"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-03-18_Barcelona_vs_Newcastle_United",
+    "home_team": "Barcelona",
+    "away_team": "Newcastle United",
+    "prediction": "1",
+    "confidence": 53,
+    "market_prob_used": "58.6",
+    "score_prediction": "2-1",
+    "rationale": "El mercado da a Barcelona con ~59% y no hay evidencia dura para contradecirlo. La posible afectación por virus en Newcastle pesa en contra del visitante, mientras que el Barça, pese a bajas en ataque, mantiene mejor producción global (GF 22/8) y localía en un cruce de alta presión. La falta de forma reciente y partes médicos confirmados reduce mi confianza respecto al market prior, pero sigo alineado con el 1.",
+    "key_factors": [
+      "Cuotas de cierre favorables al local (≈58.6% implícito) en UCL",
+      "Localía y mayor volumen ofensivo acumulado (22 goles en 8)",
+      "Dudas por virus en la plantilla de Newcastle que pueden mermar disponibilidad/rendimiento"
+    ],
+    "risk_factors": [
+      "Lesiones en la delantera del Barcelona podrían limitar su eficacia y abrir el partido",
+      "Información de forma reciente y alineaciones no confirmadas incrementa la varianza en eliminatoria UCL"
+    ],
+    "entities_impact": [
+      {
+        "player": "Múltiples jugadores (virus)",
+        "team": "Newcastle United",
+        "status": "duda",
+        "impact": "medio"
+      },
+      {
+        "player": "Delanteros varios (9 de referencia)",
+        "team": "Barcelona",
+        "status": "lesionado",
+        "impact": "medio"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-03-18_Bayern_Munich_vs_Atalanta_BC",
+    "home_team": "Bayern Munich",
+    "away_team": "Atalanta BC",
+    "prediction": "1",
+    "confidence": 60,
+    "market_prob_used": "73.1",
+    "score_prediction": "2-0",
+    "rationale": "El mercado hace a Bayern favorito claro (~73%), y no hay señales recientes que contradigan ese consenso. Llega con racha inmaculada y moral alta, mientras Atalanta viene de un 1-6 reciente ante este mismo rival, indicador de desajustes defensivos y gap competitivo. En casa, Bayern debería controlar ritmo y minimizar transiciones del rival. Ajusto la confianza bajo calibración UCL, sin evidencia de bajas clave que alteren el cuadro.",
+    "key_factors": [
+      "Cuotas muy inclinadas al local (1.30), implicando ~73% de probabilidad.",
+      "Bayern en dinámica ganadora sostenida y superioridad táctica/psicológica reciente.",
+      "Atalanta llega tocada tras el 1-6 vs Bayern (10/03), señal de brecha de rendimiento."
+    ],
+    "risk_factors": [
+      "Posible rotación/dosificación de Bayern por calendario y estado de la eliminatoria, que reduzca intensidad.",
+      "Atalanta puede dañar en transiciones si Bayern adelanta líneas; varianza típica UCL."
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-03-18_Tottenham_Hotspur_vs_Atlético_Madrid",
+    "home_team": "Tottenham Hotspur",
+    "away_team": "Atlético Madrid",
+    "prediction": "2",
+    "confidence": 40,
+    "market_prob_used": "37.8",
+    "score_prediction": "1-2",
+    "rationale": "El mercado marca al Atlético como leve favorito fuera de casa (2.60 vs 2.62). Tottenham llega muy diezmado en piezas creativas y de construcción y, además, debe arriesgar tras el 2-5 de la ida, quedando expuesto a transiciones que favorecen al Atleti. El impulso anímico visitante y un plan de control para cerrar la serie apuntalan el 2. Aun así, cuotas muy parejas y posible reacción local mantienen alta la varianza.",
+    "key_factors": [
+      "Leve favoritismo de mercado hacia el Atlético (co-favorito visitante con cuota 2.60).",
+      "Tottenham con múltiples bajas clave (Maddison, Kulusevski, Bentancur, Udogie, etc.) que reducen creación y profundidad.",
+      "Guion de vuelta: Spurs debe adelantar líneas; el Atlético, con +3 en el global, puede castigar a la contra."
+    ],
+    "risk_factors": [
+      "Cuotas equilibradas y empate con probabilidad ~25%: escenario de control del Atleti podría derivar en X.",
+      "Factor local y urgencia de Spurs; regresos de Romero y Van de Ven podrían estabilizar su zaga."
+    ],
+    "entities_impact": [
+      {
+        "player": "James Maddison",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Dejan Kulusevski",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Rodrigo Bentancur",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Destiny Udogie",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "medio"
+      },
+      {
+        "player": "Ben Davies",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "medio"
+      },
+      {
+        "player": "Mohammed Kudus",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Lucas Bergvall",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "medio"
+      },
+      {
+        "player": "Wilson Odobert",
+        "team": "Tottenham Hotspur",
+        "status": "lesionado",
+        "impact": "medio"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-03-18_Liverpool_vs_Galatasaray",
+    "home_team": "Liverpool",
+    "away_team": "Galatasaray",
+    "prediction": "1",
+    "confidence": 60,
+    "market_prob_used": "74.6",
+    "score_prediction": "2-0",
+    "rationale": "El mercado otorga ~75% al triunfo local y el gap de cuotas es amplio, señal de clear mismatch. Anfield y la mayor jerarquía colectiva/individual de Liverpool pesan en eliminación UCL. Galatasaray llega sin Muslera (baja sensible en portería), lo que reduce su estabilidad defensiva. Falta de señales recientes de forma y alineaciones nos obliga a calibrar la confianza por debajo del precio de mercado.",
+    "key_factors": [
+      "Mercado muy inclinado al 1 (≈74.6% implícito) con diferencia de cuotas contundente",
+      "Ventaja competitiva en Anfield y superioridad de plantilla/ritmo de Liverpool",
+      "Ausencia reciente de Muslera en Galatasaray, impacto alto en la solidez defensiva"
+    ],
+    "risk_factors": [
+      "Información incompleta de forma y alineaciones; posible rotación/gestión de cargas",
+      "Contexto de eliminatoria puede inducir partido más cerrado según el marcador global (no confirmado)"
+    ],
+    "entities_impact": [
+      {
+        "player": "Fernando Muslera",
+        "team": "Galatasaray",
+        "status": "lesionado",
+        "impact": "alto"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-03-11T02:48:38.197306+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "competition": "CHI1",
+  "generated_at": "05/03/2026",
+  "teams": [
+    {
+      "team": "Universidad de Chile",
+      "position_in_table": 10,
+      "points": 6,
+      "last_result": "Universidad de Chile 1‑2 Palestino (Copa Sudamericana – fase preliminar, 04/03/2026)",
+      "figures": [
+        "Matías Zaldívia (gol vs Colo Colo, Liga – 1/3/2026)",
+        "Juan Martin Lucero (asistencia vs Colo Colo)"
+      ],
+      "injuries": [
+        "Matías Zaldivia — en forma tras lesión",
+        "Gabriel Castellón — ya de alta",
+        "Maximiliano Guerrero — en progresión, podría volver en ~8 días"
+      ],
+      "form": "W‑D‑?‑?-?",
+      "context_signals": [
+        {
+          "type": "form",
+          "signal": "Victoria sobre Colo Colo justo antes de eliminación internacional",
+          "confidence": 0.9
+        },
+        {
+          "type": "disciplinary_issue",
+          "signal": "Sanción a más de 3.300 hinchas y conflicto con SERNAC",
+          "confidence": 0.8
+        }
+      ],
+      "raw_context": "Universidad de Chile ganó 1‑0 a Colo Colo el 1/3/2026, pero fue eliminado de la Copa Sudamericana al caer 1‑2 ante Palestino el 4/3, a los 6 minutos de tiempo agregado, lo que golpea anímicamente. Además, tiene sanción vigente para hinchas y disputa con el SERNAC."
+    },
+    {
+      "team": "Everton",
+      "position_in_table": 16,
+      "points": 3,
+      "last_result": "Universidad de Concepción 0‑3 Everton (Liga, 01/03/2026)",
+      "figures": [
+        "Alan Medina (doblete vs U. de Concepción)",
+        "Cecilio Waterman (gol)"
+      ],
+      "injuries": [],
+      "form": "L‑L‑L‑L‑W",
+      "context_signals": [
+        {
+          "type": "form",
+          "signal": "Victoria contundente tras cuatro derrotas seguidas",
+          "confidence": 0.85
+        }
+      ],
+      "raw_context": "Everton logró una victoria clave 3‑0 ante U. de Concepción el 1/3/2026 después de un mal inicio — 1 victoria y 4 derrotas; está último en la tabla y necesita mejorar defensivamente."
+    }
+  ]
+}

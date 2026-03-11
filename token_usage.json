@@ -1,0 +1,26 @@
+{
+  "gpt-4.1": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "calls": 179
+  },
+  "gpt-5-2025-08-07": {
+    "prompt_tokens": 726738,
+    "completion_tokens": 626096,
+    "total_tokens": 1352834,
+    "calls": 176
+  },
+  "gpt-4o-2024-08-06": {
+    "prompt_tokens": 49088,
+    "completion_tokens": 21287,
+    "total_tokens": 70375,
+    "calls": 26
+  },
+  "gpt-4.1-mini": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "calls": 2
+  }
+}

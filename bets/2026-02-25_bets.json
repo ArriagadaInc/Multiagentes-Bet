@@ -1,0 +1,148 @@
+[
+  {
+    "type": "value_bet",
+    "match": "Real Madrid vs Benfica",
+    "pick": "1",
+    "odds": 1.74,
+    "bookmaker": "1xBet",
+    "confidence": 66,
+    "implied_prob": 57.5,
+    "edge_pct": 8.5,
+    "stake_units": 1.4,
+    "rationale": "Valor detectado: Modelo (66%) vs Mercado (57.5% @ 1.74). Edge: 8.5%",
+    "tip_id": "TIP_UCL_2026-02-25_Real_Madrid_vs_Benfica"
+  },
+  {
+    "type": "value_bet",
+    "match": "Cobresal vs La Serena",
+    "pick": "1",
+    "odds": 2.15,
+    "bookmaker": "Pinnacle",
+    "confidence": 64,
+    "implied_prob": 46.5,
+    "edge_pct": 17.5,
+    "stake_units": 2.2,
+    "rationale": "Valor detectado: Modelo (64%) vs Mercado (46.5% @ 2.15). Edge: 17.5%",
+    "tip_id": "TIP_CHI1_2026-02-27_Cobresal_vs_La_Serena"
+  },
+  {
+    "type": "value_bet",
+    "match": "Coquimbo Unido vs Deportes Concepción",
+    "pick": "1",
+    "odds": 1.65,
+    "bookmaker": "Pinnacle",
+    "confidence": 66,
+    "implied_prob": 60.6,
+    "edge_pct": 5.4,
+    "stake_units": 1.0,
+    "rationale": "Valor detectado: Modelo (66%) vs Mercado (60.6% @ 1.65). Edge: 5.4%",
+    "tip_id": "TIP_CHI1_2026-02-28_Coquimbo_Unido_vs_Deportes_Concepción"
+  },
+  {
+    "type": "value_bet",
+    "match": "Universidad de Concepción vs Everton de Viña del Mar",
+    "pick": "1",
+    "odds": 2.1,
+    "bookmaker": "Coolbet",
+    "confidence": 67,
+    "implied_prob": 47.6,
+    "edge_pct": 19.4,
+    "stake_units": 2.4,
+    "rationale": "Valor detectado: Modelo (67%) vs Mercado (47.6% @ 2.1). Edge: 19.4%",
+    "tip_id": "TIP_CHI1_2026-03-01_Universidad_de_Concepción_vs_Everton_de_Viña_del_Mar"
+  },
+  {
+    "type": "value_bet",
+    "match": "Colo Colo vs Universidad de Chile",
+    "pick": "1",
+    "odds": 2.32,
+    "bookmaker": "Betsson",
+    "confidence": 62,
+    "implied_prob": 43.1,
+    "edge_pct": 18.9,
+    "stake_units": 2.4,
+    "rationale": "Valor detectado: Modelo (62%) vs Mercado (43.1% @ 2.32). Edge: 18.9%",
+    "tip_id": "TIP_CHI1_2026-03-01_Colo_Colo_vs_Universidad_de_Chile"
+  },
+  {
+    "tip_id": "COMBO_1",
+    "type": "combo_2",
+    "total_odds": 2.87,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Real Madrid vs Benfica",
+        "pick": "1",
+        "odds": 1.74
+      },
+      {
+        "match": "Coquimbo Unido vs Deportes Concepción",
+        "pick": "1",
+        "odds": 1.65
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 2.87"
+  },
+  {
+    "tip_id": "COMBO_2",
+    "type": "combo_2",
+    "total_odds": 3.65,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Real Madrid vs Benfica",
+        "pick": "1",
+        "odds": 1.74
+      },
+      {
+        "match": "Universidad de Concepción vs Everton de Viña del Mar",
+        "pick": "1",
+        "odds": 2.1
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 3.65"
+  },
+  {
+    "tip_id": "COMBO_3",
+    "type": "combo_2",
+    "total_odds": 3.46,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Coquimbo Unido vs Deportes Concepción",
+        "pick": "1",
+        "odds": 1.65
+      },
+      {
+        "match": "Universidad de Concepción vs Everton de Viña del Mar",
+        "pick": "1",
+        "odds": 2.1
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 3.46"
+  },
+  {
+    "tip_id": "COMBO_4",
+    "type": "combo_3",
+    "total_odds": 6.03,
+    "stake_units": 0.67,
+    "legs": [
+      {
+        "match": "Real Madrid vs Benfica",
+        "pick": "1",
+        "odds": 1.74
+      },
+      {
+        "match": "Coquimbo Unido vs Deportes Concepción",
+        "pick": "1",
+        "odds": 1.65
+      },
+      {
+        "match": "Universidad de Concepción vs Everton de Viña del Mar",
+        "pick": "1",
+        "odds": 2.1
+      }
+    ],
+    "rationale": "Combinada de 3 selecciones de alto valor. Cuota total: 6.03"
+  }
+]

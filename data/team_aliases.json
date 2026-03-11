@@ -1,0 +1,56 @@
+{
+    "UCL": {
+        "Inter Milan": [
+            "Internazionale",
+            "Inter",
+            "FC Internazionale Milano"
+        ],
+        "Real Madrid": [
+            "Real Madrid CF"
+        ],
+        "AC Milan": [
+            "Milan"
+        ],
+        "Bayern Munich": [
+            "Bayern München",
+            "FC Bayern"
+        ],
+        "Atletico Madrid": [
+            "Atético de Madrid",
+            "Club Atlético de Madrid"
+        ],
+        "Barcelona": [
+            "FC Barcelona"
+        ],
+        "Paris Saint-Germain": [
+            "PSG",
+            "Paris SG"
+        ],
+        "Bayer Leverkusen": [
+            "Bayer 04 Leverkusen"
+        ]
+    },
+    "CHI1": {
+        "Colo Colo": [
+            "Colo-Colo"
+        ],
+        "Universidad de Chile": [
+            "U. de Chile",
+            "U de Chile"
+        ],
+        "Universidad Catolica": [
+            "U. Catolica",
+            "U Catolica"
+        ],
+        "Audax Italiano": [
+            "Audax"
+        ],
+        "Union Española": [
+            "U. Española"
+        ],
+        "O'Higgins": [
+            "Ohiggins",
+            "O Higgins"
+        ]
+    }
+}

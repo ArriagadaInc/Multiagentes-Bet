@@ -1,0 +1,68 @@
+[
+  {
+    "id": "fixture_ucl_001",
+    "competition": "UCL",
+    "home_team": "Real Madrid",
+    "away_team": "Bayern Munich",
+    "status": "SCHEDULED",
+    "utcDate": "2026-02-25T20:00:00Z",
+    "season": 2025,
+    "stage": "KNOCKOUT_QUARTER_FINAL",
+    "group": null
+  },
+  {
+    "id": "fixture_ucl_002",
+    "competition": "UCL",
+    "home_team": "Paris Saint-Germain",
+    "away_team": "Manchester City",
+    "status": "SCHEDULED",
+    "utcDate": "2026-02-26T20:00:00Z",
+    "season": 2025,
+    "stage": "KNOCKOUT_QUARTER_FINAL",
+    "group": null
+  },
+  {
+    "id": "fixture_ucl_003",
+    "competition": "UCL",
+    "home_team": "Liverpool",
+    "away_team": "Inter Milan",
+    "status": "SCHEDULED",
+    "utcDate": "2026-03-04T21:00:00Z",
+    "season": 2025,
+    "stage": "KNOCKOUT_ROUND_16",
+    "group": null
+  },
+  {
+    "id": "fixture_chi1_001",
+    "competition": "CHI1",
+    "home_team": "Universidad de Chile",
+    "away_team": "Colo-Colo",
+    "status": "SCHEDULED",
+    "utcDate": "2026-02-20T22:00:00Z",
+    "season": 2026,
+    "stage": "REGULAR",
+    "group": null
+  },
+  {
+    "id": "fixture_chi1_002",
+    "competition": "CHI1",
+    "home_team": "O'Higgins",
+    "away_team": "Magallanes",
+    "status": "SCHEDULED",
+    "utcDate": "2026-02-21T19:00:00Z",
+    "season": 2026,
+    "stage": "REGULAR",
+    "group": null
+  },
+  {
+    "id": "fixture_chi1_003",
+    "competition": "CHI1",
+    "home_team": "La Calera",
+    "away_team": "Audax Italiano",
+    "status": "SCHEDULED",
+    "utcDate": "2026-02-21T21:30:00Z",
+    "season": 2026,
+    "stage": "REGULAR",
+    "group": null
+  }
+]

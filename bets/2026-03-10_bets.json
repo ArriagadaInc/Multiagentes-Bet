@@ -1,0 +1,65 @@
+[
+  {
+    "tip_id": "TIP_UCL_2026-03-10_Galatasaray_vs_Liverpool",
+    "type": "value_bet",
+    "strategy": "bank",
+    "match": "Galatasaray vs Liverpool",
+    "pick": "2",
+    "odds": 1.82,
+    "bookmaker": "1xBet",
+    "confidence": 56,
+    "implied_prob": 54.9,
+    "edge_pct": 1.1,
+    "stake_units": 0.2,
+    "rationale": "Value detectado: Modelo (56%) vs Mercado (54.9% @ 1.82). Edge: 1.1%"
+  },
+  {
+    "tip_id": "TIP_UCL_2026-03-10_Newcastle_United_vs_Barcelona",
+    "type": "value_bet",
+    "strategy": "parlay",
+    "match": "Newcastle United vs Barcelona",
+    "pick": "2",
+    "odds": 2.34,
+    "bookmaker": "Betfair",
+    "confidence": 50,
+    "implied_prob": 42.7,
+    "edge_pct": 7.3,
+    "stake_units": 0.5,
+    "rationale": "Value detectado: Modelo (50%) vs Mercado (42.7% @ 2.34). Edge: 7.3%",
+    "warning": "contra_mercado_baja_conf"
+  },
+  {
+    "tip_id": "TIP_UCL_2026-03-11_Real_Madrid_vs_Manchester_City",
+    "type": "value_bet",
+    "strategy": "bank",
+    "match": "Real Madrid vs Manchester City",
+    "pick": "2",
+    "odds": 2.08,
+    "bookmaker": "Betfair",
+    "confidence": 55,
+    "implied_prob": 48.1,
+    "edge_pct": 6.9,
+    "stake_units": 1.4,
+    "rationale": "Value detectado: Modelo (55%) vs Mercado (48.1% @ 2.08). Edge: 6.9%"
+  },
+  {
+    "tip_id": "COMBO_1",
+    "type": "combo_2",
+    "strategy": "parlay",
+    "total_odds": 3.79,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Galatasaray vs Liverpool",
+        "pick": "2",
+        "odds": 1.82
+      },
+      {
+        "match": "Real Madrid vs Manchester City",
+        "pick": "2",
+        "odds": 2.08
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones para alta rentabilidad. Cuota total: 3.79"
+  }
+]

@@ -1,0 +1,2116 @@
+[
+  {
+    "recorded_at": "2026-03-11T03:35:46.151827+00:00",
+    "competition": "UCL",
+    "match": "Liverpool vs Galatasaray",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Parte médico y XI probable de Liverpool (rotaciones y minutos de piezas ofensivas/portero)",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Liverpool"
+        ]
+      },
+      {
+        "need": "Confirmación del arquero titular de Galatasaray y su forma reciente",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Galatasaray"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (Asian Handicap/Under-Over) y % de dinero vs tickets",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": []
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:34:43.489008+00:00",
+    "competition": "UCL",
+    "match": "Tottenham Hotspur vs Atlético Madrid",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones y estatus final de lesionados (Maddison, Kulusevski, Bentancur, Udogie).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Tottenham Hotspur"
+        ]
+      },
+      {
+        "need": "Precio de cierre (closing line) y líneas asiáticas finales para calibración fina del edge.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Tottenham Hotspur",
+          "Atlético Madrid"
+        ]
+      },
+      {
+        "need": "Datos recientes de xG y ELO de ambos equipos en últimos 5 partidos para reforzar señal del '2'.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Tottenham Hotspur",
+          "Atlético Madrid"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:33:42.483932+00:00",
+    "competition": "UCL",
+    "match": "Bayern Munich vs Atalanta BC",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Parte médico actualizado y alineaciones probables de Bayern y Atalanta (último entrenamiento).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayern Munich",
+          "Atalanta BC"
+        ]
+      },
+      {
+        "need": "Cierre de mercado (AH y moneyline) y total de goles para calibrar probabilidad real.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayern Munich",
+          "Atalanta BC"
+        ]
+      },
+      {
+        "need": "Métricas recientes de rendimiento (xG últimos 5, presión/PPDA) para validar la superioridad táctica.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Bayern Munich",
+          "Atalanta BC"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:32:39.978712+00:00",
+    "competition": "UCL",
+    "match": "Barcelona vs Newcastle United",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones/recuperaciones (timelines) de Koundé y De Jong para esta fecha",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Barcelona"
+        ]
+      },
+      {
+        "need": "Detalle del brote vírico en Newcastle: jugadores afectados y minutos probables",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "Cierre de mercado (moneyline, AH y total) para calibrar vs. línea final",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Barcelona",
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "Indicadores de forma/xG últimos 5 partidos de ambos equipos",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Barcelona",
+          "Newcastle United"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:31:48.631404+00:00",
+    "competition": "UCL",
+    "match": "Real Madrid vs Manchester City",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación de si es ida o vuelta y marcador agregado exacto para modelar incentivos y ritmo esperado.",
+        "category": "context",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      },
+      {
+        "need": "Alineaciones probables/último parte médico (posible timing de retorno o minutos limitados de Bellingham/Mbappé).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid"
+        ]
+      },
+      {
+        "need": "Movimientos de cierre en 1X2/AH y total de goles para verificar si las bajas ya están totalmente descontadas.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      },
+      {
+        "need": "Diferencial reciente de xG (últimos 5-10 partidos) y ELO actualizado para validar edge visitante.",
+        "category": "form",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:30:58.072695+00:00",
+    "competition": "UCL",
+    "match": "Paris Saint Germain vs Chelsea",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación de alineación y estado físico (Mbappé, Dembélé, Achraf) del último entrenamiento",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain"
+        ]
+      },
+      {
+        "need": "Línea de cierre de asiáticos (AH pk/−0.25) y total de goles para validar expectativas",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      },
+      {
+        "need": "Clarificación del estado de forma real de Chelsea (últimos 3 partidos competitivos, xG for/against)",
+        "category": "form",
+        "priority": "media",
+        "teams_affected": [
+          "Chelsea"
+        ]
+      },
+      {
+        "need": "Situación exacta de la eliminatoria (si es ida/vuelta y marcador global) para ajustar incentivos",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:30:20.187833+00:00",
+    "competition": "UCL",
+    "match": "Bodø/Glimt vs Sporting Lisbon",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Alineaciones probables/confirmadas, especialmente titulares clave de Sporting.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "ELO actualizado y xG rolling (últimos 5) de ambos equipos para validar o descartar el '2' según el patrón away_blindspot.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Líneas de cierre AH y total (incluido Under 2.5) para evaluar probabilidad real de X y el sesgo de mercado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": []
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:29:06.370816+00:00",
+    "competition": "UCL",
+    "match": "Bayer Leverkusen vs Arsenal",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones y esquema de Leverkusen (quién reemplaza a Badé y rol de Tillman).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayer Leverkusen"
+        ]
+      },
+      {
+        "need": "Parte médico/rotación de Arsenal y minutos esperados de sus titulares clave.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Arsenal"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y Under/Over) para ajustar probabilidad y expectativa de goles.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:16:27.818343+00:00",
+    "competition": "UCL",
+    "match": "Liverpool vs Galatasaray",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación oficial del estatus de Muslera el día de partido (parte médico/convocados).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Galatasaray"
+        ]
+      },
+      {
+        "need": "Alineación probable y minutos recientes de los atacantes clave de Liverpool.",
+        "category": "form",
+        "priority": "media",
+        "teams_affected": [
+          "Liverpool"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y líneas AH/total cerca del cierre para validar que la información ya esté descontada.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Liverpool",
+          "Galatasaray"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:15:29.025175+00:00",
+    "competition": "UCL",
+    "match": "Tottenham Hotspur vs Atlético Madrid",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación de XI probable del Tottenham (estado real de Romero y Van de Ven, minutos esperados).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Tottenham Hotspur"
+        ]
+      },
+      {
+        "need": "Diferencial reciente de xG (últimos 5–10 partidos) y ELO actualizado para ambos equipos.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Tottenham Hotspur",
+          "Atlético Madrid"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (Asian Handicap y total de goles) para calibrar mejor la probabilidad del ‘2’ vs ‘X’.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Tottenham Hotspur",
+          "Atlético Madrid"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:14:07.702385+00:00",
+    "competition": "UCL",
+    "match": "Bayern Munich vs Atalanta BC",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación de alineación/rotación de Bayern con la serie encaminada",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayern Munich"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado y suspensiones de ambos equipos",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayern Munich",
+          "Atalanta BC"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y Totales) para calibrar probabilidad y game script",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Bayern Munich",
+          "Atalanta BC"
+        ]
+      },
+      {
+        "need": "Tendencias recientes de xG (últimos 5) para ambos equipos",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Bayern Munich",
+          "Atalanta BC"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:13:05.253422+00:00",
+    "competition": "UCL",
+    "match": "Barcelona vs Newcastle United",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Parte médico actualizado de Newcastle: confirmación de afectados por el virus y minutos esperados.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "Estado de la delantera del Barça: disponibilidad del 9 y roles ofensivos previstos (última sesión).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Barcelona"
+        ]
+      },
+      {
+        "need": "Form y métricas de rendimiento recientes (xG/xGA últimos 5) para ambos equipos.",
+        "category": "form",
+        "priority": "media",
+        "teams_affected": [
+          "Barcelona",
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y totales) para validar el sesgo de mercado final.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Barcelona",
+          "Newcastle United"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:12:25.161310+00:00",
+    "competition": "UCL",
+    "match": "Real Madrid vs Manchester City",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones y estatus final de Mbappé y Bellingham el día de partido.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid"
+        ]
+      },
+      {
+        "need": "Claridad sobre el marcador agregado y condición (ida/vuelta) para ajustar escenarios de riesgo.",
+        "category": "context",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      },
+      {
+        "need": "Línea de cierre (AH y Under/Over) para calibración fina vs. mercado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5) y ELO actualizado para validar edge del visitante.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:11:30.720489+00:00",
+    "competition": "UCL",
+    "match": "Paris Saint Germain vs Chelsea",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación de disponibilidad/once de Dembélé y Hakimi antes del kickoff.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain"
+        ]
+      },
+      {
+        "need": "Líneas de cierre de hándicap asiático y total de goles para valorar X vs 1 con mayor precisión.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      },
+      {
+        "need": "xG y ELO actualizados de últimos 5 partidos de ambos para calibrar forma real.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:10:50.062652+00:00",
+    "competition": "UCL",
+    "match": "Bodø/Glimt vs Sporting Lisbon",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Parte médico y XI probable de Sporting tras el último entrenamiento",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Diferenciales ELO y xG (últimos 5-10 partidos) para ambos equipos",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y totales) y movimiento de mercado hasta el kickoff",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Confirmación de condiciones de juego (clima y superficie) el día del partido",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T03:09:26.138874+00:00",
+    "competition": "UCL",
+    "match": "Bayer Leverkusen vs Arsenal",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Alineaciones probables/confirmadas y estatus definitivo de Malik Tillman (último entrenamiento).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayer Leverkusen"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (1X2, AH, total) y variación de cuotas en las últimas 24h para detectar movimientos de mercado.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5) y diferencial ELO actualizado para validar el edge del visitante.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:48:38.190406+00:00",
+    "competition": "UCL",
+    "match": "Liverpool vs Galatasaray",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación de si Muslera sigue fuera y reporte médico actualizado del plantel de Galatasaray",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Galatasaray"
+        ]
+      },
+      {
+        "need": "Alineaciones probables/última sesión de entrenamiento de Liverpool para detectar rotaciones",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Liverpool"
+        ]
+      },
+      {
+        "need": "Estado de la eliminatoria (ida/vuelta y marcador global) y líneas de cierre AH/Under",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Liverpool",
+          "Galatasaray"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5) de ambos equipos para validar diferencial de rendimiento",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Liverpool",
+          "Galatasaray"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:47:41.086033+00:00",
+    "competition": "UCL",
+    "match": "Tottenham Hotspur vs Atlético Madrid",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones y parte médico final (Maddison, Kulusevski, Bentancur, Udogie) el día del partido.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Tottenham Hotspur"
+        ]
+      },
+      {
+        "need": "Movimientos de cierre en mercado (AH, moneyline y total) para calibrar si se refuerza el 2 o el X.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Tottenham Hotspur",
+          "Atlético Madrid"
+        ]
+      },
+      {
+        "need": "Formas recientes de xG (últimos 5) y diferencial ELO actualizado para validar edge visitante.",
+        "category": "form",
+        "priority": "media",
+        "teams_affected": [
+          "Tottenham Hotspur",
+          "Atlético Madrid"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:46:26.239056+00:00",
+    "competition": "UCL",
+    "match": "Bayern Munich vs Atalanta BC",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Alineaciones probables/rotación de Bayern a 24h del partido para estimar intensidad real.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayern Munich"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y totales) para afinar distribución de marcadores y varianza.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayern Munich",
+          "Atalanta BC"
+        ]
+      },
+      {
+        "need": "Confirmación del estado del global y enfoque táctico esperado (presión/contención) del visitante.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Atalanta BC"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:45:39.843901+00:00",
+    "competition": "UCL",
+    "match": "Barcelona vs Newcastle United",
+    "match_date": "2026-03-18",
+    "items": [
+      {
+        "need": "Confirmación de quiénes del Newcastle están afectados por el virus y si son titulares",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado del Barcelona sobre la disponibilidad del 9 y extremos",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Barcelona"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y Over/Under) y flujo de dinero para validar el sesgo de mercado",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Barcelona",
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "xG y rendimiento de los últimos 5 partidos oficiales de ambos equipos",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Barcelona",
+          "Newcastle United"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:44:23.749878+00:00",
+    "competition": "UCL",
+    "match": "Real Madrid vs Manchester City",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación oficial de la convocatoria/estado real de Mbappé y Bellingham en la ida.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid"
+        ]
+      },
+      {
+        "need": "Líneas asiáticas de cierre (AH y total goles) para calibrar probabilidad real de X y expectativa de gol.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      },
+      {
+        "need": "xG a 5 partidos recientes por equipo para valorar forma subyacente.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      },
+      {
+        "need": "Claridad sobre el estado de la eliminatoria (ida/vuelta y marcador global) para modelar el guion.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:43:28.007290+00:00",
+    "competition": "UCL",
+    "match": "Paris Saint Germain vs Chelsea",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación de alineación y estatus final de Dembélé y Hakimi en el último entrenamiento.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas hasta el cierre (1X2 y Asian Handicap) y total goles para calibrar línea final.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      },
+      {
+        "need": "Diferenciales recientes de xG (últimos 5) y ELO actualizado para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:42:46.700024+00:00",
+    "competition": "UCL",
+    "match": "Bodø/Glimt vs Sporting Lisbon",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Alineaciones probables/confirmadas y parte médico actualizado (bajas clave o rotaciones).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "ELO actualizado y diferencial xG (últimos 5-10 partidos) para validar edge real del visitante/local.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y total de goles) para ajustar probabilidad y escenario de empate/under.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Condiciones climáticas y estado del césped en Bodo el día del partido.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-11T02:41:39.501791+00:00",
+    "competition": "UCL",
+    "match": "Bayer Leverkusen vs Arsenal",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación de XI y estado final de Tillman y la zaga (sustituto de Badé).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayer Leverkusen"
+        ]
+      },
+      {
+        "need": "xG y tendencias de últimos 5 partidos para ambos equipos para cuantificar la brecha real.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (ML, AH, totales) para verificar si hubo movimientos por noticias tardías.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:58:36.298730+00:00",
+    "competition": "UCL",
+    "match": "Real Madrid vs Manchester City",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación oficial del parte médico y XI probable del Madrid (estado final de Mbappé/Bellingham y alternativas ofensivas).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y totales) para calibrar mejor riesgo de empate/under.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5) y ELO actualizado para validar edge del City más allá de las bajas del rival.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:57:25.456532+00:00",
+    "competition": "UCL",
+    "match": "Paris Saint Germain vs Chelsea",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Parte médico actualizado de PSG (estado real de Dembélé y tiempos de Fabián; disponibilidad plena de Achraf).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y Totales) y movimientos de cuota en las últimas 24-48h para verificar sesgo real del mercado.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      },
+      {
+        "need": "xG rolling (últimos 5-10 partidos) y ELO actualizado para ambos equipos para calibrar la ventaja real.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:56:21.958983+00:00",
+    "competition": "UCL",
+    "match": "Bodø/Glimt vs Sporting Lisbon",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Parte médico actualizado de Sporting (e.g., Gyökeres, Pedro Gonçalves, Coates) y estado físico real.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Condiciones climáticas y estado del césped artificial en Aspmyra para el día del partido.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Línea de cierre de Asian Handicap y Under/Over para calibrar probabilidad de empate y sesgo final del mercado.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Confirmación de si es ida o vuelta y marcador global para ajustar incentivos tácticos.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:54:06.385406+00:00",
+    "competition": "UCL",
+    "match": "Bayer Leverkusen vs Arsenal",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Parte médico y XI probable definitivo de Leverkusen (estado de Badé/Tillman) tras el último entrenamiento.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayer Leverkusen"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (1X2, AH y total) y distribución de dinero para validar movimiento de mercado.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      },
+      {
+        "need": "xG y ELO últimos 5-10 partidos (casa/fuera) para calibrar edge real vs. mercado.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:52:56.195604+00:00",
+    "competition": "UCL",
+    "match": "Newcastle United vs Barcelona",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Listado exacto de jugadores de Newcastle afectados por el virus y su probabilidad de jugar (último entrenamiento).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "Estado actualizado de las bajas ofensivas del Barcelona (quiénes están disponibles para ser 9 o falso 9).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Barcelona"
+        ]
+      },
+      {
+        "need": "Movimiento de cierre en 1X2/AH y Under/Over para validar si el mercado descuenta el virus (closing line info).",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Newcastle United",
+          "Barcelona"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:51:49.022136+00:00",
+    "competition": "UCL",
+    "match": "Atlético Madrid vs Tottenham Hotspur",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Alineaciones probables y estado físico de los atacantes clave de Tottenham en la previa final.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Tottenham Hotspur"
+        ]
+      },
+      {
+        "need": "Datos recientes de forma/xG de ambos (últimos 5-8 partidos) para validar el edge del 1.55.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Atlético Madrid",
+          "Tottenham Hotspur"
+        ]
+      },
+      {
+        "need": "Movimiento de cierre (closing odds/asiáticos y total de goles) para ajustar calibración previa al kick-off.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Atlético Madrid",
+          "Tottenham Hotspur"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:50:42.836815+00:00",
+    "competition": "UCL",
+    "match": "Atalanta BC vs Bayern Munich",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Alineaciones probables y reporte del último entrenamiento (estado físico de titulares) de ambos equipos",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Atalanta BC",
+          "Bayern Munich"
+        ]
+      },
+      {
+        "need": "Movimiento de cierre (moneyline, AH y total) para validar si el mercado descuenta alguna baja tardía",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Atalanta BC",
+          "Bayern Munich"
+        ]
+      },
+      {
+        "need": "Datos recientes de forma avanzada (xG últimos 5) de Atalanta para calibrar el riesgo de la localía",
+        "category": "form",
+        "priority": "media",
+        "teams_affected": [
+          "Atalanta BC"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T14:49:31.364033+00:00",
+    "competition": "UCL",
+    "match": "Galatasaray vs Liverpool",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Confirmación del arquero titular de Galatasaray y métricas recientes (PSxG evitados, errores graves) para cuantificar el downgrade real en portería",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Galatasaray"
+        ]
+      },
+      {
+        "need": "Alineación probable y carga/rotación de Liverpool en la previa (confirmación de que no hay descansos clave)",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Liverpool"
+        ]
+      },
+      {
+        "need": "Movimiento de cierre de cuotas y línea AH/BTTS para validar que la baja de Muslera ya está totalmente incorporada en precio",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Galatasaray",
+          "Liverpool"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:56:48.945495+00:00",
+    "competition": "UCL",
+    "match": "Real Madrid vs Manchester City",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Confirmación oficial de descartes y minutos esperados (Mbappé/Bellingham/Rodrygo) y estado real de Camavinga en la previa.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid"
+        ]
+      },
+      {
+        "need": "Once probable del Madrid y rol táctico en ataque sin sus tres titulares (estructuras y plan con Vinícius).",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Real Madrid"
+        ]
+      },
+      {
+        "need": "Línea de cierre (AH/Total) y evolución de cuotas para verificar si el mercado ya absorbió todo el parte médico.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Real Madrid",
+          "Manchester City"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:55:44.876045+00:00",
+    "competition": "UCL",
+    "match": "Paris Saint Germain vs Chelsea",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Parte médico actualizado de PSG (estado real de Dembélé, Fabián Ruiz y Achraf) y si están para iniciar.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Paris Saint Germain"
+        ]
+      },
+      {
+        "need": "Líneas de cierre de Asian Handicap y totales (U/O) para medir expectativa y equilibrio real.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      },
+      {
+        "need": "xG/xGA de últimos 5 partidos y diferencial ELO actualizado para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Paris Saint Germain",
+          "Chelsea"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:54:56.236549+00:00",
+    "competition": "UCL",
+    "match": "Bodø/Glimt vs Sporting Lisbon",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Líneas de cierre de hándicap asiático y total (Under/Over) para validar si el partido proyecta muy cerrado y descartar X.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Parte médico y alineaciones probables de ambos equipos (bajas clave/rotaciones).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "ELO reciente y diferencial xG (últimos 5-10 partidos) para confirmar ventaja cualitativa del visitante.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt",
+          "Sporting Lisbon"
+        ]
+      },
+      {
+        "need": "Condiciones meteorológicas y estado/superficie del campo en el día del partido.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Bodø/Glimt"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:53:25.442482+00:00",
+    "competition": "UCL",
+    "match": "Bayer Leverkusen vs Arsenal",
+    "match_date": "2026-03-11",
+    "items": [
+      {
+        "need": "Parte médico y once probable de Leverkusen (confirmar situación de Badé/Tillman y la zaga titular).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Bayer Leverkusen"
+        ]
+      },
+      {
+        "need": "Líneas de cierre (AH y Under/Over) para calibrar mejor el riesgo de empate y el total esperado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5-10 partidos) y diferencial ELO actualizado para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Bayer Leverkusen",
+          "Arsenal"
+        ]
+      },
+      {
+        "need": "Plan táctico de Arteta para la ida (presión alta vs. control) que afecte el ritmo y el total de goles.",
+        "category": "tactical",
+        "priority": "baja",
+        "teams_affected": [
+          "Arsenal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:52:19.268369+00:00",
+    "competition": "UCL",
+    "match": "Newcastle United vs Barcelona",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Confirmación de qué titulares de Newcastle están afectados por el virus y su minutaje esperado.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Newcastle United"
+        ]
+      },
+      {
+        "need": "Once probable y parte médico actualizado del Barcelona (delantero centro disponible y alternativas).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Barcelona"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5-8 partidos) y ELO actualizado para validar edge del visitante.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Newcastle United",
+          "Barcelona"
+        ]
+      },
+      {
+        "need": "Línea de cierre (AH y total) para afinar calibración con el consenso final del mercado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Newcastle United",
+          "Barcelona"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:51:28.978319+00:00",
+    "competition": "UCL",
+    "match": "Atlético Madrid vs Tottenham Hotspur",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Parte médico y XI probable de ambos equipos en la previa (confirmación de titulares clave y eventuales dudas).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Atlético Madrid",
+          "Tottenham Hotspur"
+        ]
+      },
+      {
+        "need": "ELO/xG rolling (últimos 5-8 partidos) para calibrar si el sesgo pro-local del mercado está justificado.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Atlético Madrid",
+          "Tottenham Hotspur"
+        ]
+      },
+      {
+        "need": "Líneas de cierre de Asian Handicap y totales (closing line) para ajustar la confianza a la referencia final del mercado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Atlético Madrid",
+          "Tottenham Hotspur"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:50:53.544183+00:00",
+    "competition": "UCL",
+    "match": "Atalanta BC vs Bayern Munich",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Parte médico y XI probable de Atalanta (titulares en duda y estado físico real).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Atalanta BC"
+        ]
+      },
+      {
+        "need": "Forma reciente objetiva de Atalanta (últimos 5: xG a favor/en contra, tendencia defensiva).",
+        "category": "form",
+        "priority": "alta",
+        "teams_affected": [
+          "Atalanta BC"
+        ]
+      },
+      {
+        "need": "Confirmación de rotación o cargas en Bayern (minutos recientes de piezas clave).",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Bayern Munich"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-09T12:49:53.925360+00:00",
+    "competition": "UCL",
+    "match": "Galatasaray vs Liverpool",
+    "match_date": "2026-03-10",
+    "items": [
+      {
+        "need": "Confirmación del arquero titular de Galatasaray y su rendimiento reciente (minutos, xGOT faced, errores).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Galatasaray"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y rotaciones previstas de Liverpool para la ida.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Liverpool"
+        ]
+      },
+      {
+        "need": "Datos de xG recientes (últimos 5) de ambos equipos para validar diferencial de creación/permitido.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Galatasaray",
+          "Liverpool"
+        ]
+      },
+      {
+        "need": "Información del movimiento de cuotas y cierre de mercado para confirmar si la baja de Muslera ya está totalmente descontada.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Galatasaray",
+          "Liverpool"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:17:46.158904+00:00",
+    "competition": "CHI1",
+    "match": "Universidad de Chile vs Universidad de Concepción",
+    "match_date": "2026-03-09",
+    "items": [
+      {
+        "need": "Parte médico oficial y XI probable de la U post Superclásico para medir rotaciones/fatiga.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "Confirmación de disponibilidad de Octavio Rivero (minutos esperados).",
+        "category": "injuries",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y closing line para verificar si el efecto postclásico ya está descontado.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:17:11.111177+00:00",
+    "competition": "CHI1",
+    "match": "Palestino vs Cobresal",
+    "match_date": "2026-03-08",
+    "items": [
+      {
+        "need": "Alineaciones probables y reporte del último entrenamiento para confirmar cargas y posibles ausencias.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Cobresal",
+          "Palestino"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas cercano al cierre (CLV) para validar si la ventaja local se mantiene o se atenúa.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Cobresal",
+          "Palestino"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5 partidos) y producción en ABP de ambos equipos para afinar el total esperado.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Cobresal",
+          "Palestino"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:16:06.402656+00:00",
+    "competition": "CHI1",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones confirmadas 60’ antes (especialmente si O’Higgins rota fuerte tras Libertadores).",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado y minutos/cargas de los titulares de O’Higgins en Libertadores.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins"
+        ]
+      },
+      {
+        "need": "Movimiento de mercado live/closing line para validar que la información de rotaciones ya esté descontada.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:15:18.268853+00:00",
+    "competition": "CHI1",
+    "match": "Audax Italiano vs Colo Colo",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineación probable/rotación de Colo Colo tras el Superclásico y cargas de minutos del XI titular.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado de ambos equipos (bajas y minutos restringidos).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas hasta el kickoff (closing line) para validar si el mercado descuenta rotación.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "xG y xGA de últimos 5 partidos para cuantificar expectativa de gol y probabilidad real del empate.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:14:29.523550+00:00",
+    "competition": "CHI1",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones y eventuales ausencias de último momento (parte médico oficial)",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "xG/xiG de las últimas 5 fechas y producción en ABP para ambos equipos",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "Movimiento de mercado hasta el kickoff (closing line) para validar el sesgo del favorito",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:13:14.347311+00:00",
+    "competition": "CHI1",
+    "match": "Huachipato vs Coquimbo Unido",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables/última sesión de entrenamiento para confirmar XI y roles (extremos/9).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "xG y tendencias de los últimos 5 partidos para calibrar probabilidad real del empate vs 2.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y límites (closing line) para validar si el mercado sostiene el 2.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:12:00.817404+00:00",
+    "competition": "CHI1",
+    "match": "Deportes Concepción vs Ñublense",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Confirmación del parte médico y XI probable (especialmente situación de Fausto Grillo)",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Concepción"
+        ]
+      },
+      {
+        "need": "xG y ABP (últimas 5 fechas) para estimar con precisión el total esperado y la paridad real",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "Movimiento de mercado hasta el cierre (T-2h) para detectar ajustes por lesiones/rotación",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:10:54.622804+00:00",
+    "competition": "CHI1",
+    "match": "La Serena vs Union La Calera",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Confirmación oficial de fixture/horario (existe señal de 'sin partido' en esta fecha)",
+        "category": "context",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y reemplazo de Requena; estado físico de titulares",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5) para estimar total esperado y diferencia real",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T21:00:27.561090+00:00",
+    "competition": "CHI1",
+    "match": "Universidad de Chile vs Universidad de Concepción",
+    "match_date": "2026-03-09",
+    "items": [
+      {
+        "need": "Parte médico actualizado y disponibilidad real de atacantes (incluido Octavio Rivero).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y cargas post-Superclásico para estimar rotación/fatiga.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "xG y tiros a favor/en contra de las últimas 5 fechas para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T20:59:41.065870+00:00",
+    "competition": "CHI1",
+    "match": "Palestino vs Cobresal",
+    "match_date": "2026-03-08",
+    "items": [
+      {
+        "need": "Alineaciones probables y parte médico actualizado de ambos (último entrenamiento).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5 partidos) y eficacia en ABP defensivas/ofensivas para ambos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "Confirmación del estado disciplinario de Jorge Henríquez (si la sanción sigue vigente).",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Cobresal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T20:58:31.535534+00:00",
+    "competition": "CHI1",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación de rotaciones y XI probable de O'Higgins tras el partido de Libertadores.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado y XI probable de Universidad Católica.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "xG y métricas de creación/permitido en las últimas 5 fechas para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y alineaciones a -60/-30 minutos para validar sesgo de mercado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T20:57:48.425447+00:00",
+    "competition": "CHI1",
+    "match": "Audax Italiano vs Colo Colo",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineación probable y grado de rotación de Colo-Colo post-Superclásico (último entrenamiento).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Movimientos de cuota y límite asiático en horas previas (sharp action).",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "xG y tiros concedidos/producción de últimos 5 partidos para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T20:57:05.662077+00:00",
+    "competition": "CHI1",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Parte médico actualizado y disponibilidad de titulares (particularmente zaga de Everton).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y plan de juego esperado (¿ajustes defensivos de Everton? ¿continuidad de XI en Limache?).",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "xG y métricas de las últimas 5 fechas para ambos equipos para calibrar si el 3-0 de Limache es sostenible.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Limache",
+          "Everton de Viña del Mar"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas cercano al partido (closing line) para detectar si el mercado ajusta hacia la visita.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T20:56:19.239762+00:00",
+    "competition": "CHI1",
+    "match": "Huachipato vs Coquimbo Unido",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables y confirmación de si Cristian Zavala entra en la citación.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Parte médico y disponibilidad de titulares en Huachipato (bajas/sanciones reales).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Huachipato"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en las últimas 12 horas para detectar cambios no reflejados en el análisis.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T20:55:21.261048+00:00",
+    "competition": "CHI1",
+    "match": "Deportes Concepción vs Ñublense",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Alineaciones probables/confirmadas y si Ñublense rota tras el juego exigente anterior.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado de Concepción (confirmación del reemplazo de Grillo y estado de titulares).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Concepción"
+        ]
+      },
+      {
+        "need": "xG recientes (últimas 5) para estimar mejor el total esperado de goles.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T20:54:28.735520+00:00",
+    "competition": "CHI1",
+    "match": "La Serena vs Union La Calera",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Confirmación oficial de la suspensión de Requena y reemplazo probable en la zaga.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "xG a favor/en contra de ambos equipos en las últimas 5 fechas para calibrar el total esperado y la paridad real.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y estado físico (cargas/rotación) del local tras el viaje previo.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena"
+        ]
+      }
+    ]
+  },
+  {
+    "need": "Confirmar bajas de última hora, recuperaciones de lesionados clave y suspensiones disciplinarias.",
+    "category": "injuries",
+    "priority": "alta",
+    "teams_affected": []
+  },
+  {
+    "need": "Alineaciones probables del último entrenamiento y posibles ajustes tácticos (esquema o roles específicos).",
+    "category": "tactical",
+    "priority": "media",
+    "teams_affected": []
+  },
+  {
+    "need": "Movimientos de mercado (odds/asiáticos) en las últimas 24h para detectar si la información pública ya está descontada.",
+    "category": "market",
+    "priority": "media",
+    "teams_affected": []
+  },
+  {
+    "need": "Factores de contexto: Estado del campo, fatiga por viajes internacionales o clima extremo (ej: calor extremo o lluvia).",
+    "category": "context",
+    "priority": "media",
+    "teams_affected": []
+  },
+  {
+    "need": "xG y volumen de tiros de los últimos 3-5 partidos para calibrar si la tendencia de goles es real o azarosa.",
+    "category": "stats",
+    "priority": "media",
+    "teams_affected": []
+  },
+  {
+    "need": "Actualización médica de Octavio Rivero y señales de rotación por Superclásico.",
+    "category": "injuries",
+    "priority": "alta",
+    "teams_affected": [
+      "Universidad de Chile"
+    ]
+  },
+  {
+    "need": "Estado físico de Larrivey y Grillo y si jugarán con el sub-21 titular.",
+    "category": "injuries",
+    "priority": "alta",
+    "teams_affected": [
+      "Deportes Concepción"
+    ]
+  },
+  {
+    "need": "Confirmar si Joaquín Larrivey está disponible tras su sanción.",
+    "category": "injuries",
+    "priority": "alta",
+    "teams_affected": [
+      "Deportes Limache"
+    ]
+  },
+  {
+    "need": "Plan de rotación de O'Higgins tras su partido de Copa Libertadores.",
+    "category": "tactical",
+    "priority": "alta",
+    "teams_affected": [
+      "O'Higgins"
+    ]
+  }
+]

@@ -1,0 +1,154 @@
+{
+  "generated_at": "2026-03-03T14:18:15.257352+00:00",
+  "total_evaluated": 54,
+  "accuracy_overall": 25.9,
+  "by_league": {
+    "CHI1": {
+      "stats": {
+        "total": 32,
+        "correct": 10,
+        "accuracy": 31.2,
+        "accuracy_by_sign": {
+          "1": {
+            "predicted": 13,
+            "correct": 8,
+            "accuracy": 61.5
+          },
+          "X": {
+            "predicted": 10,
+            "correct": 1,
+            "accuracy": 10.0
+          },
+          "2": {
+            "predicted": 9,
+            "correct": 1,
+            "accuracy": 11.1
+          }
+        },
+        "pred_distribution": {
+          "2": 9,
+          "1": 13,
+          "X": 10
+        },
+        "real_distribution": {
+          "2": 11,
+          "X": 9,
+          "1": 12
+        },
+        "error_counts": {
+          "correct": 10,
+          "draw_missed": 8,
+          "market_alignment_loss": 9,
+          "overconfident_wrong": 1,
+          "home_bias": 4
+        },
+        "avg_confidence_correct": 65.2,
+        "avg_confidence_incorrect": 62.5
+      },
+      "lessons": [
+        {
+          "pattern": "market_alignment_loss",
+          "severity": "alta",
+          "description": "Demasiadas picks contra el favorito del mercado en CHI1 terminaron en pérdida.",
+          "lesson": "Antes de ir contra el favorito 1X2 (probabilidad implícita), exige al menos 3 señales independientes: xG_diff_5 ≥ +0.4, bajas/sanciones clave en el favorito y ventaja situacional CHI1 (altitud en El Salvador/Calama; viaje largo norte–sur; descanso). Si tu prob. difiere del mercado >7 pp, mantén el signo de mercado o baja la confianza <55%."
+        },
+        {
+          "pattern": "draw_missed",
+          "severity": "alta",
+          "description": "Se escaparon muchos empates por forzar 1/2 en partidos parejos y de baja anotación.",
+          "lesson": "En CHI1 marca X solo si: total esperado ≤2.2, |xG_diff_5| ≤0.2 y la cuota del empate implica ≥28%. Si 1 y 2 están a ≤7 pp y no hay ventaja local clara (sin altitud ni aforo pleno), cambia a X. En clásicos (U. de Chile–Colo-Colo, U. Católica–Colo-Colo) endurece el umbral de X (≤2.0 goles esperados)."
+        },
+        {
+          "pattern": "away_win_misread",
+          "severity": "media",
+          "description": "Muy baja precisión en '2' pese a una tasa real de victorias visitantes similar a la local en CHI1.",
+          "lesson": "Predice '2' solo si el visitante es top-4 (Colo-Colo, U. Católica, U. de Chile) o tiene xG_diff_5 ≥ +0.4 y el mercado le da ≥40% (cuota ≤2.50). Evita '2' cuando el local juega en altitud (Cobresal, Cobreloa) o tras viaje largo del visitante, salvo que la ventaja de xG ≥ +0.5 y haya bajas locales confirmadas."
+        },
+        {
+          "pattern": "home_bias",
+          "severity": "media",
+          "description": "Tendencia a inflar '1' en escenarios donde el local no tiene ventaja real en CHI1.",
+          "lesson": "No marques '1' si el local no cumple al menos una: altitud (Cobresal/Cobreloa), descanso ≥+2 días, o xG_diff_5 ≥ +0.3. Si el visitante es top-4, exige dos de esas condiciones. Si la cuota local >2.70, prohíbe '1' salvo que existan ≥3 señales fuertes concurrentes."
+        },
+        {
+          "pattern": "overconfident_wrong",
+          "severity": "baja",
+          "description": "Alguna pick fallida con confianza alta sin respaldo multifuente.",
+          "lesson": "Capa la confianza en CHI1 así: X ≤58%, 2 ≤60% y 1 ≤65%, y solo supera esos topes con ≥3 señales alineadas (mercado, xG, bajas/fixture). Si el mercado se mueve ≥10 pts contra tu signo, reduce confianza <55% o evita la pick."
+        }
+      ],
+      "calibration_note": "En CHI1 la confianza media de aciertos (65.2%) e incorrectos (62.5%) es muy cercana; baja el baseline a ~58% y eleva >65% solo con 3+ señales concordantes y sin ir contra el mercado. Aplica topes: X ≤58% y 2 ≤60% salvo evidencia excepcional.",
+      "top_lesson": "No vayas contra el favorito del mercado en CHI1 sin 3 pruebas independientes; si tu probabilidad difiere >7 pp, alinea el signo o reduce la confianza por debajo de 55%."
+    },
+    "UCL": {
+      "stats": {
+        "total": 22,
+        "correct": 4,
+        "accuracy": 18.2,
+        "accuracy_by_sign": {
+          "1": {
+            "predicted": 16,
+            "correct": 4,
+            "accuracy": 25.0
+          },
+          "X": {
+            "predicted": 6,
+            "correct": 0,
+            "accuracy": 0.0
+          }
+        },
+        "pred_distribution": {
+          "1": 16,
+          "X": 6
+        },
+        "real_distribution": {
+          "X": 5,
+          "1": 10,
+          "2": 7
+        },
+        "error_counts": {
+          "draw_missed": 5,
+          "market_alignment_loss": 6,
+          "home_bias": 7,
+          "correct": 4
+        },
+        "avg_confidence_correct": 69.2,
+        "avg_confidence_incorrect": 65.8
+      },
+      "lessons": [
+        {
+          "pattern": "away_blindspot",
+          "severity": "alta",
+          "description": "No se emitieron '2' y hubo 7 victorias visitantes: sesgo ciego al visitante en UCL.",
+          "lesson": "En UCL, si la prob. implícita visitante ≥ 35% (cuota ≤ 2.85) o el AH marca visitante 0/−0.25 con cuota ≤ 1.95, evalúa '2' antes que '1'/'X'. Exige además ELO visitante ≥ +50 y diferencial xG (no penal) visitante ≥ +0.3 (últimos 5). Si 2 de 3 señales (mercado/ELO/xG) se cumplen, selecciona '2'."
+        },
+        {
+          "pattern": "home_bias",
+          "severity": "alta",
+          "description": "31.8% de errores por favorecer al local frente a favoritos UCL en salida.",
+          "lesson": "No elijas '1' cuando la prob. implícita local < 45% o el AH está en local pk con cuota ≥ 2.05; en UCL la ventaja de campo cae frente a élites viajeras. Si tu modelo da '1' pero el mercado favorece neutral/visitante, rebaja '1' en 8–10 pp o descártalo."
+        },
+        {
+          "pattern": "draw_missed",
+          "severity": "alta",
+          "description": "Se fallaron todos los 'X' pese a 5 empates reales: mala selección de partidos a empate.",
+          "lesson": "Solo predice 'X' en UCL si: Under 2.5 ≤ 1.75, líneas AH ~ pk (1.95–2.05 ambos) y ΔELO ≤ 25. En eliminatorias, permite 'X' con ida/vuelta abierta (±1 gol) y expectativa total ≤ 2.6; fuera de esos casos, evita 'X'."
+        },
+        {
+          "pattern": "market_alignment_loss",
+          "severity": "media",
+          "description": "27.3% de errores por apartarse del cierre sin edge verificable.",
+          "lesson": "Ancla tus probabilidades al cierre UCL: p_final = 0.7·p_mercado + 0.3·p_modelo. Solo desvíate del mercado >5 pp si hay 2 señales duras (alineaciones confirmadas, rotación por calendario UCL/ligas, baja clave o táctica). Si no, ajusta a la línea y evita picks contrarian."
+        },
+        {
+          "pattern": "pick_quality_filter",
+          "severity": "media",
+          "description": "Precisión global 18.2%: exceso de picks de bajo edge.",
+          "lesson": "En UCL publica un pick solo si el edge vs cierre ≥ 3 pp en '1/2' o ≥ 5 pp en 'X'; si no, abstente. Limita el slate a 3–5 picks con mayor gap modelo-mercado y descarta partidos con info incompleta o señales mixtas."
+        }
+      ],
+      "calibration_note": "La confianza media en aciertos (69.2%) y fallos (65.8%) es casi indistinguible: reduce 5–8 pp todas las confianzas en UCL y no superes 60% salvo cuando modelo y mercado coincidan (desviación <2 pp). Usa el cierre como prior para calibrar.",
+      "top_lesson": "Deja de evitar el '2': cuando el mercado haga favorito o co-favorito al visitante en UCL, prioriza '2' con confirmación ELO/xG en vez de refugiarte en '1'/'X'. Este cambio ataca directamente los 7 visitantes perdidos."
+    }
+  }
+}

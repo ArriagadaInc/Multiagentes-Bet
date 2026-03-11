@@ -1,0 +1,240 @@
+[
+  {
+    "type": "value_bet",
+    "match": "Atlético Madrid vs Club Brugge",
+    "pick": "1",
+    "odds": 1.44,
+    "bookmaker": "Marathon Bet",
+    "confidence": 78,
+    "implied_prob": 69.4,
+    "edge_pct": 8.6,
+    "stake_units": 1.4,
+    "rationale": "Valor detectado: Modelo (78%) vs Mercado (69.4% @ 1.44). Edge: 8.6%",
+    "tip_id": "TIP_UCL_2026-02-24_Atlético_Madrid_vs_Club_Brugge"
+  },
+  {
+    "type": "value_bet",
+    "match": "Bayer Leverkusen vs Olympiakos Piraeus",
+    "pick": "1",
+    "odds": 1.82,
+    "bookmaker": "1xBet",
+    "confidence": 63,
+    "implied_prob": 54.9,
+    "edge_pct": 8.1,
+    "stake_units": 1.3,
+    "rationale": "Valor detectado: Modelo (63%) vs Mercado (54.9% @ 1.82). Edge: 8.1%",
+    "tip_id": "TIP_UCL_2026-02-24_Bayer_Leverkusen_vs_Olympiakos_Piraeus"
+  },
+  {
+    "type": "value_bet",
+    "match": "Inter Milan vs Bodø/Glimt",
+    "pick": "1",
+    "odds": 1.3,
+    "bookmaker": "1xBet",
+    "confidence": 85,
+    "implied_prob": 76.9,
+    "edge_pct": 8.1,
+    "stake_units": 1.3,
+    "rationale": "Valor detectado: Modelo (85%) vs Mercado (76.9% @ 1.3). Edge: 8.1%",
+    "tip_id": "TIP_UCL_2026-02-24_Inter_Milan_vs_Bodø/Glimt"
+  },
+  {
+    "type": "value_bet",
+    "match": "Newcastle United vs Qarabağ FK",
+    "pick": "1",
+    "odds": 1.2,
+    "bookmaker": "1xBet",
+    "confidence": 89,
+    "implied_prob": 83.3,
+    "edge_pct": 5.7,
+    "stake_units": 1.1,
+    "rationale": "Valor detectado: Modelo (89%) vs Mercado (83.3% @ 1.2). Edge: 5.7%",
+    "tip_id": "TIP_UCL_2026-02-24_Newcastle_United_vs_Qarabağ_FK"
+  },
+  {
+    "type": "value_bet",
+    "match": "Real Madrid vs Benfica",
+    "pick": "1",
+    "odds": 1.53,
+    "bookmaker": "Betfair",
+    "confidence": 75,
+    "implied_prob": 65.4,
+    "edge_pct": 9.6,
+    "stake_units": 1.5,
+    "rationale": "Valor detectado: Modelo (75%) vs Mercado (65.4% @ 1.53). Edge: 9.6%",
+    "tip_id": "TIP_UCL_2026-02-25_Real_Madrid_vs_Benfica"
+  },
+  {
+    "type": "value_bet",
+    "match": "Juventus vs Galatasaray",
+    "pick": "X",
+    "odds": 5.4,
+    "bookmaker": "PMU (FR)",
+    "confidence": 60,
+    "implied_prob": 18.5,
+    "edge_pct": 41.5,
+    "stake_units": 4.6,
+    "rationale": "Valor detectado: Modelo (60%) vs Mercado (18.5% @ 5.4). Edge: 41.5%",
+    "tip_id": "TIP_UCL_2026-02-25_Juventus_vs_Galatasaray"
+  },
+  {
+    "type": "value_bet",
+    "match": "Cobresal vs La Serena",
+    "pick": "1",
+    "odds": 2.15,
+    "bookmaker": "Pinnacle",
+    "confidence": 61,
+    "implied_prob": 46.5,
+    "edge_pct": 14.5,
+    "stake_units": 1.9,
+    "rationale": "Valor detectado: Modelo (61%) vs Mercado (46.5% @ 2.15). Edge: 14.5%",
+    "tip_id": "TIP_CHI1_2026-02-27_Cobresal_vs_La_Serena"
+  },
+  {
+    "type": "value_bet",
+    "match": "Coquimbo Unido vs Deportes Concepción",
+    "pick": "1",
+    "odds": 1.65,
+    "bookmaker": "Pinnacle",
+    "confidence": 67,
+    "implied_prob": 60.6,
+    "edge_pct": 6.4,
+    "stake_units": 1.1,
+    "rationale": "Valor detectado: Modelo (67%) vs Mercado (60.6% @ 1.65). Edge: 6.4%",
+    "tip_id": "TIP_CHI1_2026-02-28_Coquimbo_Unido_vs_Deportes_Concepción"
+  },
+  {
+    "type": "value_bet",
+    "match": "Universidad de Concepción vs Everton de Viña del Mar",
+    "pick": "1",
+    "odds": 2.12,
+    "bookmaker": "GTbets",
+    "confidence": 64,
+    "implied_prob": 47.2,
+    "edge_pct": 16.8,
+    "stake_units": 2.2,
+    "rationale": "Valor detectado: Modelo (64%) vs Mercado (47.2% @ 2.12). Edge: 16.8%",
+    "tip_id": "TIP_CHI1_2026-03-01_Universidad_de_Concepción_vs_Everton_de_Viña_del_Mar"
+  },
+  {
+    "type": "value_bet",
+    "match": "Colo Colo vs Universidad de Chile",
+    "pick": "1",
+    "odds": 2.26,
+    "bookmaker": "Betfair",
+    "confidence": 62,
+    "implied_prob": 44.2,
+    "edge_pct": 17.8,
+    "stake_units": 2.3,
+    "rationale": "Valor detectado: Modelo (62%) vs Mercado (44.2% @ 2.26). Edge: 17.8%",
+    "tip_id": "TIP_CHI1_2026-03-01_Colo_Colo_vs_Universidad_de_Chile"
+  },
+  {
+    "type": "value_bet",
+    "match": "Ñublense vs Universidad Católica (CHI)",
+    "pick": "2",
+    "odds": 2.45,
+    "bookmaker": "Coolbet",
+    "confidence": 60,
+    "implied_prob": 40.8,
+    "edge_pct": 19.2,
+    "stake_units": 2.4,
+    "rationale": "Valor detectado: Modelo (60%) vs Mercado (40.8% @ 2.45). Edge: 19.2%",
+    "tip_id": "TIP_CHI1_2026-03-01_Ñublense_vs_Universidad_Católica_(CHI)"
+  },
+  {
+    "tip_id": "COMBO_1",
+    "type": "combo_2",
+    "total_odds": 1.87,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Atlético Madrid vs Club Brugge",
+        "pick": "1",
+        "odds": 1.44
+      },
+      {
+        "match": "Inter Milan vs Bodø/Glimt",
+        "pick": "1",
+        "odds": 1.3
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 1.87"
+  },
+  {
+    "tip_id": "COMBO_2",
+    "type": "combo_2",
+    "total_odds": 1.73,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Atlético Madrid vs Club Brugge",
+        "pick": "1",
+        "odds": 1.44
+      },
+      {
+        "match": "Newcastle United vs Qarabağ FK",
+        "pick": "1",
+        "odds": 1.2
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 1.73"
+  },
+  {
+    "tip_id": "COMBO_3",
+    "type": "combo_2",
+    "total_odds": 2.2,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Atlético Madrid vs Club Brugge",
+        "pick": "1",
+        "odds": 1.44
+      },
+      {
+        "match": "Real Madrid vs Benfica",
+        "pick": "1",
+        "odds": 1.53
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 2.20"
+  },
+  {
+    "tip_id": "COMBO_4",
+    "type": "combo_2",
+    "total_odds": 2.38,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Atlético Madrid vs Club Brugge",
+        "pick": "1",
+        "odds": 1.44
+      },
+      {
+        "match": "Coquimbo Unido vs Deportes Concepción",
+        "pick": "1",
+        "odds": 1.65
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 2.38"
+  },
+  {
+    "tip_id": "COMBO_5",
+    "type": "combo_2",
+    "total_odds": 1.56,
+    "stake_units": 0.75,
+    "legs": [
+      {
+        "match": "Inter Milan vs Bodø/Glimt",
+        "pick": "1",
+        "odds": 1.3
+      },
+      {
+        "match": "Newcastle United vs Qarabağ FK",
+        "pick": "1",
+        "odds": 1.2
+      }
+    ],
+    "rationale": "Combinada de 2 selecciones de alto valor. Cuota total: 1.56"
+  }
+]

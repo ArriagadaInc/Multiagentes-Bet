@@ -1,0 +1,340 @@
+[
+  {
+    "prediction_id": "UCL_2026-02-24_Atlético_Madrid_vs_Club_Brugge",
+    "home_team": "Atlético Madrid",
+    "away_team": "Club Brugge",
+    "prediction": "1",
+    "confidence": 75,
+    "score_prediction": "2-0",
+    "rationale": "Atlético presenta mejores métricas y un plan que castiga bien a balón parado y en transición. Brugge sufre cuando debe bascular rápido y proteger carriles interiores; el contexto local y las cuotas refuerzan el favoritismo colchonero.",
+    "key_factors": [
+      "Solidez en bloque medio-bajo y poder a balón parado del Atleti",
+      "Mejor diferencial de goles y control de segundas jugadas",
+      "Condicionantes de mercado que reflejan clara superioridad local"
+    ],
+    "risk_factors": [
+      "Transiciones rápidas de Brugge y pelotas quietas en contra",
+      "Posible atasco del Atleti ante bloque bajo sostenido"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-24_Bayer_Leverkusen_vs_Olympiakos_Piraeus",
+    "home_team": "Bayer Leverkusen",
+    "away_team": "Olympiakos Piraeus",
+    "prediction": "1",
+    "confidence": 63,
+    "score_prediction": "2-1",
+    "rationale": "Leverkusen debería imponer ritmo y amplitud para desordenar el bloque medio de Olympiakos. Si controla las pérdidas interiores, minimizará las contras rivales; en casa, el 1 tiene ligera ventaja.",
+    "key_factors": [
+      "Superior circulación y amplitud para abrir bloque bajo",
+      "Factor local y mayor volumen de llegadas en campo rival",
+      "Necesidad de Olympiakos de un partido lento para competir"
+    ],
+    "risk_factors": [
+      "Contras a la espalda y balón parado visitante",
+      "Errores en salida ante presión agresiva griega"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-24_Inter_Milan_vs_Bodø/Glimt",
+    "home_team": "Inter Milan",
+    "away_team": "Bodø/Glimt",
+    "prediction": "1",
+    "confidence": 84,
+    "score_prediction": "2-0",
+    "rationale": "Inter combina solidez (pocos goles encajados) con control del ritmo y superioridad territorial. Bodø/Glimt puede sufrir a la espalda de laterales ante el timing de los carrileros locales.",
+    "key_factors": [
+      "Dominio de segundas jugadas y control del ritmo",
+      "Ventaja táctica por carriles y centros laterales",
+      "Cuotas que reflejan una brecha de calidad amplia"
+    ],
+    "risk_factors": [
+      "Presión alta coordinada de Bodø/Glimt forzando errores",
+      "Un gol temprano visitante que rompa el guion"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-24_Newcastle_United_vs_Qarabağ_FK",
+    "home_team": "Newcastle United",
+    "away_team": "Qarabağ FK",
+    "prediction": "1",
+    "confidence": 90,
+    "score_prediction": "3-0",
+    "rationale": "Newcastle es muy superior física y técnicamente; su presión e insistencia en segundas jugadas y centros deben desnivelar ante un Qarabağ que concede mucho. Mercado y forma respaldan un 1 claro.",
+    "key_factors": [
+      "Intensidad sin balón y presión sobre mediocentro rival",
+      "Superioridad en duelos aéreos y segundas jugadas",
+      "Defensa visitante vulnerable (21 GC)"
+    ],
+    "risk_factors": [
+      "Rotaciones o relajación que bajen el ritmo",
+      "Contras aisladas del Qarabağ"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Atalanta_BC_vs_Borussia_Dortmund",
+    "home_team": "Atalanta BC",
+    "away_team": "Borussia Dortmund",
+    "prediction": "X",
+    "confidence": 57,
+    "score_prediction": "1-1",
+    "rationale": "Partido muy equilibrado: Atalanta compite bien en presiones y segundas jugadas, mientras Dortmund tiene pegada y transiciones peligrosas. El intercambio de momentos sugiere tablas.",
+    "key_factors": [
+      "Equilibrio general de rendimiento en UCL",
+      "Presión alta de Atalanta vs velocidad de Dortmund a la espalda",
+      "Acierto en áreas probablemente similar"
+    ],
+    "risk_factors": [
+      "Balón parado o una racha de eficacia que rompa la paridad",
+      "Errores individuales en salida"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Paris_Saint_Germain_vs_AS_Monaco",
+    "home_team": "Paris Saint Germain",
+    "away_team": "AS Monaco",
+    "prediction": "1",
+    "confidence": 85,
+    "score_prediction": "3-1",
+    "rationale": "Monaco llega con emergencia defensiva y zaga improvisada; PSG debe castigar por fuera y en transiciones con alta producción ofensiva. La diferencia de calidad y las cuotas apuntalan el 1.",
+    "key_factors": [
+      "Bajas clave en la defensa de Monaco",
+      "Superioridad ofensiva del PSG en bandas y cargas al área",
+      "Escenario de intercambios favorable al poder de fuego local"
+    ],
+    "risk_factors": [
+      "Transiciones de Monaco si el partido se rompe",
+      "Varianza alta en definición"
+    ],
+    "entities_impact": [
+      {
+        "player": "Geradequi",
+        "team": "AS Monaco",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Salí",
+        "team": "AS Monaco",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Suuidier",
+        "team": "AS Monaco",
+        "status": "lesionado",
+        "impact": "alto"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Real_Madrid_vs_Benfica",
+    "home_team": "Real Madrid",
+    "away_team": "Benfica",
+    "prediction": "1",
+    "confidence": 72,
+    "score_prediction": "2-1",
+    "rationale": "El Madrid debe imponer jerarquía en casa y encontrar ventaja en transiciones y balón parado. Benfica será compacto y dañino a la contra, por lo que el ‘ambos marcan’ es plausible, pero el peso local decide.",
+    "key_factors": [
+      "Factor Bernabéu y mayor calidad individual",
+      "Eficacia en transiciones y acciones a balón parado",
+      "Mejor diferencial ofensivo"
+    ],
+    "risk_factors": [
+      "Plan reactivo de Benfica y posibles penales",
+      "Gestión de contras portuguesas"
+    ],
+    "entities_impact": [],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "UCL_2026-02-25_Juventus_vs_Galatasaray",
+    "home_team": "Juventus",
+    "away_team": "Galatasaray",
+    "prediction": "X",
+    "confidence": 58,
+    "score_prediction": "1-1",
+    "rationale": "Juventus llega con crisis ofensiva sin sus tres ‘9’, lo que reduce amenaza y automatismos. Galatasaray, con Osimhen en forma, puede anotar, pero a domicilio el reparto de puntos es el escenario más probable.",
+    "key_factors": [
+      "Bajas simultáneas en el frente de ataque de Juventus",
+      "Capacidad de Galatasaray para presionar y castigar transiciones",
+      "Previsible volumen bajo de ocasiones claras del local"
+    ],
+    "risk_factors": [
+      "Gol tempranero que rompa el guion",
+      "Fragilidad reciente de Juve atrás que abra la puerta al 1-2"
+    ],
+    "entities_impact": [
+      {
+        "player": "Jonathan David",
+        "team": "Juventus",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Blahovic",
+        "team": "Juventus",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Milik",
+        "team": "Juventus",
+        "status": "lesionado",
+        "impact": "alto"
+      }
+    ],
+    "competition": "UCL",
+    "generated_at": "2026-02-21T23:12:48.626894+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-21_O'Higgins_vs_Colo_Colo",
+    "home_team": "O'Higgins",
+    "away_team": "Colo Colo",
+    "prediction": "2",
+    "confidence": 91,
+    "score_prediction": "0-1",
+    "rationale": "Colo Colo ya ganó 0-1 en este mismo estadio y mostró mayor control (57.9% posesión, 11 tiros). O'Higgins no registró tiros al arco en el último duelo y sufre en la finalización. Con automatismos de presión alta y mayor calidad en áreas, el visitante parte con ventaja clara.",
+    "key_factors": [
+      "H2H reciente: 0-1 para Colo Colo como visitante con superioridad en volumen ofensivo",
+      "O'Higgins sin tiros al arco en el último partido: baja eficacia",
+      "Mercado extremadamente volcado al 2, alineado con rendimientos y jerarquía"
+    ],
+    "risk_factors": [
+      "Partido de baja anotación que puede decidirse por detalles/variancia",
+      "Ajustes locales en defensa y salida bajo presión podrían igualar el trámite"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-21T23:14:01.332103+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-21_Universidad_Católica_(CHI)_vs_Coquimbo_Unido",
+    "home_team": "Universidad Católica (CHI)",
+    "away_team": "Coquimbo Unido",
+    "prediction": "X",
+    "confidence": 58,
+    "score_prediction": "1-1",
+    "rationale": "Católica llega tras un 0-3 que expone dudas en eficacia y balance, mientras Coquimbo encadena buenos resultados y defiende bien (2 GC en 3). Con estilos contrapuestos (posesión vs transiciones), el riesgo se reparte y el mercado marca paridad relativa.",
+    "key_factors": [
+      "Coquimbo sólido en bloque medio y transiciones; encaja poco",
+      "Católica generó 17 tiros pero solo 3 al arco: problemas de eficacia",
+      "Cuotas cercanas y tendencia reciente sugiere equilibrio"
+    ],
+    "risk_factors": [
+      "Reacción de Católica en casa con mejor ocupación del área",
+      "Balón parado puede decantar un partido cerrado"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-21T23:14:01.332103+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-22_La_Serena_vs_Universidad_de_Concepción",
+    "home_team": "La Serena",
+    "away_team": "Universidad de Concepción",
+    "prediction": "X",
+    "confidence": 57,
+    "score_prediction": "1-1",
+    "rationale": "La Serena compite mejor en casa pese a su mal inicio y viene de caer por un gol tardío. U. de Concepción llega tras una derrota clara, mostrando fragilidad reciente. Con cuotas muy parejas y necesidades similares, pinta a reparto de puntos.",
+    "key_factors": [
+      "La Serena ajustó atrás (solo 1 gol encajado en su último partido)",
+      "UdeC viene de 0-3: dudas en solidez defensiva",
+      "Mercado equilibrado entre 1 y 2, sugiriendo alta probabilidad de X"
+    ],
+    "risk_factors": [
+      "Un gol temprano puede romper el guion y abrir el juego",
+      "Errores individuales en salida pueden castigar a cualquiera"
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-02-21T23:14:01.332103+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-22_Audax_Italiano_vs_Everton_de_Viña_del_Mar",
+    "home_team": "Audax Italiano",
+    "away_team": "Everton de Viña del Mar",
+    "prediction": "1",
+    "confidence": 69,
+    "score_prediction": "2-0",
+    "rationale": "Audax llega con inercia tras un 3-0 y un plan claro de amplitud y presión tras pérdida. Everton suma 0 GF y 6 GC, además de una baja por sanción en defensa, y le cuesta generar peligro sostenido.",
+    "key_factors": [
+      "Racha y rendimiento reciente de Audax (3-0, 5 tiros al arco)",
+      "Everton: 0 goles en 3 partidos y fragilidad atrás (6 GC)",
+      "Baja por roja afecta estructura defensiva visitante"
+    ],
+    "risk_factors": [
+      "Posible repliegue bajo de Everton que frene a Audax",
+      "Volatilidad típica en CHI1 con marcadores cortos"
+    ],
+    "entities_impact": [
+      {
+        "player": "Hugo Magallanes",
+        "team": "Everton de Viña del Mar",
+        "status": "sancionado",
+        "impact": "medio-alto"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-02-21T23:14:01.332103+00:00",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-02-22_Universidad_de_Chile_vs_Deportes_Limache",
+    "home_team": "Universidad de Chile",
+    "away_team": "Deportes Limache",
+    "prediction": "1",
+    "confidence": 73,
+    "score_prediction": "2-1",
+    "rationale": "La U es favorita por plantilla y localía, y debería imponer posesión y ritmo. Limache compite con bloques bajos y transiciones, pero llega con una expulsión reciente que limita rotaciones. El mercado respalda con fuerza el 1.",
+    "key_factors": [
+      "Superioridad de la U en casa y cuotas marcadamente a favor",
+      "Limache cede posesión y sufre si lo arrinconan en campo propio",
+      "Sanción reduce opciones para sostener el bloque en los 90'"
+    ],
+    "risk_factors": [
+      "Forma reciente irregular de la U (derrota amplia previa)",
+      "Transiciones rápidas de Limache pueden castigar espacios"
+    ],
+    "entities_impact": [
+      {
+        "player": "Axel Alfonzo",
+        "team": "Deportes Limache",
+        "status": "sancionado",
+        "impact": "medio"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-02-21T23:14:01.332103+00:00",
+    "missing_data": []
+  }
+]

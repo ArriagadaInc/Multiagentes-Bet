@@ -1,0 +1,1449 @@
+[
+  {
+    "recorded_at": "2026-03-06T16:28:55.342032+00:00",
+    "competition": "CHI1",
+    "match": "Universidad de Chile vs Universidad de Concepción",
+    "match_date": "2026-03-09",
+    "items": [
+      {
+        "need": "Confirmación oficial de si Octavio Rivero entra o no en la convocatoria.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "Posible XI y señales de rotación de la U pensando en el Superclásico.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas close-to-kickoff para confirmar que el mercado sostiene el 1 fuerte.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": []
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T16:28:12.558153+00:00",
+    "competition": "CHI1",
+    "match": "Palestino vs Cobresal",
+    "match_date": "2026-03-08",
+    "items": [
+      {
+        "need": "Confirmación de si Jorge Henríquez ya está disponible o sigue con alguna restricción.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "Probables XI y esquema táctico (último entrenamiento) para anticipar ajustes en cierres de partido.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Cobresal",
+          "Palestino"
+        ]
+      },
+      {
+        "need": "xG y tiros a puerta de los últimos 3 partidos de ambos para calibrar el total esperado y el peso del X.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en las 24h previas (closing line) para validar si el mercado sostiene el 1.64.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T16:27:10.269947+00:00",
+    "competition": "CHI1",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineación probable/confirmada de O'Higgins y plan de rotaciones tras el partido de Libertadores",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins"
+        ]
+      },
+      {
+        "need": "Movimiento de cierre de mercado (odds/asiáticos) para validar si la fatiga ya está totalmente descontada",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "xG y tiros concedidos/creados en los últimos 5 partidos para calibrar el total esperado y probabilidad de X",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T16:26:32.452611+00:00",
+    "competition": "CHI1",
+    "match": "Audax Italiano vs Colo Colo",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables y reemplazo específico de Bolados en Colo-Colo (último entrenamiento).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Datos recientes de xG y ocasiones creadas/permitidas en las últimas 3 jornadas.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas día de partido y límites (para detectar info no pública).",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T16:25:41.747800+00:00",
+    "competition": "CHI1",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables/confirmadas del último entrenamiento (Everton con DT interino).",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar"
+        ]
+      },
+      {
+        "need": "Parte médico y sanciones confirmadas de ambos equipos.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "xG y tendencias de goles esperados de los últimos 5 partidos para estimar total esperado.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en las últimas 24-48h para ver si el mercado ajustó al cambio de DT.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T16:24:37.754548+00:00",
+    "competition": "CHI1",
+    "match": "Huachipato vs Coquimbo Unido",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones probables (sobre todo reemplazos en el medio y lateral izquierdo de Coquimbo).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Línea de goles y xG recientes de ambos equipos para calibrar el total esperado.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Confirmación oficial de sede/localía para descartar cualquier ambigüedad de calendario.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T16:23:36.685679+00:00",
+    "competition": "CHI1",
+    "match": "Deportes Concepción vs Ñublense",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Alineación y plan de rotación de Ñublense dada la semana corta.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "Confirmación del parte médico de Grillo y si Rojas (sub-21) será titular.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Concepción"
+        ]
+      },
+      {
+        "need": "xG y xGA de los últimos 5 partidos para estimar total esperado y gap real.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-06T16:22:37.137653+00:00",
+    "competition": "CHI1",
+    "match": "La Serena vs Union La Calera",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Confirmación oficial de si Requena cumple sanción en este partido.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y reporte del último entrenamiento (rotaciones o bajas de La Serena).",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena"
+        ]
+      },
+      {
+        "need": "xG y balón parado (a favor/en contra) de las últimas 5 fechas para medir riesgo de empate.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en las últimas 24-48 horas para detectar si el mercado ya descontó bajas.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:16:01.402773+00:00",
+    "competition": "CHI1",
+    "match": "Universidad de Chile vs Universidad de Concepción",
+    "match_date": "2026-03-09",
+    "items": [
+      {
+        "need": "Confirmación médica de Rivero y Hormazábal (disponibilidad y minutos esperados).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "Probables XI y ajuste táctico de la U ante las bajas (sistema y rol del 9).",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y límites en las 24-48h previas para validar si las bajas ya están plenamente descontadas.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:14:41.919878+00:00",
+    "competition": "CHI1",
+    "match": "Palestino vs Cobresal",
+    "match_date": "2026-03-08",
+    "items": [
+      {
+        "need": "Alineación probable y plan de rotación de Palestino tras el partido de Sudamericana.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Palestino"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado y disponibilidad efectiva de Jorge Henríquez.",
+        "category": "injuries",
+        "priority": "media",
+        "teams_affected": [
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "xG y métricas de creación/allowance de los últimos 5 partidos para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:13:55.848082+00:00",
+    "competition": "CHI1",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineación probable/confirmada de O’Higgins para medir profundidad real de la rotación.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado (bajas y cargas) de ambos equipos 24h antes.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y límites cerca del kickoff para detectar dinero informado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:13:05.664589+00:00",
+    "competition": "CHI1",
+    "match": "Audax Italiano vs Colo Colo",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación de alineación de Colo-Colo (si Aquino definitivamente no va y si hay rotaciones por el Superclásico).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Datos recientes de xG/ocaciones creadas y permitidas (últimos 5 partidos) para calibrar probabilidad de empate/goles.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Información del desgaste real de Audax (minutos acumulados, viajes y rotaciones tras Sudamericana).",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:12:24.913939+00:00",
+    "competition": "CHI1",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Reporte médico y disponibilidad de titulares clave (bajas/sanciones confirmadas) para ambos equipos.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "xG y tiros a favor/en contra de los últimos 5 partidos para calibrar el nivel real detrás de los resultados.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en las últimas 24-48h para detectar información de mercado no reflejada en el análisis.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "Posibles once iniciales y ajustes tácticos del interinato de Barroso.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:11:14.664911+00:00",
+    "competition": "CHI1",
+    "match": "Huachipato vs Coquimbo Unido",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables y reporte de bajas/altas de último entrenamiento para ambos equipos.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "xG a favor/en contra de los últimos 5 partidos para medir si la racha de Coquimbo es varianza o rendimiento real.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Coquimbo Unido",
+          "Huachipato"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y % de dinero apostado cerca del kickoff para validar si el mercado sostiene al 2.",
+        "category": "market",
+        "priority": "alta",
+        "teams_affected": [
+          "Coquimbo Unido",
+          "Huachipato"
+        ]
+      },
+      {
+        "need": "H2H reciente en Talcahuano con métricas de goles y xG para estimar el sesgo hacia la X.",
+        "category": "h2h",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:09:51.618576+00:00",
+    "competition": "CHI1",
+    "match": "Deportes Concepción vs Ñublense",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Parte médico y XI probable/rotaciones de ambos (bajas o descansos clave).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "xG y tiros a favor/en contra de las últimas 5 fechas para estimar mejor el total esperado.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y % de dinero cercano al kickoff para ver si se consolida el favorito.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T22:08:34.719332+00:00",
+    "competition": "CHI1",
+    "match": "La Serena vs Union La Calera",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Confirmación oficial de la sanción de Requena y quién lo reemplaza en la zaga.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y estado físico de Jeisson Vargas y Sebastián Sáez.",
+        "category": "injuries",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "xG a favor/en contra de ambos en las últimas 5 fechas para afinar el total esperado.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:27:39.005005+00:00",
+    "competition": "CHI1",
+    "match": "Universidad de Chile vs Universidad de Concepción",
+    "match_date": "2026-03-09",
+    "items": [
+      {
+        "need": "Confirmación de alineaciones probables y estatus final de Octavio Rivero en el último entrenamiento.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "xG y xGA de los últimos 5 partidos para ambos equipos para validar la superioridad real.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en las últimas 24-48h y porcentaje de dinero apostado por signo.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:26:37.363309+00:00",
+    "competition": "CHI1",
+    "match": "Palestino vs Cobresal",
+    "match_date": "2026-03-08",
+    "items": [
+      {
+        "need": "Confirmar si Jorge Henríquez ya cumplió su sanción o está disponible para esta fecha.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "xG y splits casa/visita de últimos 5 partidos para ambos equipos.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y reporte del último entrenamiento de Palestino.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:25:29.358183+00:00",
+    "competition": "CHI1",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación de rotaciones y parte médico de O'Higgins post-Libertadores (titulares con carga alta).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y roles tácticos (quiénes descansan y quién reemplaza).",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "Seguimiento de movimiento de cuotas/asiáticos en las últimas 24h para validar si el mercado amplifica o reduce la ventaja visitante.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:24:47.775317+00:00",
+    "competition": "CHI1",
+    "match": "Audax Italiano vs Colo Colo",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables y reporte de rotación de Colo-Colo previo al partido.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "xG y tiros creados/permitidos en los últimos 5 partidos para ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado de atacantes alternativos de Colo-Colo (sustitutos de Bolados).",
+        "category": "injuries",
+        "priority": "media",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:23:55.370040+00:00",
+    "competition": "CHI1",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables y estado físico de titulares clave (última práctica).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "Plan táctico de Barroso para su primer partido (presión/altura de bloque, cambios de XI).",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas desde la apertura para detectar flujo de dinero informado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:23:08.447156+00:00",
+    "competition": "CHI1",
+    "match": "Huachipato vs Coquimbo Unido",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Parte médico y disponibilidad de titulares clave en ambos equipos (bajas/sanciones confirmadas).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "xG reciente (últimos 5 partidos) y métricas defensivas/ofensivas para calibrar el modelo de goles.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Información táctica probable (sistemas y ajustes del DT para este duelo).",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y límites en las últimas 24-48h para detectar dinero informado.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:22:17.681787+00:00",
+    "competition": "CHI1",
+    "match": "Deportes Concepción vs Ñublense",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Lista de bajas y estado físico (rotaciones) de Ñublense tras el último partido",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y esquema de Deportes Concepción (cambios tácticos en casa)",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción"
+        ]
+      },
+      {
+        "need": "xG recientes (últimos 5) de ambos para afinar expectativa de goles",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T19:21:32.797858+00:00",
+    "competition": "CHI1",
+    "match": "La Serena vs Union La Calera",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Alineaciones probables y bajas confirmadas del último entrenamiento.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "xG y tiros (últimas 5 fechas) para estimar total esperado y chance real del empate.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en 24-48h y límites para detectar info no pública.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Over/Under de mercado y estado del césped/clima el día del partido.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:18:03.403562+00:00",
+    "competition": "CHI1",
+    "match": "Universidad de Chile vs Universidad de Concepción",
+    "match_date": "2026-03-09",
+    "items": [
+      {
+        "need": "Alineaciones probables y parte médico confirmado 24-48h antes (bajas/altas claves) de ambos equipos.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      },
+      {
+        "need": "xG, tiros y llegadas de los últimos 5 partidos por equipo (fuente oficial) para estimar total de goles y dominio real.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y límites (closing line) en las 24h previas para detectar información no pública.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:17:02.116571+00:00",
+    "competition": "CHI1",
+    "match": "Palestino vs Cobresal",
+    "match_date": "2026-03-08",
+    "items": [
+      {
+        "need": "Parte médico y estatus de titulares ofensivos (delanteros/mediapuntas) de ambos equipos para confirmar poder de gol",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "xG y xGA de las últimas 5 fechas para cuantificar el total esperado de gol y la calidad de llegadas",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "Posibles rotaciones y once probable tras el último entrenamiento",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "Movimiento de línea y porcentaje de apuestas cercano al cierre para detectar sesgos o información tardía",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:16:01.676400+00:00",
+    "competition": "CHI1",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación de alineación y rotaciones de O'Higgins tras la serie con Bahía.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins"
+        ]
+      },
+      {
+        "need": "Reporte médico actualizado de titulares en ambos equipos (bajas o cargas específicas).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "Movimiento de mercado en las 12 horas previas (posible señal de información interna).",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:15:13.945984+00:00",
+    "competition": "CHI1",
+    "match": "Audax Italiano vs Colo Colo",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineación probable y rol del reemplazante de Bolados (extremos disponibles y estado físico).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "xG for/against de los últimos 5 partidos para ambos equipos para afinar el total de goles y el margen.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Reporte de última sesión de entrenamiento y posibles rotaciones por calendario.",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Colo Colo",
+          "Audax Italiano"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:14:00.845690+00:00",
+    "competition": "CHI1",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación oficial de si Larrivey cumple su segunda fecha y no está disponible para este partido.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "Probables XI y último reporte de entrenamiento (especialmente la zaga de Limache y el 9 de Everton).",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "xG y métricas recientes (últimos 5) para calibrar expectativa de goles y dominio real.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:12:08.413931+00:00",
+    "competition": "CHI1",
+    "match": "Huachipato vs Coquimbo Unido",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Confirmación oficial de sede/condición de localía (fixture vs reportes de cancha).",
+        "category": "context",
+        "priority": "alta",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y si Cristian Zavala entra en la citación.",
+        "category": "injuries",
+        "priority": "media",
+        "teams_affected": [
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas en las últimas 24-48 horas para detectar cambios por bajas o información nueva.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato",
+          "Coquimbo Unido"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:08:26.076750+00:00",
+    "competition": "CHI1",
+    "match": "Deportes Concepción vs Ñublense",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Confirmación oficial de disponibilidad/sanción de Joaquín Larrivey para este partido.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Concepción"
+        ]
+      },
+      {
+        "need": "Alineaciones probables y reporte de cargas/rotación de Ñublense por jugar en viernes.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "xG y totales de mercado (línea de goles) de la última semana para validar expectativa de bajo score.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-05T14:07:24.744037+00:00",
+    "competition": "CHI1",
+    "match": "La Serena vs Union La Calera",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Alineaciones probables y minutos recientes de los titulares (9/10/creadores) para ambos equipos.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "xG y xGA de los últimos 5 partidos para calibrar mejor la expectativa de goles y la paridad real.",
+        "category": "stats",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Historial H2H reciente en casa de La Serena para ajustar el sesgo de localía.",
+        "category": "h2h",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:31:03.323583+00:00",
+    "competition": "CHI1",
+    "match": "Universidad de Chile vs Universidad de Concepción",
+    "match_date": "2026-03-09",
+    "items": [
+      {
+        "need": "Parte médico y XI probable de U. de Chile (último entrenamiento) para confirmar que no hay bajas de titulares",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Universidad de Chile"
+        ]
+      },
+      {
+        "need": "xG y tiros (últimos 5 partidos) de ambos equipos para cuantificar la mejora ofensiva/defensiva",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      },
+      {
+        "need": "Movimiento de cuotas y limits de mercado en las últimas 48h para detectar info no pública",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Universidad de Chile",
+          "Universidad de Concepción"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:30:00.709645+00:00",
+    "competition": "CHI1",
+    "match": "Palestino vs Cobresal",
+    "match_date": "2026-03-08",
+    "items": [
+      {
+        "need": "Alineaciones probables y parte médico actualizado de los atacantes de Palestino.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Palestino"
+        ]
+      },
+      {
+        "need": "Evolución de cuotas y límites en las últimas 24-48h para detectar info no pública.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "xG y volumen de tiros de los últimos 3-5 partidos de ambos equipos.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Palestino",
+          "Cobresal"
+        ]
+      },
+      {
+        "need": "Detalle de viaje y descanso de Cobresal (itinerario y días de recuperación).",
+        "category": "context",
+        "priority": "media",
+        "teams_affected": [
+          "Cobresal"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:29:07.815143+00:00",
+    "competition": "CHI1",
+    "match": "O'Higgins vs Universidad Católica (CHI)",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables y reporte de cargas del último entrenamiento de O'Higgins (minutos acumulados post-Libertadores).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins"
+        ]
+      },
+      {
+        "need": "Parte médico actualizado (bajas/sanciones) de ambos equipos para confirmar si habrá rotaciones clave.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      },
+      {
+        "need": "Registros de rendimiento reciente como visitante/local (xG y llegadas) de las últimas 5 fechas.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "O'Higgins",
+          "Universidad Católica (CHI)"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:28:29.209619+00:00",
+    "competition": "CHI1",
+    "match": "Audax Italiano vs Colo Colo",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables y reporte del último entrenamiento (rol de Palacios/Paiva y extremos en Colo-Colo).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Colo Colo"
+        ]
+      },
+      {
+        "need": "Confirmación del plan táctico de Audax (si bloque bajo 5-4-1 o presión media) para estimar el total de goles.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano"
+        ]
+      },
+      {
+        "need": "Movimiento de mercado hasta el cierre (closing line) para validar si hay sobrevaloración del visitante.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Colo Colo",
+          "Audax Italiano"
+        ]
+      },
+      {
+        "need": "xG de las últimas 5 fechas para ambos equipos para cuantificar la probabilidad de X en partido de bajas.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Audax Italiano",
+          "Colo Colo"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:27:42.574029+00:00",
+    "competition": "CHI1",
+    "match": "Everton de Viña del Mar vs Deportes Limache",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables/confirmadas y si Limache ajustará esquema sin Larrivey (9 puro vs falso 9).",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "Clarificar la contradicción en la ‘forma’ de Limache (líder vs racha negativa reportada).",
+        "category": "form",
+        "priority": "alta",
+        "teams_affected": [
+          "Deportes Limache"
+        ]
+      },
+      {
+        "need": "xG y tiros creados/permitidos últimas 5 fechas para estimar total de goles y probabilidad de X.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Everton de Viña del Mar",
+          "Deportes Limache"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:26:30.469408+00:00",
+    "competition": "CHI1",
+    "match": "Huachipato vs Coquimbo Unido",
+    "match_date": "2026-03-07",
+    "items": [
+      {
+        "need": "Alineaciones probables/confirmadas (especialmente si Zavala entra en citación y confirmación de Cabrera como titular en el lateral).",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "Coquimbo Unido"
+        ]
+      },
+      {
+        "need": "Parte médico y disponibilidad real de Huachipato (lesiones/rotaciones) previo al partido.",
+        "category": "injuries",
+        "priority": "media",
+        "teams_affected": [
+          "Huachipato"
+        ]
+      },
+      {
+        "need": "Movimiento de mercado en horas previas (si las bajas de Coquimbo ya están plenamente descontadas).",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "Coquimbo Unido",
+          "Huachipato"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:25:06.676284+00:00",
+    "competition": "CHI1",
+    "match": "Deportes Concepción vs Ñublense",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Alineaciones probables y confirmación de posibles rotaciones en Ñublense por el corto descanso.",
+        "category": "tactical",
+        "priority": "alta",
+        "teams_affected": [
+          "Ñublense"
+        ]
+      },
+      {
+        "need": "Parte médico y tiempos de recuperación de Grillo y detalle del reemplazo (perfil/juegos previos del sub21).",
+        "category": "injuries",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción"
+        ]
+      },
+      {
+        "need": "xG y tiros a favor/en contra de las últimas 5 fechas para estimar total esperado de goles.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "Deportes Concepción",
+          "Ñublense"
+        ]
+      }
+    ]
+  },
+  {
+    "recorded_at": "2026-03-04T09:23:50.633267+00:00",
+    "competition": "CHI1",
+    "match": "La Serena vs Union La Calera",
+    "match_date": "2026-03-06",
+    "items": [
+      {
+        "need": "Parte médico actualizado y posibles sanciones de titulares en ambos equipos.",
+        "category": "injuries",
+        "priority": "alta",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Alineaciones probables del último entrenamiento para inferir plan de juego y ajustes.",
+        "category": "tactical",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "xG y xGA de las últimas 5 fechas para calibrar la calidad real de las ocasiones.",
+        "category": "stats",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      },
+      {
+        "need": "Movimiento de cierre del mercado (CLV) y límites para validar la dirección del consenso.",
+        "category": "market",
+        "priority": "media",
+        "teams_affected": [
+          "La Serena",
+          "Union La Calera"
+        ]
+      }
+    ]
+  }
+]
