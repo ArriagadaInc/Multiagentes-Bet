@@ -210,6 +210,10 @@ def run_pipeline_script(ligas: list = None):
         log_placeholder = log_expander.empty()
         full_logs = ""
         
+        # Capturar var entorno actual, setear EXPENSIVE_MODE
+        env_vars = os.environ.copy()
+        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", True) else "false"
+
         # Start Process (Merge stdout/stderr)
         process = subprocess.Popen(
             cmd,
@@ -218,7 +222,8 @@ def run_pipeline_script(ligas: list = None):
             text=True,
             encoding='utf-8', 
             errors='replace',
-            bufsize=1 # Line buffered
+            bufsize=1, # Line buffered
+            env=env_vars
         )
         
         # Registrar PID para poder detenerlo
@@ -302,6 +307,10 @@ def run_partial_pipeline_from_journalist_script():
         log_placeholder = log_expander.empty()
         full_logs = ""
 
+        # Capturar var entorno actual, setear EXPENSIVE_MODE
+        env_vars = os.environ.copy()
+        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", True) else "false"
+
         process = subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
@@ -309,7 +318,8 @@ def run_partial_pipeline_from_journalist_script():
             text=True,
             encoding='utf-8',
             errors='replace',
-            bufsize=1
+            bufsize=1,
+            env=env_vars
         )
 
         # Registrar PID para poder detenerlo
@@ -375,6 +385,9 @@ def run_web_agent_script(user_prompt: str):
         if not os.path.exists(script_name):
             return False, "No existe run_web_agent.py"
 
+        env_vars = os.environ.copy()
+        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", True) else "false"
+
         cmd = [sys.executable, script_name, "--prompt", user_prompt]
         result = subprocess.run(
             cmd,
@@ -382,6 +395,7 @@ def run_web_agent_script(user_prompt: str):
             text=True,
             encoding="utf-8",
             errors="replace",
+            env=env_vars
         )
         logs = (result.stdout or "") + ("\n" + result.stderr if result.stderr else "")
         return result.returncode == 0, logs
@@ -394,6 +408,9 @@ with st.sidebar:
     st.markdown("---")
     
     st.subheader("⚙️ Panel de Control")
+    
+    st.toggle("✨ Modo Caro (GPT-5)", value=True, key="expensive_mode", help="Si se apaga, usará Gemini 2.5 Flash-Lite para ahorrar costos.")
+    st.markdown("---")
     
     liga_sidebar = st.selectbox(
         "⚽ Liga",

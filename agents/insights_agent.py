@@ -912,19 +912,15 @@ def _find_next_match(
 # ============================================================================
 
 def _make_llm() -> Optional[Any]:
-    """Crea instancia de ChatOpenAI si OPENAI_API_KEY está configurada."""
+    """Crea instancia de LLM según factory."""
     try:
-        from langchain_openai import ChatOpenAI
-
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            return None
-        return ChatOpenAI(
-            model="gpt-5", 
+        from utils.llm_factory import get_llm
+        return get_llm(
             temperature=0.2,
             callbacks=[TokenTrackingCallbackHandler()]
         )
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Error al inicializar LLM: {e}")
         return None
 
 

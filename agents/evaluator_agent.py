@@ -125,14 +125,9 @@ class ResultEvaluator:
     def _get_llm_matching(self, pred_home: str, pred_away: str, candidates: List[Dict]) -> Optional[str]:
         """Usa el LLM para identificar un partido entre candidatos de ESPN."""
         try:
-            from langchain_openai import ChatOpenAI
-            api_key = os.getenv("OPENAI_API_KEY")
-            if not api_key: return None
+            from utils.llm_factory import get_llm
             
-            # Usamos GPT-4o para el matching (más inteligente para estas tareas)
-            model_to_use = "gpt-4o"
-            llm = ChatOpenAI(
-                model=model_to_use, 
+            llm = get_llm(
                 temperature=0,
                 callbacks=[TokenTrackingCallbackHandler()]
             )

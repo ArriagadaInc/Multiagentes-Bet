@@ -236,14 +236,9 @@ def select_top_videos(candidates: List[Dict[str, Any]], competition: str, n: int
 # ============================================================================
 
 def _make_llm() -> Optional[Any]:
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return None
     try:
-        from langchain_openai import ChatOpenAI
-        model_name = os.getenv("JOURNALIST_LLM_MODEL", "gpt-4o")
-        return ChatOpenAI(
-            model=model_name,
+        from utils.llm_factory import get_llm
+        return get_llm(
             temperature=0.1,
             callbacks=[TokenTrackingCallbackHandler()]
         )
