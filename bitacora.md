@@ -2,6 +2,7 @@
 💻 **Repositorio Oficial:** [ArriagadaInc/Multiagentes-Bet](https://github.com/ArriagadaInc/Multiagentes-Bet)
 
 ### 📌 Hitos Recientes de la Fase 2
+- **Micro-tarea 6 (Modo Económico Dual OpenAI/Gemini)**: Implementación quirúrgica de un `llm_factory.py` y una variable de entorno `EXPENSIVE_MODE` (controlable via UI en `app.py`). Todos los agentes (`analyst`, `insights`, `evaluator`, `journalist`) fueron refactorizados para consumir el factory sin romper los contratos estrictos de LangChain (`bind_tools`, `with_structured_output`). Ahora se puede procesar con **GPT-5** (por defecto) o **Gemini 2.5 Flash-Lite** para escalar y abaratar costos manteniendo interoperabilidad. Autenticación con `GEMINI_API_KEY` o `GOOGLE_API_KEY` asegurada.
 - **Micro-tarea 4.1 (Afinamiento de Sospecha)**: Lógica refinada para `is_suspicious`. Reducción pragmática de falsos positivos en `unknown_scope` limitándolos a señales empíricamente accionables (lesiones, rotaciones, fatiga). Deduplicación cruzada activada filtrando caracteres especiales y equivalencias.
 - **Micro-tarea 5 (Aduana de Roster & Oponente)**: Creación de memoria de observación de "Entities" por equipo para el partido. Si un jugador es mencionado en el contexto de "home" pero solo fue detectado en "away", dispara gravedad `foreign_entity_in_team_signal`. El mismatch de `subject_type` ahora tolera menciones legítimas ("opponent_form") que no vienen estructuradas.
 

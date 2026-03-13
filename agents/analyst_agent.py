@@ -327,19 +327,15 @@ def _merge_analyst_web_check_signals(team_insights: Optional[dict], check_result
 # ============================================================================
 
 def _make_llm() -> Optional[Any]:
-    """Crea instancia de ChatOpenAI si OPENAI_API_KEY está configurada."""
+    """Crea instancia del LLM según el factory."""
     try:
-        from langchain_openai import ChatOpenAI
-
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            return None
-        return ChatOpenAI(
-            model="gpt-5", 
+        from utils.llm_factory import get_llm
+        return get_llm(
             temperature=0.3,
             callbacks=[TokenTrackingCallbackHandler()]
         )
-    except Exception:
+    except Exception as e:
+        logger.error(f"Fallo al inicializar el modelo en get_llm: {e}")
         return None
 
 
