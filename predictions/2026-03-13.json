@@ -1,0 +1,247 @@
+[
+  {
+    "prediction_id": "CHI1_2026-03-13_Audax_Italiano_vs_Deportes_Concepción",
+    "home_team": "Audax Italiano",
+    "away_team": "Deportes Concepción",
+    "prediction": "1",
+    "confidence": 49,
+    "market_prob_used": "44.7",
+    "score_prediction": "1-0",
+    "rationale": "El mercado favorece a Audax (~44.7% normalizado) y el visitante llega último, con 4 puntos y 9 GC en 6 fechas. Audax es de baja anotación pero competitivo en casa y viene de perder por la mínima ante el líder, escenario para controlar y transitar. Concepción arrastra problemas defensivos y la baja de Grillo, además de ruido extradeportivo; todo sugiere leve ventaja local en un partido de pocos goles. El empate sigue siendo plausible dada la baja producción ofensiva de Audax.",
+    "key_factors": [
+      "Alineación con el favorito del mercado y localía para Audax en un cruce de baja diferencia cualitativa",
+      "Deportes Concepción con mala forma reciente (LWDLL) y 9 goles recibidos en 6 PJ",
+      "Lesión de Fausto Grillo reduce solidez defensiva visitante; Audax sin nuevas bajas relevantes"
+    ],
+    "risk_factors": [
+      "Probabilidad de empate elevada en mercado (~28.8%) y perfil de pocos goles de Audax (4 GF/6PJ)",
+      "Posible pico anímico del Conce y ausencia de confirmación de XI/parte médico final"
+    ],
+    "entities_impact": [
+      {
+        "player": "Fabián Orellana",
+        "team": "Audax Italiano",
+        "status": "lesionado",
+        "impact": "medio"
+      },
+      {
+        "player": "Fausto Grillo",
+        "team": "Deportes Concepción",
+        "status": "lesionado",
+        "impact": "medio-alto"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-14_Coquimbo_Unido_vs_Universidad_de_Chile",
+    "home_team": "Coquimbo Unido",
+    "away_team": "Universidad de Chile",
+    "prediction": "1",
+    "confidence": 44,
+    "market_prob_used": "41.3",
+    "score_prediction": "1-0",
+    "rationale": "El mercado da un favoritismo leve al local y las señales recientes refuerzan ese sesgo: Coquimbo llega con inercia positiva (Supercopa y 3-1 a Huachipato) y localía. La U arrastra crisis anímica, eliminación internacional y la baja prolongada de Rivero que reduce su gol. Partido parejo y de pocos márgenes, con empate muy vivo; mantengo ‘1’ alineado al mercado y con confianza moderada.",
+    "key_factors": [
+      "Momentum local: campeón de Supercopa y victoria 3-1 ante Huachipato la fecha pasada.",
+      "Contexto adverso en la U: presión mediática y eliminación reciente que afecta el anímico.",
+      "Baja de Octavio Rivero (lesión de rodilla, largo plazo) merma la referencia ofensiva visitante."
+    ],
+    "risk_factors": [
+      "Cuotas muy cercanas y empate con probabilidad implícita alta (~31%), escenario X plausible.",
+      "Sin parte médico/once confirmado de Coquimbo (p. ej., estado de Zavala), lo que puede mover el equilibrio."
+    ],
+    "entities_impact": [
+      {
+        "player": "Octavio Rivero",
+        "team": "Universidad de Chile",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "Cristian Zavala",
+        "team": "Coquimbo Unido",
+        "status": "duda",
+        "impact": "medio"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-14_Universidad_Católica_(CHI)_vs_Everton_de_Viña_del_Mar",
+    "home_team": "Universidad Católica (CHI)",
+    "away_team": "Everton de Viña del Mar",
+    "prediction": "1",
+    "confidence": 60,
+    "market_prob_used": "58.5",
+    "score_prediction": "2-0",
+    "rationale": "El mercado marca a la UC como favorito claro (≈58.5% implícita normalizada). Católica es 4ª con mayor producción ofensiva (11 GF) frente a un Everton 15º con solo 4 goles en 6 fechas. El visitante llega irregular (4 derrotas) y con plan reactivo que limita su techo ofensivo; en un juego probablemente cerrado, la mayor pegada local inclina el signo. No hay bajas clave confirmadas que ameriten desviarse del mercado.",
+    "key_factors": [
+      "Cuota local ~1.50 respalda el 1 (prob. implícita normalizada ≈58.5%).",
+      "Brecha de producción: UC 11 GF vs Everton 4 GF en 6 partidos; UC mejor posicionado (4º vs 15º).",
+      "Señales recientes: UC mostró capacidad de respuesta (triunfo reciente citado vs Ñublense); Everton con 4 derrotas/6."
+    ],
+    "risk_factors": [
+      "Inconsistencia de UC: caída 0-1 reciente ante O'Higgins y presión externa competitiva.",
+      "Partido potencialmente de baja anotación (tendencia a X en fuentes), donde un detalle puede equilibrar."
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-15_Universidad_de_Concepción_vs_Palestino",
+    "home_team": "Universidad de Concepción",
+    "away_team": "Palestino",
+    "prediction": "2",
+    "confidence": 33,
+    "market_prob_used": "39.1",
+    "score_prediction": "1-2",
+    "rationale": "El mercado marca leve favoritismo visitante en un partido muy parejo. U. de Concepción muestra fragilidad defensiva (9 GC, DG -4) y arrastra ruido institucional por impagos, mientras Palestino llega con mejor caudal ofensivo (11 GF). Aun así, la paridad de cuotas y el buen punto reciente de UdeC ante la U sostienen un escenario de alta varianza, por eso la confianza es contenida.",
+    "key_factors": [
+      "Alineación con el mercado: Palestino ligero favorito (cuota 2.56 ≈ 39%).",
+      "U. de Concepción concede en promedio >1 gol por partido (9 GC en 6) y DG negativo.",
+      "Palestino tiene producción ofensiva superior (11 GF en 6), capaz de castigar transiciones débiles."
+    ],
+    "risk_factors": [
+      "Cuotas casi ‘pick’em’ (diferencia <5%), alta probabilidad de X.",
+      "Impulso anímico local tras empatar con Universidad de Chile y sin bajas confirmadas."
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-15_Cobresal_vs_Deportes_Limache",
+    "home_team": "Cobresal",
+    "away_team": "Deportes Limache",
+    "prediction": "1",
+    "confidence": 34,
+    "market_prob_used": "36.6",
+    "score_prediction": "2-1",
+    "rationale": "Mercado ligeramente a favor del local en un partido muy parejo; en El Salvador la altitud suele ser un hándicap real para el visitante. Cobresal, pese a la irregularidad, puede castigar el ajuste defensivo de Limache por la baja de Parot. Limache llega bien y con Pinares de vuelta, pero su plan de atacar la espalda del local puede resentirse físicamente a la altura. Dada la paridad y riesgo de X, bajo la confianza respecto al implícito.",
+    "key_factors": [
+      "Altitud y localía de Cobresal en El Salvador: ventaja situacional típica en CHI1",
+      "El mercado favorece por poco el 1 en cuotas muy equilibradas",
+      "Baja de Alfonso Parot obliga ajuste en la zaga de Limache (ingresa Axel Alfonso), posible foco a explotar"
+    ],
+    "risk_factors": [
+      "Limache en mejor forma general y con el retorno de César Pinares que eleva su creación",
+      "Cuotas casi niveladas (<5% de diferencia) y probabilidad alta de empate"
+    ],
+    "entities_impact": [
+      {
+        "player": "Alfonso Parot",
+        "team": "Deportes Limache",
+        "status": "lesionado",
+        "impact": "alto"
+      },
+      {
+        "player": "César Pinares",
+        "team": "Deportes Limache",
+        "status": "regresa",
+        "impact": "medio"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-15_Ñublense_vs_La_Serena",
+    "home_team": "Ñublense",
+    "away_team": "La Serena",
+    "prediction": "1",
+    "confidence": 53,
+    "market_prob_used": "50.5",
+    "score_prediction": "2-1",
+    "rationale": "El mercado favorece al local (~50.5%) y no hay señales concretas que lo contradigan. Ñublense llega con rebote anímico y buen orden táctico, mostrando profundidad (4 cambios sin resentir) y preparación específica para controlar las transiciones de La Serena. La Serena viene en racha (2 triunfos), lo que baja el margen, pero la localía y el nivel mostrado por Ñublense inclinan el signo al 1.",
+    "key_factors": [
+      "Alineación con el mercado: Ñublense favorito con ~50.5% implícito.",
+      "Mejora reciente y solidez táctica; victoria 0-2 y plantel competitivo pese a rotaciones.",
+      "Plan de juego enfocado en neutralizar transiciones del rival; ventaja local."
+    ],
+    "risk_factors": [
+      "La Serena llega con dos victorias consecutivas y buen momentum.",
+      "Lorenzo Reyes arrastró molestia (aunque jugó completo); si no está al 100% baja control en medio."
+    ],
+    "entities_impact": [
+      {
+        "player": "Lorenzo Reyes",
+        "team": "Ñublense",
+        "status": "duda",
+        "impact": "medio"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-16_Union_La_Calera_vs_O'Higgins",
+    "home_team": "Union La Calera",
+    "away_team": "O'Higgins",
+    "prediction": "X",
+    "confidence": 30,
+    "market_prob_used": "29.1",
+    "score_prediction": "1-1",
+    "rationale": "El mercado marca paridad extrema (1 y 2 separados por <1 pp) y un empate implícito cercano al 29%, alineado con los pronósticos previos. O’Higgins llega con carga internacional y posible rotación, lo que tiende a aplanar el partido fuera de casa. La Calera, tras el 0-3 reciente, debería priorizar estabilidad y reducir riesgos. Sin ventajas locales/tácticas claras, el guion de márgenes finos favorece el 1-1.",
+    "key_factors": [
+      "Cuotas muy equilibradas: empate con prob. implícita alta (~29%) y sin favorito claro.",
+      "Posible gestión de cargas/rotaciones en O’Higgins tras Libertadores, bajando su techo fuera de casa.",
+      "Reacción de La Calera tras derrota dura: enfoque conservador y de detalles (balón parado) → partido cerrado."
+    ],
+    "risk_factors": [
+      "Si O’Higgins no rota y sostiene la intensidad reciente, podría inclinar el resultado a su favor.",
+      "Fragilidad defensiva puntual de La Calera tras el 0-3 podría abrir el partido más de lo previsto."
+    ],
+    "entities_impact": [
+      {
+        "player": "Requena",
+        "team": "Union La Calera",
+        "status": "duda",
+        "impact": "medio"
+      }
+    ],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  },
+  {
+    "prediction_id": "CHI1_2026-03-16_Colo_Colo_vs_Huachipato",
+    "home_team": "Colo Colo",
+    "away_team": "Huachipato",
+    "prediction": "1",
+    "confidence": 63,
+    "market_prob_used": "65.4%",
+    "score_prediction": "1-0",
+    "rationale": "El mercado asigna ~65% al triunfo local y no hay señales recientes de bajas o rotaciones que lo contradigan. Colo Colo llega líder, con solidez defensiva (4 GC en 6) y victoria reciente, en casa. Huachipato muestra rendimiento más irregular y DG negativo, con exigencia alta en fase defensiva y balón parado. La baja producción goleadora alba sugiere partido cerrado, por eso el score ajustado.",
+    "key_factors": [
+      "Favoritismo de mercado claro (1.53) y localía en el Monumental.",
+      "Colo Colo líder, racha positiva reciente y defensa consistente (4 GC/6J).",
+      "Huachipato con DG -1 y vulnerabilidades defensivas mencionadas en ABP."
+    ],
+    "risk_factors": [
+      "Perfil de pocos goles de Colo Colo eleva la varianza y acerca el empate.",
+      "Falta de parte médico/alineaciones confirmadas puede alterar el contexto real del match-up."
+    ],
+    "entities_impact": [],
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "analyst_model_id": "gpt-5",
+    "missing_data": []
+  }
+]

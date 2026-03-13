@@ -1161,8 +1161,10 @@ def _export_signals_audit(match_contexts: list[dict]):
     No afecta la lógica de predicción.
     """
     audit_file = "pipeline_signals_audit.json"
+    partitioned_file = "pipeline_signals_partitioned.json"
     rows = []
-    seen_signals = set()
+    partitioned_data = []
+    seen_texts = {}
     
     for mc in match_contexts:
         match_id = mc.get("match_id", "unknown")
@@ -1172,6 +1174,28 @@ def _export_signals_audit(match_contexts: list[dict]):
         away_dict = mc.get("away") or {}
         home_team = home_dict.get("canonical_name", "unknown")
         away_team = away_dict.get("canonical_name", "unknown")
+        
+        # Pre-pass: Collect observed players for each team to catch cross-talk
+        def collect_observed_players(t_dict):
+            observed = set()
+            signals = t_dict.get("insights", {}).get("context_signals", [])
+            for sig in signals:
+                if not isinstance(sig, dict): continue
+                
+                p_raw = sig.get("player")
+                sig_type = str(sig.get("type", "unknown"))
+                if not p_raw and sig_type in {"injury_news", "disciplinary_issue"}:
+                    pts = _extract_person_names_from_signal(sig)
+                    if pts: p_raw = pts[0]
+                
+                if isinstance(p_raw, str):
+                    p_clean = p_raw.strip().lower()
+                    if p_clean and p_clean not in {"null", "none", "", "n/a", "unknown"}:
+                        observed.add(p_clean)
+            return observed
+            
+        home_observed_players = collect_observed_players(home_dict)
+        away_observed_players = collect_observed_players(away_dict)
         
         # Helper to process team signals
         def process_team_signals(team_dict, target_team):
@@ -1274,68 +1298,134 @@ def _export_signals_audit(match_contexts: list[dict]):
                 
                 # --- CALCULAR SUSPICIOUS FLAGS ---
                 is_suspicious = False
-                suspicion_reasons = []
+                raw_reasons = []
                 
                 # 1. team_not_in_match
                 if target_team not in (home_team, away_team):
-                    suspicion_reasons.append("team_not_in_match")
+                    raw_reasons.append("team_not_in_match")
                     
                 # 2. subject_type_type_mismatch
+                mismatch_triggered = False
                 if subject_type == "player" and sig_type in {"case", "competition_context", "legal_context", "managerial_context"}:
-                    suspicion_reasons.append("subject_type_type_mismatch")
+                    mismatch_triggered = True
+                elif subject_type == "player":
+                    mismatch_coach = ["dt", "técnico", "tecnico", "mister", "entrenador", "evalúa rotaciones", "evalua rotaciones", "política de no arriesgar", "politica de no arriesgar"]
+                    mismatch_case = ["caso", "procesamiento", "justicia", "demanda", "sanción", "sancion", "fifa"]
+                    if any(w in t_text_lower for w in mismatch_coach + mismatch_case):
+                        mismatch_triggered = True
                 elif subject_type == "competition" and sig_type in {"injury_news", "disciplinary_issue", "availability", "rotation"}:
-                    suspicion_reasons.append("subject_type_type_mismatch")
+                    mismatch_triggered = True
                 elif subject_type in {"coach", "case"} and sig_type in {"form", "recent_form"}:
-                    suspicion_reasons.append("subject_type_type_mismatch")
+                    mismatch_triggered = True
+                elif subject_type == "unknown":
+                    import re
+                    # Heurística simple para "nombre propio" evidente
+                    if re.search(r'\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\b', str(sig.get("signal", ""))):
+                        mismatch_triggered = True
+                        
+                if mismatch_triggered:
+                    opponent_types = {"opponent_form", "opponent_crisis", "opponent_strength", "opponent_availability", "opponent_schedule", "opponent_context"}
+                    if scope == "opponent" and sig_type in opponent_types and subject_type in {"unknown", "team"}:
+                        # Suprimir falso positivo de rival
+                        pass
+                    else:
+                        raw_reasons.append("subject_type_type_mismatch")
                     
                 # 3. foreign_entity_in_team_signal
-                # If player name string mentions the opponent 
-                if player_clean and _signal_team_match_scores(other_team, player_clean)[0] > 0:
-                    suspicion_reasons.append("foreign_entity_in_team_signal")
-                # Or if mentions_opponent but scope == self (impossible with current logic, but captured by rule 9)
+                if player_clean and subject_type == "player" and scope != "opponent":
+                    p_lower = player_clean.lower()
+                    opponent_observed = away_observed_players if target_team == home_team else home_observed_players
+                    self_observed = home_observed_players if target_team == home_team else away_observed_players
+                    
+                    # If player name explicitly matches the opponent's team name
+                    if _signal_team_match_scores(other_team, player_clean)[0] > 0:
+                        raw_reasons.append("foreign_entity_in_team_signal")
+                    # Or if the player is exclusively observed in the opponent's raw signals
+                    elif p_lower in opponent_observed and p_lower not in self_observed:
+                        raw_reasons.append("foreign_entity_in_team_signal")
+                    # Or if the signal mentions the opponent explicitly, and player is not confirmed as ours
+                    elif _signal_team_match_scores(other_team, t_text_lower)[0] > 0 and p_lower not in self_observed:
+                        raw_reasons.append("foreign_entity_in_team_signal")
                 
                 # 4. stale_or_implausible_history_signal
-                if source_type == "history" and not date_clean:
-                    stale_words = ["cambio de dt", "era de", "pasó de", "ex entrenador", "historico", "antiguo", "años"]
+                if source_type == "history":
+                    stale_words = ["cambio de dt", "histórico", "historico", "pasó de", "paso de", "era de", "mitad de temporada", "asume capitanía", "asume capitania"]
                     if any(w in t_text_lower for w in stale_words):
-                        suspicion_reasons.append("stale_or_implausible_history_signal")
+                        raw_reasons.append("stale_or_implausible_history_signal")
                         
                 # 5. missing_date_for_time_sensitive_signal
                 time_sensitive_types = {"injury_news", "availability", "fatigue", "disciplinary_issue", "rotation", "schedule_load", "opponent_missing_players", "medical_doubt"}
                 if not date_clean and sig_type in time_sensitive_types:
-                    suspicion_reasons.append("missing_date_for_time_sensitive_signal")
+                    raw_reasons.append("missing_date_for_time_sensitive_signal")
                     
                 # 6. possible_duplicate_signal
+                import unicodedata
                 import re
-                norm_text = re.sub(r'[^\w\s]', '', t_text_lower).strip()
-                norm_text = re.sub(r'\s+', ' ', norm_text)
-                sig_hash = f"{match_id}_{target_team}_{sig_type}_{norm_text}"
-                if sig_hash in seen_signals:
-                    suspicion_reasons.append("possible_duplicate_signal")
-                seen_signals.add(sig_hash)
+                def normalize_for_dedup(s):
+                    s = str(s).lower()
+                    s = ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
+                    s = re.sub(r'[^\w\s]', '', s).strip()
+                    s = re.sub(r'\s+', ' ', s)
+                    s = s.replace("la champions", "champions")
+                    return s
+                
+                norm_text = normalize_for_dedup(t_text)
+                group_key = f"{match_id}_{target_team}_{sig_type}"
+                
+                is_dup = False
+                if group_key not in seen_texts:
+                    seen_texts[group_key] = []
+                else:
+                    for past_text in seen_texts[group_key]:
+                        if norm_text == past_text or norm_text in past_text or past_text in norm_text:
+                            is_dup = True
+                            break
+                if is_dup:
+                    raw_reasons.append("possible_duplicate_signal")
+                else:
+                    seen_texts[group_key].append(norm_text)
                 
                 # 7. scope_unknown_for_actionable_signal
-                actionable_types = {"injury_news", "availability", "rotation", "form", "fatigue", "disciplinary_issue", "schedule_load"}
+                actionable_types = {"injury_news", "disciplinary_issue", "squad_availability", "heavy_rotation", "medical_doubt", "medical_ok", "fatigue", "form", "schedule_load", "coach_change"}
                 if scope == "unknown" and sig_type in actionable_types:
-                    suspicion_reasons.append("scope_unknown_for_actionable_signal")
+                    if sig_type in {"form", "schedule_load"}:
+                        if not date_clean or subject_type == "unknown":
+                            raw_reasons.append("scope_unknown_for_actionable_signal")
+                    else:
+                        raw_reasons.append("scope_unknown_for_actionable_signal")
                     
                 # 8. manual_signal_low_clarity
                 if source_type == "manual" and (scope == "unknown" or subject_type == "unknown" or not date_clean):
-                    suspicion_reasons.append("manual_signal_low_clarity")
+                    raw_reasons.append("manual_signal_low_clarity")
                     
                 # 9. opponent_scope_attached_to_team
                 if scope == "opponent" and not is_opponent_type:
-                    suspicion_reasons.append("opponent_scope_attached_to_team")
+                    raw_reasons.append("opponent_scope_attached_to_team")
                     
                 # 10. low_information_signal
                 valid_signal_text = str(sig.get("signal", ""))
                 if not valid_signal_text or len(valid_signal_text.strip()) < 12:
-                    suspicion_reasons.append("low_information_signal")
+                    raw_reasons.append("low_information_signal")
                 else:
                     generic_phrases = ["mal momento", "complicado", "buen momento", "en duda", "lesionado", "partido dificil", "sin informacion"]
                     if valid_signal_text.strip().lower() in generic_phrases:
-                        suspicion_reasons.append("low_information_signal")
+                        raw_reasons.append("low_information_signal")
                         
+                # Ordenar razones
+                priority_order = [
+                    "foreign_entity_in_team_signal",
+                    "subject_type_type_mismatch",
+                    "stale_or_implausible_history_signal",
+                    "possible_duplicate_signal",
+                    "missing_date_for_time_sensitive_signal",
+                    "scope_unknown_for_actionable_signal",
+                    "team_not_in_match",
+                    "manual_signal_low_clarity",
+                    "opponent_scope_attached_to_team",
+                    "low_information_signal"
+                ]
+                suspicion_reasons = sorted(raw_reasons, key=lambda x: priority_order.index(x) if x in priority_order else 99)
+                
                 if suspicion_reasons:
                     is_suspicious = True
                     
@@ -1363,15 +1453,72 @@ def _export_signals_audit(match_contexts: list[dict]):
                 }
                 rows.append(row)
                 
+        # Procesar primero para inyectar los flags en los diccionarios originales
         process_team_signals(home_dict, home_team)
         process_team_signals(away_dict, away_team)
+        
+        # --- PARTICIÓN DE SEÑALES ---
+        # Consolidamos todas las señales del partido (home + away)
+        all_match_signals = []
+        if home_dict and "insights" in home_dict and "context_signals" in home_dict["insights"]:
+            all_match_signals.extend(home_dict["insights"]["context_signals"])
+        if away_dict and "insights" in away_dict and "context_signals" in away_dict["insights"]:
+            all_match_signals.extend(away_dict["insights"]["context_signals"])
+            
+        signals_clean = []
+        signals_suspicious = []
+        reasons_counter = {}
+        
+        for sig in all_match_signals:
+            if not isinstance(sig, dict): continue
+            
+            if sig.get("is_suspicious", False):
+                signals_suspicious.append(sig)
+                for r in sig.get("suspicion_reasons", []):
+                    reasons_counter[r] = reasons_counter.get(r, 0) + 1
+            else:
+                signals_clean.append(sig)
+                
+        # Top reasons sorting
+        sorted_reasons = sorted(reasons_counter.items(), key=lambda x: x[1], reverse=True)
+        top_reasons = [k for k, v in sorted_reasons[:5]]
+        
+        total_sigs = len(signals_clean) + len(signals_suspicious)
+        ratio = round(len(signals_suspicious) / total_sigs, 2) if total_sigs > 0 else 0.0
+        
+        summary = {
+            "total": total_sigs,
+            "clean_count": len(signals_clean),
+            "suspicious_count": len(signals_suspicious),
+            "suspicious_ratio": ratio,
+            "top_suspicion_reasons": top_reasons
+        }
+        
+        # Inyectar estructura particionada en el context de este partido
+        mc["signals_clean"] = signals_clean
+        mc["signals_suspicious"] = signals_suspicious
+        mc["signals_summary"] = summary
+        
+        partitioned_data.append({
+            "match_id": match_id,
+            "home_team": home_team,
+            "away_team": away_team,
+            "signals_clean": signals_clean,
+            "signals_suspicious": signals_suspicious,
+            "signals_summary": summary
+        })
         
     try:
         with open(audit_file, "w", encoding="utf-8") as f:
             json.dump(rows, f, indent=2, ensure_ascii=False)
+            
+        with open(partitioned_file, "w", encoding="utf-8") as f:
+            json.dump(partitioned_data, f, indent=2, ensure_ascii=False)
+            
         logger.info(f"✓ Auditoría de señales exportada: {len(rows)} señales guardadas en {audit_file}")
+        logger.info(f"✓ Partición de señales guardada en {partitioned_file}")
     except Exception as e:
-        logger.warning(f"No se pudo guardar la auditoría de señales: {e}")
+        logger.warning(f"No se pudo guardar la auditoría de señales y/o partición: {e}")
 
 # ============================================================================
 # NODO PRINCIPAL DE LANGGRAPH

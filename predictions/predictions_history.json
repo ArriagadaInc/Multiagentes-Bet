@@ -1643,11 +1643,12 @@
     "score_prediction": "0-2",
     "rationale": "Arsenal llega con pleno de 8/8 en UCL y un diferencial +19 (23 GF, 4 GC), indicador de solidez en ambas áreas. Leverkusen muestra balance irregular (DG -1) y llega con presión mediática y semana de alta carga, factores reportados dentro de la ventana de 14 días. Las cuotas (1.72 al visitante) refuerzan la superioridad del conjunto inglés. Las señales históricas de Arsenal vía YouTube son de baja aplicabilidad 2026 y no afectan el veredicto.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "X",
+    "actual_score": "1-1",
+    "correct": false,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862578"
   },
   {
     "prediction_id": "UCL_2026-03-10_Atalanta_BC_vs_Bayern_Munich",
@@ -1661,11 +1662,12 @@
     "score_prediction": "1-2",
     "rationale": "El mercado sitúa al Bayern claramente favorito (1.71 vs 4.35), coherente con su mayor calidad y profundidad. Atalanta llega con desventaja agregada reciente y obligación de atacar, escenario que suele abrir espacios a las transiciones del Bayern. La gestión de cargas puede implicar rotaciones bávaras, pero su banquillo habitualmente sostiene el nivel en UCL. Parte del contexto previo contiene inconsistencias de club y se pondera bajo, lo que añade varianza.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "2",
+    "actual_score": "1-6",
+    "correct": true,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862641"
   },
   {
     "prediction_id": "UCL_2026-03-10_Atlético_Madrid_vs_Tottenham_Hotspur",
@@ -1679,11 +1681,12 @@
     "score_prediction": "2-1",
     "rationale": "El Metropolitano y la exigencia de ‘obligatorio ganar’ favorecen a un Atleti que suele elevar su nivel en noches UCL. El mercado respalda con fuerza al local (1.42) y su producción ofensiva en la competición es alta (17 GF en 8). Tottenham llega sólido, pero en una visita exigente y con señal de posible gestión de cargas, lo que puede limitar su agresividad. Parte de las señales del 25/02 están al límite temporal (14 días), por lo que se ponderan con peso medio.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "5-2",
+    "correct": true,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862579"
   },
   {
     "prediction_id": "UCL_2026-03-10_Bodø/Glimt_vs_Sporting_Lisbon",
@@ -1697,11 +1700,12 @@
     "score_prediction": "1-1",
     "rationale": "El mercado da ligera ventaja al Sporting, pero el viaje largo al norte y la climatología de Bodø en marzo tienden a equilibrar el partido. Bodø/Glimt llega con plantilla completa (24/02) y un impulso reciente por una ida ganada 3‑1 hace menos de dos semanas, lo que sugiere un plan proactivo en casa. La carga europea para ambos y la falta de señales firmes sobre bajas del Sporting apuntan a un choque cerrado. Opto por reparto de puntos en un contexto táctico balanceado y condiciones que atenúan la superioridad visitante.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "3-0",
+    "correct": false,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862583"
   },
   {
     "prediction_id": "UCL_2026-03-10_Galatasaray_vs_Liverpool",
@@ -1715,11 +1719,12 @@
     "score_prediction": "1-2",
     "rationale": "Liverpool llega con mejores métricas UCL (6V, +12 DG, 20 GF) y respaldo del mercado, señal de superioridad sostenida pese a ser visitante. Galatasaray concede 11 en 8 y su 5-2 reciente estuvo condicionado por la expulsión rival (17/02), señal cuyo peso baja por antigüedad (>14 días) y contexto. En un ambiente hostil, la experiencia y control emocional del Liverpool deberían imponerse, aunque el partido sea abierto. Valoro la localía turca y posible rotación, pero el techo competitivo del visitante es mayor.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "1-0",
+    "correct": false,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862667"
   },
   {
     "prediction_id": "UCL_2026-03-10_Real_Madrid_vs_Manchester_City",
@@ -1733,11 +1738,12 @@
     "score_prediction": "1-1",
     "rationale": "Cuotas muy equilibradas (RM 2.4 vs MC 2.6) sugieren partido cerrado. Las bajas recientes y/o dudas en Real Madrid (Bellingham, Rodrygo, Militão) reducen su techo ofensivo y condicionan la salida de balón, mientras que City tiende a controlar ritmo y pérdidas fuera de casa, escenario que favorece el empate. El Bernabéu compensa parte de la merma blanca y dificulta ver a City como claro ganador. El ruido extradeportivo reciente en torno a Vinícius puede afectar, pero lo pondero medio y no decisivo.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "3-0",
+    "correct": false,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862645"
   },
   {
     "prediction_id": "UCL_2026-03-10_Newcastle_United_vs_Barcelona",
@@ -1751,11 +1757,12 @@
     "score_prediction": "1-1",
     "rationale": "Cuotas muy equilibradas con leve sesgo al Barça, pero la localía en St James’ Park y la solidez reciente de Newcastle (DG +10, solo 7 GC a 27/02) compensan. El pico goleador de Anthony Gordon (señal 25/02) sostiene amenaza local, mientras que Barcelona produce mucho (22 GF) pero concede (14 GC), escenario típico de 1-1. La posible congestión de Newcastle por cruces cercanos con Chelsea (25/02) limita su techo de victoria. Las señales de bajas del Barça son antiguas/rumor y se devalúan en el peso.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "X",
+    "actual_score": "1-1",
+    "correct": true,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862577"
   },
   {
     "prediction_id": "UCL_2026-03-10_Paris_Saint_Germain_vs_Chelsea",
@@ -1769,11 +1776,12 @@
     "score_prediction": "2-1",
     "rationale": "PSG llega con mejor diferencial (+10) y producción ofensiva alta (21 GF/8 PJ) y será local, aspecto reforzado por el consenso de cuotas que lo hace claro favorito. La señal de Chelsea sugiere un plan más conservador fuera de casa (schedule_load, confianza media), lo que reduce su amenaza inicial. Dembélé y Fabián Ruiz llegaron con problemas desde mediados de febrero/enero; por la política de Luis Enrique de no arriesgar, su impacto se pondera medio aunque la data supere 14 días. Aun con esas dudas, la superioridad local y ritmo goleador inclinan el 1.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "5-2",
+    "correct": true,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862646"
   },
   {
     "prediction_id": "UCL_2026-03-11_Bayer_Leverkusen_vs_Arsenal",
@@ -1787,11 +1795,12 @@
     "score_prediction": "1-2",
     "rationale": "Arsenal llega con un 8/8 en UCL y un +19 de diferencia, combinando producción ofensiva alta y solidez (4 GC). Leverkusen muestra irregularidad (DG -1) y afronta bajas recientes: Badé fuera y Tillman en duda, en un contexto de presión mediática y carga de calendario. Las cuotas (1.54 visitante) refuerzan el favoritismo gunner y están alineadas con el rendimiento. Doy peso alto a las lesiones confirmadas (≤14 días) y bajo al contexto histórico del Arsenal, aunque la localía modera la confianza.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "X",
+    "actual_score": "1-1",
+    "correct": false,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862578"
   },
   {
     "prediction_id": "UCL_2026-03-11_Bodø/Glimt_vs_Sporting_Lisbon",
@@ -1805,11 +1814,12 @@
     "score_prediction": "2-1",
     "rationale": "Las cuotas marcan un duelo muy parejo, pero el factor local en Bodø y el desplazamiento complejo para Sporting inclinan ligeramente la balanza. Bodø/Glimt llega con inercia competitiva reciente (eliminación sorpresiva de un favorito), señal vigente dentro de los últimos 14 días, y un promedio goleador sólido (14 GF en 8 PJ) que suele hacerse notar en casa. Sporting conserva estatus de favorito marginal por plantilla, pero la combinación de clima/viaje y el momentum local pueden generar un escenario de partido abierto con ligero edge para el anfitrión.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "3-0",
+    "correct": true,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862583"
   },
   {
     "prediction_id": "UCL_2026-03-11_Paris_Saint_Germain_vs_Chelsea",
@@ -1823,11 +1833,12 @@
     "score_prediction": "2-1",
     "rationale": "PSG llega con producción ofensiva alta en UCL (21 GF en 8) y la localía debería inclinar un duelo parejo. Las cuotas de mercado respaldan una ligera superioridad del PSG. Dembélé es duda a 13 días del partido (señal del 27/02), lo que baja algo el techo ofensivo, pero el bloque parisino ha mantenido buen diferencial (+10). Chelsea compite bien (5G en 8), pero fuera de casa y con carga europea, su margen se reduce.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "5-2",
+    "correct": true,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862646"
   },
   {
     "prediction_id": "UCL_2026-03-11_Real_Madrid_vs_Manchester_City",
@@ -1841,11 +1852,12 @@
     "score_prediction": "1-1",
     "rationale": "El mercado favorece ligeramente al City, pero el Madrid llega con alta producción ofensiva en UCL (21 GF/8 PJ) y la localía del Bernabéu equilibra fuerzas. Señales recientes (27/02) apuntan a un 1-0 global para el Madrid, lo que obliga al City a proponer desde el inicio y abre un escenario donde ambos marcan pero sin gran desequilibrio. La necesidad visitante versus la gestión táctica local sugiere intercambio controlado y reparto de puntos en los 90’. Contexto disciplinario/mediático se considera de peso medio y no decisivo, aunque añade volatilidad.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "FUTURE_MATCH"
+    "result": "1",
+    "actual_score": "3-0",
+    "correct": false,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401862645"
   },
   {
     "prediction_id": "CHI1_2026-03-06_La_Serena_vs_Union_La_Calera",
@@ -1992,11 +2004,12 @@
     "score_prediction": "2-1",
     "rationale": "El mercado marca con claridad a Universidad de Chile como favorita (cuota 1.35), y suele ser el mejor predictor disponible. Llega con buena producción ofensiva reciente y localía, elementos que suelen imponerse ante un U. de Concepción menos respaldado por las cuotas. La profundidad de plantel debería mitigar eventuales rotaciones por calendario. Aun así, la posible suspensión del DT y la carga competitiva pueden estrechar el marcador.",
     "analyst_model_id": "gpt-5",
-    "result": null,
-    "actual_score": null,
-    "correct": null,
-    "evaluated_at": null,
-    "evaluation_status": "PENDING"
+    "result": "X",
+    "actual_score": "1-1",
+    "correct": false,
+    "evaluated_at": "2026-03-12T03:43:26.159528+00:00",
+    "evaluation_status": "OK",
+    "event_id": "401850503"
   },
   {
     "prediction_id": "UCL_2026-03-18_Barcelona_vs_Newcastle_United",
@@ -2037,7 +2050,7 @@
     "correct": null,
     "evaluated_at": null,
     "event_id": null,
-    "evaluation_status": null,
+    "evaluation_status": "FUTURE_MATCH",
     "post_match_observation": null
   },
   {
@@ -2079,7 +2092,7 @@
     "correct": null,
     "evaluated_at": null,
     "event_id": null,
-    "evaluation_status": null,
+    "evaluation_status": "FUTURE_MATCH",
     "post_match_observation": null
   },
   {
@@ -2121,7 +2134,7 @@
     "correct": null,
     "evaluated_at": null,
     "event_id": null,
-    "evaluation_status": null,
+    "evaluation_status": "FUTURE_MATCH",
     "post_match_observation": null
   },
   {
@@ -2144,6 +2157,342 @@
     "risk_factors": [
       "Información incompleta de forma y alineaciones; posible rotación/gestión de cargas",
       "Contexto de eliminatoria puede inducir partido más cerrado según el marcador global (no confirmado)"
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": "FUTURE_MATCH",
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-13_Audax_Italiano_vs_Deportes_Concepción",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Audax Italiano",
+    "away_team": "Deportes Concepción",
+    "prediction": "1",
+    "confidence": 49,
+    "market_prob_used": "44.7",
+    "score_prediction": "1-0",
+    "rationale": "El mercado favorece a Audax (~44.7% normalizado) y el visitante llega último, con 4 puntos y 9 GC en 6 fechas. Audax es de baja anotación pero competitivo en casa y viene de perder por la mínima ante el líder, escenario para controlar y transitar. Concepción arrastra problemas defensivos y la baja de Grillo, además de ruido extradeportivo; todo sugiere leve ventaja local en un partido de pocos goles. El empate sigue siendo plausible dada la baja producción ofensiva de Audax.",
+    "key_factors": [
+      "Alineación con el favorito del mercado y localía para Audax en un cruce de baja diferencia cualitativa",
+      "Deportes Concepción con mala forma reciente (LWDLL) y 9 goles recibidos en 6 PJ",
+      "Lesión de Fausto Grillo reduce solidez defensiva visitante; Audax sin nuevas bajas relevantes"
+    ],
+    "risk_factors": [
+      "Probabilidad de empate elevada en mercado (~28.8%) y perfil de pocos goles de Audax (4 GF/6PJ)",
+      "Posible pico anímico del Conce y ausencia de confirmación de XI/parte médico final"
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": null,
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-14_Coquimbo_Unido_vs_Universidad_de_Chile",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Coquimbo Unido",
+    "away_team": "Universidad de Chile",
+    "prediction": "1",
+    "confidence": 44,
+    "market_prob_used": "41.3",
+    "score_prediction": "1-0",
+    "rationale": "El mercado da un favoritismo leve al local y las señales recientes refuerzan ese sesgo: Coquimbo llega con inercia positiva (Supercopa y 3-1 a Huachipato) y localía. La U arrastra crisis anímica, eliminación internacional y la baja prolongada de Rivero que reduce su gol. Partido parejo y de pocos márgenes, con empate muy vivo; mantengo ‘1’ alineado al mercado y con confianza moderada.",
+    "key_factors": [
+      "Momentum local: campeón de Supercopa y victoria 3-1 ante Huachipato la fecha pasada.",
+      "Contexto adverso en la U: presión mediática y eliminación reciente que afecta el anímico.",
+      "Baja de Octavio Rivero (lesión de rodilla, largo plazo) merma la referencia ofensiva visitante."
+    ],
+    "risk_factors": [
+      "Cuotas muy cercanas y empate con probabilidad implícita alta (~31%), escenario X plausible.",
+      "Sin parte médico/once confirmado de Coquimbo (p. ej., estado de Zavala), lo que puede mover el equilibrio."
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": null,
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-14_Universidad_Católica_(CHI)_vs_Everton_de_Viña_del_Mar",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Universidad Católica (CHI)",
+    "away_team": "Everton de Viña del Mar",
+    "prediction": "1",
+    "confidence": 60,
+    "market_prob_used": "58.5",
+    "score_prediction": "2-0",
+    "rationale": "El mercado marca a la UC como favorito claro (≈58.5% implícita normalizada). Católica es 4ª con mayor producción ofensiva (11 GF) frente a un Everton 15º con solo 4 goles en 6 fechas. El visitante llega irregular (4 derrotas) y con plan reactivo que limita su techo ofensivo; en un juego probablemente cerrado, la mayor pegada local inclina el signo. No hay bajas clave confirmadas que ameriten desviarse del mercado.",
+    "key_factors": [
+      "Cuota local ~1.50 respalda el 1 (prob. implícita normalizada ≈58.5%).",
+      "Brecha de producción: UC 11 GF vs Everton 4 GF en 6 partidos; UC mejor posicionado (4º vs 15º).",
+      "Señales recientes: UC mostró capacidad de respuesta (triunfo reciente citado vs Ñublense); Everton con 4 derrotas/6."
+    ],
+    "risk_factors": [
+      "Inconsistencia de UC: caída 0-1 reciente ante O'Higgins y presión externa competitiva.",
+      "Partido potencialmente de baja anotación (tendencia a X en fuentes), donde un detalle puede equilibrar."
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": null,
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-15_Universidad_de_Concepción_vs_Palestino",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Universidad de Concepción",
+    "away_team": "Palestino",
+    "prediction": "2",
+    "confidence": 33,
+    "market_prob_used": "39.1",
+    "score_prediction": "1-2",
+    "rationale": "El mercado marca leve favoritismo visitante en un partido muy parejo. U. de Concepción muestra fragilidad defensiva (9 GC, DG -4) y arrastra ruido institucional por impagos, mientras Palestino llega con mejor caudal ofensivo (11 GF). Aun así, la paridad de cuotas y el buen punto reciente de UdeC ante la U sostienen un escenario de alta varianza, por eso la confianza es contenida.",
+    "key_factors": [
+      "Alineación con el mercado: Palestino ligero favorito (cuota 2.56 ≈ 39%).",
+      "U. de Concepción concede en promedio >1 gol por partido (9 GC en 6) y DG negativo.",
+      "Palestino tiene producción ofensiva superior (11 GF en 6), capaz de castigar transiciones débiles."
+    ],
+    "risk_factors": [
+      "Cuotas casi ‘pick’em’ (diferencia <5%), alta probabilidad de X.",
+      "Impulso anímico local tras empatar con Universidad de Chile y sin bajas confirmadas."
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": null,
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-15_Cobresal_vs_Deportes_Limache",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Cobresal",
+    "away_team": "Deportes Limache",
+    "prediction": "1",
+    "confidence": 34,
+    "market_prob_used": "36.6",
+    "score_prediction": "2-1",
+    "rationale": "Mercado ligeramente a favor del local en un partido muy parejo; en El Salvador la altitud suele ser un hándicap real para el visitante. Cobresal, pese a la irregularidad, puede castigar el ajuste defensivo de Limache por la baja de Parot. Limache llega bien y con Pinares de vuelta, pero su plan de atacar la espalda del local puede resentirse físicamente a la altura. Dada la paridad y riesgo de X, bajo la confianza respecto al implícito.",
+    "key_factors": [
+      "Altitud y localía de Cobresal en El Salvador: ventaja situacional típica en CHI1",
+      "El mercado favorece por poco el 1 en cuotas muy equilibradas",
+      "Baja de Alfonso Parot obliga ajuste en la zaga de Limache (ingresa Axel Alfonso), posible foco a explotar"
+    ],
+    "risk_factors": [
+      "Limache en mejor forma general y con el retorno de César Pinares que eleva su creación",
+      "Cuotas casi niveladas (<5% de diferencia) y probabilidad alta de empate"
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": null,
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-15_Ñublense_vs_La_Serena",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Ñublense",
+    "away_team": "La Serena",
+    "prediction": "1",
+    "confidence": 53,
+    "market_prob_used": "50.5",
+    "score_prediction": "2-1",
+    "rationale": "El mercado favorece al local (~50.5%) y no hay señales concretas que lo contradigan. Ñublense llega con rebote anímico y buen orden táctico, mostrando profundidad (4 cambios sin resentir) y preparación específica para controlar las transiciones de La Serena. La Serena viene en racha (2 triunfos), lo que baja el margen, pero la localía y el nivel mostrado por Ñublense inclinan el signo al 1.",
+    "key_factors": [
+      "Alineación con el mercado: Ñublense favorito con ~50.5% implícito.",
+      "Mejora reciente y solidez táctica; victoria 0-2 y plantel competitivo pese a rotaciones.",
+      "Plan de juego enfocado en neutralizar transiciones del rival; ventaja local."
+    ],
+    "risk_factors": [
+      "La Serena llega con dos victorias consecutivas y buen momentum.",
+      "Lorenzo Reyes arrastró molestia (aunque jugó completo); si no está al 100% baja control en medio."
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": null,
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-16_Union_La_Calera_vs_O'Higgins",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Union La Calera",
+    "away_team": "O'Higgins",
+    "prediction": "X",
+    "confidence": 30,
+    "market_prob_used": "29.1",
+    "score_prediction": "1-1",
+    "rationale": "El mercado marca paridad extrema (1 y 2 separados por <1 pp) y un empate implícito cercano al 29%, alineado con los pronósticos previos. O’Higgins llega con carga internacional y posible rotación, lo que tiende a aplanar el partido fuera de casa. La Calera, tras el 0-3 reciente, debería priorizar estabilidad y reducir riesgos. Sin ventajas locales/tácticas claras, el guion de márgenes finos favorece el 1-1.",
+    "key_factors": [
+      "Cuotas muy equilibradas: empate con prob. implícita alta (~29%) y sin favorito claro.",
+      "Posible gestión de cargas/rotaciones en O’Higgins tras Libertadores, bajando su techo fuera de casa.",
+      "Reacción de La Calera tras derrota dura: enfoque conservador y de detalles (balón parado) → partido cerrado."
+    ],
+    "risk_factors": [
+      "Si O’Higgins no rota y sostiene la intensidad reciente, podría inclinar el resultado a su favor.",
+      "Fragilidad defensiva puntual de La Calera tras el 0-3 podría abrir el partido más de lo previsto."
+    ],
+    "home_pos": null,
+    "away_pos": null,
+    "home_form": null,
+    "away_form": null,
+    "had_youtube_insights": false,
+    "had_espn_stats": false,
+    "data_quality_flags": [
+      "home_pos_99",
+      "away_pos_99",
+      "no_youtube_insights",
+      "no_espn_stats"
+    ],
+    "analyst_model_id": "gpt-5",
+    "result": null,
+    "actual_score": null,
+    "correct": null,
+    "evaluated_at": null,
+    "event_id": null,
+    "evaluation_status": null,
+    "post_match_observation": null
+  },
+  {
+    "prediction_id": "CHI1_2026-03-16_Colo_Colo_vs_Huachipato",
+    "competition": "CHI1",
+    "generated_at": "2026-03-13T18:57:57.449016+00:00",
+    "match_date": null,
+    "home_team": "Colo Colo",
+    "away_team": "Huachipato",
+    "prediction": "1",
+    "confidence": 63,
+    "market_prob_used": "65.4%",
+    "score_prediction": "1-0",
+    "rationale": "El mercado asigna ~65% al triunfo local y no hay señales recientes de bajas o rotaciones que lo contradigan. Colo Colo llega líder, con solidez defensiva (4 GC en 6) y victoria reciente, en casa. Huachipato muestra rendimiento más irregular y DG negativo, con exigencia alta en fase defensiva y balón parado. La baja producción goleadora alba sugiere partido cerrado, por eso el score ajustado.",
+    "key_factors": [
+      "Favoritismo de mercado claro (1.53) y localía en el Monumental.",
+      "Colo Colo líder, racha positiva reciente y defensa consistente (4 GC/6J).",
+      "Huachipato con DG -1 y vulnerabilidades defensivas mencionadas en ABP."
+    ],
+    "risk_factors": [
+      "Perfil de pocos goles de Colo Colo eleva la varianza y acerca el empate.",
+      "Falta de parte médico/alineaciones confirmadas puede alterar el contexto real del match-up."
     ],
     "home_pos": null,
     "away_pos": null,

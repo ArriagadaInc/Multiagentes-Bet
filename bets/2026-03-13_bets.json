@@ -1,0 +1,16 @@
+[
+  {
+    "tip_id": "TIP_CHI1_2026-03-16_Colo_Colo_vs_Huachipato",
+    "type": "value_bet",
+    "strategy": "bank",
+    "match": "Colo Colo vs Huachipato",
+    "pick": "1",
+    "odds": 1.65,
+    "bookmaker": "Betsson",
+    "confidence": 63,
+    "implied_prob": 60.6,
+    "edge_pct": 2.4,
+    "stake_units": 0.5,
+    "rationale": "Value detectado: Modelo (63%) vs Mercado (60.6% @ 1.65). Edge: 2.4%"
+  }
+]

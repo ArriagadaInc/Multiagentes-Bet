@@ -1,18 +1,18 @@
 {
-  "evaluated_at": "2026-03-09T12:34:27.891919+00:00",
-  "total_evaluated": 37,
-  "total_correct": 10,
-  "overall_accuracy_pct": 27.03,
+  "evaluated_at": "2026-03-12T19:11:32.006810+00:00",
+  "total_evaluated": 46,
+  "total_correct": 15,
+  "overall_accuracy_pct": 32.61,
   "by_league": {
     "CHI1": {
-      "total": 23,
+      "total": 24,
       "correct": 7,
-      "accuracy": 30.43
+      "accuracy": 29.17
     },
     "UCL": {
-      "total": 14,
-      "correct": 3,
-      "accuracy": 21.43
+      "total": 22,
+      "correct": 8,
+      "accuracy": 36.36
     }
   },
   "by_model": {
@@ -22,14 +22,14 @@
       "accuracy": 20.0
     },
     "gpt-5": {
-      "total": 7,
-      "correct": 4,
-      "accuracy": 57.14
+      "total": 16,
+      "correct": 9,
+      "accuracy": 56.25
     }
   },
   "status_counts": {
-    "OK": 37,
-    "PENDING": 1,
+    "OK": 46,
+    "PENDING": 0,
     "NOT_FOUND": 0,
     "NO_DATE": 0
   }

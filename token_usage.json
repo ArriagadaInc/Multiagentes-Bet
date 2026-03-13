@@ -3,19 +3,19 @@
     "prompt_tokens": 0,
     "completion_tokens": 0,
     "total_tokens": 0,
-    "calls": 179
+    "calls": 198
   },
   "gpt-5-2025-08-07": {
-    "prompt_tokens": 726738,
-    "completion_tokens": 626096,
-    "total_tokens": 1352834,
-    "calls": 176
+    "prompt_tokens": 812184,
+    "completion_tokens": 693526,
+    "total_tokens": 1505710,
+    "calls": 194
   },
   "gpt-4o-2024-08-06": {
-    "prompt_tokens": 49088,
-    "completion_tokens": 21287,
-    "total_tokens": 70375,
-    "calls": 26
+    "prompt_tokens": 52780,
+    "completion_tokens": 22945,
+    "total_tokens": 75725,
+    "calls": 28
   },
   "gpt-4.1-mini": {
     "prompt_tokens": 0,

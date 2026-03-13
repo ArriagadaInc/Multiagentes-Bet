@@ -1,14 +1,14 @@
 {
   "summary": {
-    "last_updated": "2026-03-09T12:36:23.660319+00:00",
-    "total_bets": 33,
-    "total_correct": 9,
-    "win_rate": 27.27,
+    "last_updated": "2026-03-12T03:44:15.431935+00:00",
+    "total_bets": 45,
+    "total_correct": 15,
+    "win_rate": 33.33,
     "fixed_stake_per_bet": 1000,
-    "total_invested": 33000,
-    "total_returned": 22170.0,
-    "net_profit": -10830.0,
-    "roi_pct": -32.82
+    "total_invested": 45000,
+    "total_returned": 35920.0,
+    "net_profit": -9080.0,
+    "roi_pct": -20.18
   },
   "time_series": {
     "by_week": {
@@ -22,13 +22,13 @@
         "win_rate": 38.1
       },
       "2026-W09": {
-        "invested": 9000,
-        "returned": 0,
-        "bets": 9,
-        "correct": 0,
-        "profit": -9000,
-        "roi_pct": -100.0,
-        "win_rate": 0.0
+        "invested": 21000,
+        "returned": 13750.0,
+        "bets": 21,
+        "correct": 6,
+        "profit": -7250.0,
+        "roi_pct": -34.52,
+        "win_rate": 28.57
       },
       "2026-W10": {
         "invested": 3000,
@@ -42,13 +42,13 @@
     },
     "by_month": {
       "2026-02": {
-        "invested": 30000,
-        "returned": 19420.0,
-        "bets": 30,
-        "correct": 8,
-        "profit": -10580.0,
-        "roi_pct": -35.27,
-        "win_rate": 26.67
+        "invested": 42000,
+        "returned": 33170.0,
+        "bets": 42,
+        "correct": 14,
+        "profit": -8830.0,
+        "roi_pct": -21.02,
+        "win_rate": 33.33
       },
       "2026-03": {
         "invested": 3000,
@@ -440,6 +440,162 @@
       "cumulative_profit": -9580.0
     },
     {
+      "prediction_id": "UCL_2026-03-10_Bayer_Leverkusen_vs_Arsenal",
+      "date": "2026-02-27",
+      "match": "Bayer Leverkusen vs Arsenal",
+      "prediction": "2",
+      "correct": false,
+      "odds": 1.65,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 0,
+      "profit": -1000,
+      "cumulative_profit": -10580.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-10_Atalanta_BC_vs_Bayern_Munich",
+      "date": "2026-02-27",
+      "match": "Atalanta BC vs Bayern Munich",
+      "prediction": "2",
+      "correct": true,
+      "odds": 1.71,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 1710.0,
+      "profit": 710.0,
+      "cumulative_profit": -9870.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-10_Atlético_Madrid_vs_Tottenham_Hotspur",
+      "date": "2026-02-27",
+      "match": "Atlético Madrid vs Tottenham Hotspur",
+      "prediction": "1",
+      "correct": true,
+      "odds": 1.71,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 1710.0,
+      "profit": 710.0,
+      "cumulative_profit": -9160.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-10_Bodø/Glimt_vs_Sporting_Lisbon",
+      "date": "2026-02-27",
+      "match": "Bodø/Glimt vs Sporting Lisbon",
+      "prediction": "X",
+      "correct": false,
+      "odds": 3.85,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 0,
+      "profit": -1000,
+      "cumulative_profit": -10160.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-10_Galatasaray_vs_Liverpool",
+      "date": "2026-02-27",
+      "match": "Galatasaray vs Liverpool",
+      "prediction": "2",
+      "correct": false,
+      "odds": 1.86,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 0,
+      "profit": -1000,
+      "cumulative_profit": -11160.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-10_Real_Madrid_vs_Manchester_City",
+      "date": "2026-02-27",
+      "match": "Real Madrid vs Manchester City",
+      "prediction": "X",
+      "correct": false,
+      "odds": 2.4,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 0,
+      "profit": -1000,
+      "cumulative_profit": -12160.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-10_Newcastle_United_vs_Barcelona",
+      "date": "2026-02-27",
+      "match": "Newcastle United vs Barcelona",
+      "prediction": "X",
+      "correct": true,
+      "odds": 3.9,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 3900.0,
+      "profit": 2900.0,
+      "cumulative_profit": -9260.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-10_Paris_Saint_Germain_vs_Chelsea",
+      "date": "2026-02-27",
+      "match": "Paris Saint Germain vs Chelsea",
+      "prediction": "1",
+      "correct": true,
+      "odds": 1.79,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 1790.0,
+      "profit": 790.0,
+      "cumulative_profit": -8470.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-11_Bayer_Leverkusen_vs_Arsenal",
+      "date": "2026-02-27",
+      "match": "Bayer Leverkusen vs Arsenal",
+      "prediction": "2",
+      "correct": false,
+      "odds": 1.65,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 0,
+      "profit": -1000,
+      "cumulative_profit": -9470.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-11_Bodø/Glimt_vs_Sporting_Lisbon",
+      "date": "2026-02-27",
+      "match": "Bodø/Glimt vs Sporting Lisbon",
+      "prediction": "1",
+      "correct": true,
+      "odds": 2.85,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 2850.0,
+      "profit": 1850.0,
+      "cumulative_profit": -7620.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-11_Paris_Saint_Germain_vs_Chelsea",
+      "date": "2026-02-27",
+      "match": "Paris Saint Germain vs Chelsea",
+      "prediction": "1",
+      "correct": true,
+      "odds": 1.79,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 1790.0,
+      "profit": 790.0,
+      "cumulative_profit": -6830.0
+    },
+    {
+      "prediction_id": "UCL_2026-03-11_Real_Madrid_vs_Manchester_City",
+      "date": "2026-02-27",
+      "match": "Real Madrid vs Manchester City",
+      "prediction": "X",
+      "correct": false,
+      "odds": 3.9,
+      "odds_source": "bets_registry",
+      "stake": 1000,
+      "payout": 0,
+      "profit": -1000,
+      "cumulative_profit": -7830.0
+    },
+    {
       "prediction_id": "CHI1_2026-03-06_La_Serena_vs_Union_La_Calera",
       "date": "2026-02-28",
       "match": "La Serena vs Union La Calera",
@@ -450,7 +606,7 @@
       "stake": 1000,
       "payout": 0,
       "profit": -1000,
-      "cumulative_profit": -10580.0
+      "cumulative_profit": -8830.0
     },
     {
       "prediction_id": "CHI1_2026-03-06_Deportes_Concepción_vs_Ñublense",
@@ -463,7 +619,7 @@
       "stake": 1000,
       "payout": 2750.0,
       "profit": 1750.0,
-      "cumulative_profit": -8830.0
+      "cumulative_profit": -7080.0
     },
     {
       "prediction_id": "CHI1_2026-03-07_Everton_de_Viña_del_Mar_vs_Deportes_Limache",
@@ -476,7 +632,7 @@
       "stake": 1000,
       "payout": 0,
       "profit": -1000,
-      "cumulative_profit": -9830.0
+      "cumulative_profit": -8080.0
     },
     {
       "prediction_id": "CHI1_2026-03-07_O'Higgins_vs_Universidad_Católica_(CHI)",
@@ -489,7 +645,7 @@
       "stake": 1000,
       "payout": 0,
       "profit": -1000,
-      "cumulative_profit": -10830.0
+      "cumulative_profit": -9080.0
     }
   ]
 }

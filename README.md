@@ -2,6 +2,8 @@
 
 Este proyecto es un ecosistema multi-agente diseñado para encontrar valor en apuestas deportivas de fútbol mediante el análisis avanzado de datos e Inteligencia Artificial.
 
+💻 **Repositorio Oficial:** [ArriagadaInc/Multiagentes-Bet](https://github.com/ArriagadaInc/Multiagentes-Bet)
+
 ## 🚀 Resumen del Proyecto
 El sistema procesa múltiples fuentes de datos (cuotas de mercado, estadísticas en tiempo real e insights tácticos de YouTube) utilizando agentes especializados coordinados por **LangGraph**. El objetivo final es identificar el "Edge" o ventaja teórica sobre las casas de apuestas para sugerir pronósticos con alta probabilidad de éxito.
 

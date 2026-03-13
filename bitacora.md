@@ -1,4 +1,9 @@
 ﻿## Sesión: Roadmap Fase 2 - Robustez Arquitectónica (10-Mar-2026) 🧠🛡️
+💻 **Repositorio Oficial:** [ArriagadaInc/Multiagentes-Bet](https://github.com/ArriagadaInc/Multiagentes-Bet)
+
+### 📌 Hitos Recientes de la Fase 2
+- **Micro-tarea 4.1 (Afinamiento de Sospecha)**: Lógica refinada para `is_suspicious`. Reducción pragmática de falsos positivos en `unknown_scope` limitándolos a señales empíricamente accionables (lesiones, rotaciones, fatiga). Deduplicación cruzada activada filtrando caracteres especiales y equivalencias.
+- **Micro-tarea 5 (Aduana de Roster & Oponente)**: Creación de memoria de observación de "Entities" por equipo para el partido. Si un jugador es mencionado en el contexto de "home" pero solo fue detectado en "away", dispara gravedad `foreign_entity_in_team_signal`. El mismatch de `subject_type` ahora tolera menciones legítimas ("opponent_form") que no vienen estructuradas.
 
 ### 🎯 Idea rectora
 No queremos meter "más IA" por meterla. Buscamos que el sistema sea más confiable, más auditable y menos vulnerable a señales contaminadas o a confianzas ficticias.
@@ -8,8 +13,8 @@ No queremos meter "más IA" por meterla. Buscamos que el sistema sea más confia
 | Estado | Tarea | Objetivo |
 | :--- | :--- | :--- |
 | ✅ | **1. Auditoría plana de señales antes del Analista** | Ver exactamente qué señales le están llegando al Analista, de qué fuente, equipo asociado y detectar ruido o cross-talk antes de tocar la lógica (`pipeline_signals_audit.json`). |
-| ⏳ | **2. Detección de señales sospechosas por partido** | Marcar automáticamente señales cuyo team no coincide con home/away, sin fecha, duplicadas o ambiguas para separar ruido de contexto útil. |
-| ⏳ | **3. Cuarentena de señales dudosas** | Tener una "aduana" mínima. Las señales sospechosas no desaparecen, pero evitamos que lleguen al Analista como verdades absolutas. |
+| ✅ | **2. Detección de señales sospechosas por partido** | Marcar silenciosamente señales dudosas (`is_suspicious`) usando 10 reglas clave: `foreign_entity`, deduplicación semántica cruzada, alerta de historia obsoleta, `subject_type_mismatch` y fechas omitidas, con radar contextual de rival. |
+| ✅ | **3. Cuarentena de señales dudosas** | Primer paso de segregación listado. Separadas en `signals_clean` y `signals_suspicious` sin alterar el prompt del Analista ni borrar nada, pero apartadas para evitar que el Analista las lea como hecho puro. |
 | ⏳ | **4. Validación básica de entidades** | Impedir errores groseros como jugadores en clubes equivocados, equipos confundidos o señales asociadas al partido incorrecto. |
 | ⏳ | **5. Gate de calidad real, no decorativo** | Reemplazar la nota genérica actual por una evaluación de integridad de entidades, frescura, rumor, conflicto y riesgo manual. |
 | ⏳ | **6. Brief estructurado para el Analista** | Enviar un expediente ordenado con hechos confirmados, conflictos y alertas en lugar de una bolsa de señales mezcladas. |
