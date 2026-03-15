@@ -509,36 +509,91 @@ def _format_insights_context(insights: Optional[dict]) -> str:
             parts.append(f"Ausencias: {', '.join(absences)}")
         lines.append(f"  Bajas mencionadas: {' | '.join(parts)}")
 
-    # Importante: incluir señales de contexto estructuradas (off-field, morales,
-    # disciplinarias, carga por torneos, etc.) que vienen del insights_agent.
-    context_signals = insights.get("context_signals") or []
-    if context_signals:
-        lines.append("  Contexto relevante detectado:")
-        for sig in context_signals[:8]:
-            if not isinstance(sig, dict):
-                continue
-            sig_type = sig.get("type", "other")
-            sig_text = sig.get("signal", "")
-            sig_ev = sig.get("evidence", "")
-            sig_conf = sig.get("confidence")
-            sig_date = sig.get("date")
-            sig_rumor = bool(sig.get("is_rumor", False))
-            sig_prov = sig.get("provenance") or sig.get("source")
-            conf_txt = f" [conf. {sig_conf:.2f}]" if isinstance(sig_conf, (int, float)) else ""
-            date_txt = f" [{sig_date}]" if sig_date else ""
-            rumor_txt = " [RUMOR]" if sig_rumor else ""
-            if isinstance(sig_prov, list):
-                prov_txt = f" [fuentes: {', '.join(str(p) for p in sig_prov if p)}]" if sig_prov else ""
-            elif sig_prov:
-                prov_txt = f" [fuente: {sig_prov}]"
-            else:
-                prov_txt = ""
-            if sig_text:
-                lines.append(f"    - ({sig_type}){date_txt}{rumor_txt}{prov_txt} {sig_text}{conf_txt}")
-            if sig_ev:
-                lines.append(f"      Evidencia: {sig_ev[:220]}")
+    # NOTA: Las señales en `context_signals` ahora se renderizan a nivel de partido 
+    # mediante _format_match_signals() separadas en limpias y sospechosas.
 
     return "\n".join(lines) if lines else "  Sin análisis táctico disponible."
+
+
+def _format_match_signals(mc: dict) -> str:
+    """
+    Formatea las señales del partido dividiéndolas explícitamente en Limpias y Sospechosas.
+    Aplica fallback si es una ejecución antigua que no particionó las señales.
+    """
+    clean = mc.get("signals_clean")
+    suspicious = mc.get("signals_suspicious")
+    summary = mc.get("signals_summary")
+    
+    # Fallback compatibilidad hacia atrás
+    if clean is None and suspicious is None:
+        home_sigs = mc.get("home", {}).get("insights", {}).get("context_signals", [])
+        away_sigs = mc.get("away", {}).get("insights", {}).get("context_signals", [])
+        clean = list(home_sigs) + list(away_sigs)
+        suspicious = []
+        summary = {
+            "total": len(clean),
+            "clean_count": len(clean),
+            "suspicious_count": 0,
+            "suspicious_ratio": 0.0,
+            "top_suspicion_reasons": []
+        }
+    else:
+        clean = clean or []
+        suspicious = suspicious or []
+        summary = summary or {
+            "total": len(clean) + len(suspicious),
+            "clean_count": len(clean),
+            "suspicious_count": len(suspicious),
+            "suspicious_ratio": 0.0,
+            "top_suspicion_reasons": []
+        }
+
+    lines = []
+    
+    # 1. Limpias
+    lines.append("SEÑALES LIMPIAS (Base de alta confianza)")
+    lines.append("-" * 40)
+    if clean:
+        for s in clean[:15]: # Limitar para no saturar context window
+            tm = s.get("team", "?")
+            t_type = s.get("type", "other")
+            text = s.get("signal", "")
+            src = s.get("source_type", "unknown")
+            lines.append(f"- [{tm}] {t_type} | {text} | src={src}")
+    else:
+        lines.append("- (Ninguna señal limpia reportada)")
+        
+    lines.append("")
+        
+    # 2. Sospechosas
+    lines.append("SEÑALES SOSPECHOSAS (Información de precaución o dudosa)")
+    lines.append("-" * 40)
+    if suspicious:
+        for s in suspicious[:10]:
+            tm = s.get("team", "?")
+            t_type = s.get("type", "other")
+            text = s.get("signal", "")
+            src = s.get("source_type", "unknown")
+            reasons = ", ".join(s.get("suspicion_reasons", []))
+            lines.append(f"- [{tm}] {t_type} | {text} | src={src} | reasons={reasons}")
+    else:
+        lines.append("- (Ninguna señal sospechosa detectada)")
+        
+    lines.append("")
+        
+    # 3. Resumen
+    lines.append("RESUMEN DE SEÑALES (SUMMARY)")
+    lines.append("-" * 40)
+    lines.append(f"- total: {summary.get('total', 0)}")
+    lines.append(f"- clean_count: {summary.get('clean_count', 0)}")
+    lines.append(f"- suspicious_count: {summary.get('suspicious_count', 0)}")
+    lines.append(f"- suspicious_ratio: {summary.get('suspicious_ratio', 0.0)}")
+    
+    top_reasons = summary.get('top_suspicion_reasons', [])
+    if top_reasons:
+        lines.append(f"- top_suspicion_reasons: {', '.join(top_reasons)}")
+        
+    return "\n".join(lines)
 
 
 def _format_odds_context(odds_event: Optional[dict]) -> str:
@@ -658,6 +713,12 @@ def _build_match_context(
     away_insights = _find_team_insights(away, insights)
     match_odds = _find_match_odds(home, away, odds)
 
+    # Reconstrucción dummy de match context para _format_match_signals con legacy format
+    dummy_mc = {
+        "home": {"insights": home_insights},
+        "away": {"insights": away_insights}
+    }
+
     ctx = f"""
 PARTIDO: {home} vs {away}
 Fecha: {match_date} | Competencia: {competition}
@@ -672,6 +733,8 @@ Fecha: {match_date} | Competencia: {competition}
 
 CUOTAS DEL MERCADO:
 {_format_odds_context(match_odds)}
+
+{_format_match_signals(dummy_mc)}
 """
 
     return {
@@ -842,67 +905,47 @@ Si tenías todo lo que necesitabas y la predicción es sólida, puedes escribir:
 REGLAS FUNDAMENTALES (LEER COMPLETO ANTES DE RESPONDER)
 ════════════════════════════════════════════════════════════
 
-1. ANCLA BAYESIANA — CUOTAS DEL MERCADO (PRIORIDAD MÁXIMA):
+1. DISCERNIMIENTO DE SEÑALES (LIMPIAS vs SOSPECHOSAS):
+   - Usa SEÑALES LIMPIAS como base prioritaria de tu análisis táctico y narrativo. Son verdades confirmadas.
+   - Trata SEÑALES SOSPECHOSAS con extrema precaución. Son contexto de advertencia, rumor, o información contaminada/desactualizada.
+   - NUNCA conviertas una señal sospechosa en hecho duro (Ej: no digas "Mbappé está lesionado" si la señal es sospechosa; di "Existe incertidumbre sobre Mbappé").
+   - Si una señal sospechosa aborda un tema crítico (lesiones, castigos, fatiga), repórtala como INCERTIDUMBRE CRÍTICA en key_factors o risk_factors, no como hecho comprobado.
+   - Si el 'suspicious_ratio' del resumen de señales es alto (ej > 0.3), o existen demasiados conflictos (ej duplicate_signals, mismatch), DEBES BAJAR TU CONVICCIÓN (confidence), porque estás prediciendo a ciegas bajo niebla. El reasoning debe reflejar cautela explícita frente a datos confusos.
+
+2. ANCLA BAYESIANA — CUOTAS DEL MERCADO (PRIORIDAD MÁXIMA):
    - Las probabilidades implícitas que aparecen en las CUOTAS DEL MERCADO al final del contexto
      son el MEJOR PREDICTOR DISPONIBLE. Representan el consenso de miles de analistas con dinero real.
    - TU PUNTO DE PARTIDA OBLIGATORIO es el favorito del mercado (⭐ FAVORITO DEL MERCADO).
-   - SOLO debes apartarte del favorito del mercado si tienes evidencia CONCRETA y RECIENTE:
-       * Lesión confirmada de un titular clave no reflejada en las cuotas
-       * Sanción o suspensión confirmada que el mercado no ha descontado
-       * Ventaja táctica o de localía extrema claramente superior al promedio
-   - Si no tienes evidencia concreta como las anteriores, TU PREDICCIÓN DEBE COINCIDIR
-     con el favorito del mercado.
-   - Si te apartas del favorito sin evidencia, tu riesgo de error sube drásticamente.
+   - SOLO debes apartarte del favorito del mercado si tienes evidencia CONCRETA, RECIENTE y LIMPIA:
+       * Lesión confirmada (SEÑAL LIMPIA) de un titular clave no reflejada en las cuotas
+       * Sanción o suspensión confirmada (SEÑAL LIMPIA) que el mercado no ha descontado
+       * Ventaja táctica o de localía extrema demostrable
+   - Si no tienes evidencia limpia como las anteriores, TU PREDICCIÓN DEBE COINCIDIR con el mercado.
 
-2. CALIBRACIÓN DE CONFIANZA (CRÍTICO):
+3. CALIBRACIÓN DE CONFIANZA (CRÍTICO):
    - `confidence` es tu estimación de probabilidad real del resultado (escala 0-100).
-   - Si no tienes evidencia que cambie las probabilidades del mercado: confidence ≈ prob. implícita del mercado ± 5%.
-   - Para superar confidence >= 70% necesitas justificación EXPLÍCITA en key_factors (señal concreta).
-   - confidence >= 75% solo si tienes 2+ señales confirmadas y recientes que refuerzan el resultado.
+   - Si no tienes evidencia limpia que contradiga al mercado: confidence ≈ prob. implícita ± 5%.
+   - Para superar confidence >= 70% necesitas justificación EXPLÍCITA en key_factors apoyada 100% en SEÑALES LIMPIAS.
    - PENALIZACIONES OBLIGATORIAS en confidence:
+       * 'suspicious_ratio' > 0.35: -10 puntos (niebla informativa).
        * Datos de stats con posición=99 (sin datos reales de ESPN): -12 puntos
        * Forma vacía o desconocida de algún equipo: -8 puntos
-       * Sin insights de YouTube para esta jornada: -5 puntos
-       * Partido entre equipos del mismo nivel con cuotas equilibradas (diferencia < 5%): -8 puntos
+       * Sin insights de YouTube/Web para esta jornada: -5 puntos
 
-3. DISTRIBUCIÓN HISTÓRICA (BASE):
+4. DISTRIBUCIÓN HISTÓRICA (BASE):
    - En CHI1: ~40% victorias local | ~27% empates | ~33% victorias visitante
    - En UCL fase eliminatoria: ~45% local | ~24% empates | ~31% visitante
-   - Si las cuotas muestran empate con probabilidad implícita >= 28%, el empate es un resultado
-     completamente plausible. NO lo descartes sin evidencia.
-   - Si el visitante tiene cuota <= 3.00 (prob > 33%), tiene chances REALES. No lo ignores.
+   - Si las cuotas muestran empate con probabilidad implícita >= 28%, el empate es plausible. NO lo descartes sin evidencia limpia.
 
-4. ANTI-SESGO AL LOCAL:
-   - El fútbol profesional moderno no tiene el sesgo histórico al local que tenía antes del 2010.
-   - Predecir siempre al local es una estrategia mediocre con ~40% de precisión.
-   - Que un equipo juegue de local NO es suficiente razón por sí sola para predecirle la victoria.
-   - Solo argumenta ventaja de localía si hay un factor concreto: cancha extrema (altura, calor),
-     historial reciente muy favorable en casa, o rival que viaja desde muy lejos.
+5. PONDERACIÓN TEMPORAL Y DE FUENTES:
+   - Usa fechas (as_of_date, date) para ponderar relevancia. Contexto > {stale_days} días vale menos, salvo cambios estructurales (cambio DT).
+   - Prioridad de Fuentes LIMPIAS: youtube/web > history.
+   - Señales [RUMOR] / SOSPECHOSAS: peso enormemente reducido. NUNCA pueden gatillar una decisión contra-mercado por sí solas.
 
-5. PONDERACIÓN TEMPORAL:
-   - Usa fechas (as_of_date, context_signals[].date) para ponderar relevancia.
-   - Contexto con más de {stale_days} días: baja su peso salvo que sea estructural (crisis institucional,
-     sanción prolongada, cambio de DT).
-
-6. PONDERACIÓN POR FUENTE:
-   - Prioridad: youtube/web > history. Si contradicen, usa youtube/web.
-   - Señales con `analyst_web_check`: alta utilidad, úsalas para confirmar/descartar bajas concretas.
-   - Señales marcadas [RUMOR]: peso reducido, no pueden ser el factor decisivo principal.
-
-9. CONTEXTO PSICOLÓGICO Y COMPETITIVO:
-   - Importancia del partido (definición, clásico, descenso, acceso a copa): motivación extra puede superar diferencias tácticas.
-   - Efecto DT nuevo: el equipo con DT recién asumido suele responder con mayor intensidad al principio.
-   - international_fatigue o heavy_rotation: reduce confianza en victoria del equipo afectado.
-   - extreme_venue (altitude, heat): hándicap severo para el visitante.
-   - aggregate_score_disadvantage en UCL: el equipo que va perdiendo atacará → más goles, escenarios abiertos.
-   - must_win_scenario: motivación extrema que puede compensar deficiencias técnicas.
-   - Crisis institucional (impago sueldos, conflicto camarín): puede impactar rendimiento aunque no se vea en las stats.
-
-10. REGLA DE ORO FINAL:
-    - Es mejor predecir con 55% de confianza real que con 75% de confianza falsa.
-    - Prefiere precisión a seguridad. Una predicción humilde y correcta vale más que una audaz e incorrecta.
-    - El output del Insights Agent ya hizo el trabajo de inteligencia. Tu trabajo es SINTETIZAR y DECIDIR, no inventar.
-    - Responde SOLO con el JSON, sin texto adicional.
+6. REGLA DE ORO FINAL:
+   - Es mejor predecir con 55% de confianza real que con 75% de confianza inventada sobre señales sospechosas.
+   - Prefiere precisión a seguridad ficticia. Una predicción humilde y correcta vale más que una audaz e incorrecta.
+   - Responde SOLO con el JSON, sin texto adicional.
 {_format_memory_section(competition)}"""
 
     return prompt
@@ -1291,6 +1334,8 @@ def _export_signals_audit(match_contexts: list[dict]):
                 # Inyectar campos también en la señal intermedia previa al Analista
                 sig["player"] = player_clean
                 sig["subject_type"] = subject_type
+                sig["team"] = target_team
+                sig["source_type"] = source_type
                 
                 # --- CALCULAR SUSPICIOUS FLAGS ---
                 is_suspicious = False
@@ -1729,6 +1774,8 @@ Fecha: {mc.get('match_date', '?')} | Competencia: {label}
 
 CUOTAS DEL MERCADO:
 {odds_str}
+
+{_format_match_signals(mc)}
 """
                 matches_ctx.append({
                     "home": home,

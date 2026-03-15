@@ -1,4 +1,4 @@
-﻿## Sesión: Roadmap Fase 2 - Robustez Arquitectónica (10-Mar-2026) 🧠🛡️
+## Sesión: Roadmap Fase 2 - Robustez Arquitectónica (10-Mar-2026) 🧠🛡️
 💻 **Repositorio Oficial:** [ArriagadaInc/Multiagentes-Bet](https://github.com/ArriagadaInc/Multiagentes-Bet)
 
 ### 📌 Hitos Recientes de la Fase 2
@@ -1376,6 +1376,25 @@ Test unitario `test_normalizer.py` confirma:
 - Resiliencia: Activación exitosa de reparación de JSON automática ante fallos de formato del modelo de búsqueda.
 
 **ESTADO DE LA SESIÓN:** Abierta. Forzado web activo.
+
+### [2026-03-14] Micro-tarea 7: Separación Epistemológica de Señales para el Analista
+Se ha refactorizado radicalmente la forma en que el `analyst_agent.py` ingiere y procesa el contexto provisto por el `insights_agent.py`.
+En vez de mezclar rumores y datos confirmados en una misma lista visual, ahora se ha diseñado un modelo de prioridades cognitivas para el bot.
+
+**Cambios Técnicos:**
+1.  **Aislamiento Físico y Renderizado Compartimentado**: La función `_format_match_signals` ahora toma el `match_context` general y dibuja tres bloques explícitos en el Prompt:
+    * **SEÑALES LIMPIAS** (Base prioritaria).
+    * **SEÑALES SOSPECHOSAS (ADVERTENCIA)** (Tratadas con extrema precaución, no como hechos).
+    * **RESUMEN DE CALIDAD DE LA INFORMACIÓN** (Expone el `clean_count` y un `suspicious_ratio` crítico).
+2.  **Inyección Contextual de Metadatos**: Se ha forzado a la función de auditoría `_export_signals_audit` a devolver diccionarios inyectados con el `team` objetivo para su rápido consumo. También se borró el viejo renderizado disperso de `context_signals` anidado por equipo en el `_format_insights_context`.
+3.  **Refactor del Sistema de Toma de Decisiones (Analyst Prompt)**: Se ha reescrito el decálogo de Reglas Fundamentales del Mega Prompt. 
+    - Regla #1 ahora castiga duramente la confianza (confidence) si la bolsa presenta un `suspicious_ratio` alto (ej. > 0.35) restando 10 puntos de convicción e induciendo prudencia explícita.
+    - Se obliga al sistema a utilizar sólo señales limpias para gatillar picos de Conviction por sobre el 75%.
+
+> [!TIP]
+> Esta mejora previene al LLM de caer en alucinaciones basadas en datos mixtos desorganizados, resultando en predicciones conservadoras mucho más realistas frente a escenarios confusos o altamente sospechosos (incertidumbres como lesiones, sanciones).
+
+---
 
 ### [2026-02-27] Regla Dura: Identidad de Concepción (PRO)
 Se ha implementado una solución definitiva y robusta para evitar la confusión entre **Universidad de Concepción** y **Deportes Concepción**.
