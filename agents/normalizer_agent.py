@@ -22,6 +22,7 @@ from typing import Any, Optional
 
 from state import AgentState
 from utils.normalizer import slugify, TeamNormalizer
+from utils.signal_partitioner import partition_match_signals
 
 logger = logging.getLogger(__name__)
 
@@ -505,7 +506,7 @@ def _build_match_context(
     home_canonical = (home_stats or {}).get("canonical_name") or normalizer.clean(home)
     away_canonical = (away_stats or {}).get("canonical_name") or normalizer.clean(away)
 
-    return {
+    ctx = {
         "match_id":    match_id,
         "match_key":   match_key,
         "competition": competition,
@@ -527,6 +528,10 @@ def _build_match_context(
         "odds": _extract_best_odds(odds_event),
         "missing_data": missing,
     }
+
+    # Enriquecer ctx separando y dictaminando senales limpias de sospechosas epistemologicas
+    ctx = partition_match_signals(ctx, force_recompute=True)
+    return ctx
 
 
 # ============================================================================
