@@ -22,7 +22,7 @@ import json
 import logging
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Any, Optional
 
 from state import AgentState
@@ -327,12 +327,15 @@ def _merge_analyst_web_check_signals(team_insights: Optional[dict], check_result
 # ============================================================================
 
 def _make_llm() -> Optional[Any]:
-    """Crea instancia del LLM según el factory."""
+    """Crea instancia del LLM según el factory.
+    - EXPENSIVE_MODE=true  → Claude claude-sonnet-4-6 (razonamiento profundo)
+    - EXPENSIVE_MODE=false → Gemini con fallback a gpt-4o-mini
+    """
     try:
         from utils.llm_factory import get_llm
         return get_llm(
             temperature=0.3,
-            callbacks=[TokenTrackingCallbackHandler()]
+            profile="analyst_core"
         )
     except Exception as e:
         logger.error(f"Fallo al inicializar el modelo en get_llm: {e}")
@@ -374,10 +377,18 @@ def _find_team_insights(team_name: str, insights: list[dict]) -> Optional[dict]:
 
 def _find_match_odds(home: str, away: str, odds: list[dict]) -> Optional[dict]:
     """
-    Busca odds coincidente usando lógica difusa.
+    Busca odds coincidente usando lógica difusa y normalizada.
     """
     if not odds:
         return None
+        
+    try:
+        from utils.normalizer import TeamNormalizer
+        normalizer = TeamNormalizer()
+        home = normalizer.clean(home) or home
+        away = normalizer.clean(away) or away
+    except Exception:
+        pass
         
     # 1. Match Exacto de nombres normalizados
     target_slug = f"{home} vs {away}".lower().strip()
@@ -386,6 +397,13 @@ def _find_match_odds(home: str, away: str, odds: list[dict]) -> Optional[dict]:
         # Check normal
         g_home = game.get('home_team', '')
         g_away = game.get('away_team', '')
+        
+        try:
+            g_home = normalizer.clean(g_home) or g_home
+            g_away = normalizer.clean(g_away) or g_away
+        except Exception:
+            pass
+            
         g_slug = f"{g_home} vs {g_away}".lower().strip()
         
         if g_slug == target_slug:
@@ -509,36 +527,75 @@ def _format_insights_context(insights: Optional[dict]) -> str:
             parts.append(f"Ausencias: {', '.join(absences)}")
         lines.append(f"  Bajas mencionadas: {' | '.join(parts)}")
 
-    # Importante: incluir señales de contexto estructuradas (off-field, morales,
-    # disciplinarias, carga por torneos, etc.) que vienen del insights_agent.
-    context_signals = insights.get("context_signals") or []
-    if context_signals:
-        lines.append("  Contexto relevante detectado:")
-        for sig in context_signals[:8]:
-            if not isinstance(sig, dict):
-                continue
-            sig_type = sig.get("type", "other")
-            sig_text = sig.get("signal", "")
-            sig_ev = sig.get("evidence", "")
-            sig_conf = sig.get("confidence")
-            sig_date = sig.get("date")
-            sig_rumor = bool(sig.get("is_rumor", False))
-            sig_prov = sig.get("provenance") or sig.get("source")
-            conf_txt = f" [conf. {sig_conf:.2f}]" if isinstance(sig_conf, (int, float)) else ""
-            date_txt = f" [{sig_date}]" if sig_date else ""
-            rumor_txt = " [RUMOR]" if sig_rumor else ""
-            if isinstance(sig_prov, list):
-                prov_txt = f" [fuentes: {', '.join(str(p) for p in sig_prov if p)}]" if sig_prov else ""
-            elif sig_prov:
-                prov_txt = f" [fuente: {sig_prov}]"
-            else:
-                prov_txt = ""
-            if sig_text:
-                lines.append(f"    - ({sig_type}){date_txt}{rumor_txt}{prov_txt} {sig_text}{conf_txt}")
-            if sig_ev:
-                lines.append(f"      Evidencia: {sig_ev[:220]}")
+    # NOTA: Las señales en `context_signals` ahora se renderizan a nivel de partido 
+    # mediante _format_match_signals() separadas en limpias y sospechosas.
 
     return "\n".join(lines) if lines else "  Sin análisis táctico disponible."
+
+
+def _format_match_signals(mc: dict) -> str:
+    """
+    Formatea las señales del partido dividiéndolas explícitamente en Limpias y Sospechosas.
+    Aplica fallback si es una ejecución antigua que no particionó las señales.
+    """
+    clean = mc.get("signals_clean")
+    suspicious = mc.get("signals_suspicious")
+    summary = mc.get("signals_summary")
+    
+    # Fallback compatibilidad hacia atrás
+    if clean is None and suspicious is None:
+        from utils.signal_partitioner import partition_match_signals
+        fallback_mc = partition_match_signals(mc.copy())
+        clean = fallback_mc.get("signals_clean", [])
+        suspicious = fallback_mc.get("signals_suspicious", [])
+        summary = fallback_mc.get("signals_summary", {})
+
+    lines = []
+    
+    # 1. Limpias
+    lines.append("SEÑALES LIMPIAS (Base de alta confianza)")
+    lines.append("-" * 40)
+    if clean:
+        for s in clean[:15]: # Limitar para no saturar context window
+            tm = s.get("team", "?")
+            t_type = s.get("type", "other")
+            text = s.get("signal", "")
+            src = s.get("source_type", "unknown")
+            lines.append(f"- [{tm}] {t_type} | {text} | src={src}")
+    else:
+        lines.append("- (Ninguna señal limpia reportada)")
+        
+    lines.append("")
+        
+    # 2. Sospechosas
+    lines.append("SEÑALES SOSPECHOSAS (Información de precaución o dudosa)")
+    lines.append("-" * 40)
+    if suspicious:
+        for s in suspicious[:10]:
+            tm = s.get("team", "?")
+            t_type = s.get("type", "other")
+            text = s.get("signal", "")
+            src = s.get("source_type", "unknown")
+            reasons = ", ".join(s.get("suspicion_reasons", []))
+            lines.append(f"- [{tm}] {t_type} | {text} | src={src} | reasons={reasons}")
+    else:
+        lines.append("- (Ninguna señal sospechosa detectada)")
+        
+    lines.append("")
+        
+    # 3. Resumen
+    lines.append("RESUMEN DE SEÑALES (SUMMARY)")
+    lines.append("-" * 40)
+    lines.append(f"- total: {summary.get('total', 0)}")
+    lines.append(f"- clean_count: {summary.get('clean_count', 0)}")
+    lines.append(f"- suspicious_count: {summary.get('suspicious_count', 0)}")
+    lines.append(f"- suspicious_ratio: {summary.get('suspicious_ratio', 0.0)}")
+    
+    top_reasons = summary.get('top_suspicion_reasons', [])
+    if top_reasons:
+        lines.append(f"- top_suspicion_reasons: {', '.join(top_reasons)}")
+        
+    return "\n".join(lines)
 
 
 def _format_odds_context(odds_event: Optional[dict]) -> str:
@@ -649,7 +706,7 @@ def _build_match_context(
     if not home or not away:
         return None
 
-    match_date = fixture.get("match_date", fixture.get("commence_time", "?"))
+    match_date = fixture.get("match_date", fixture.get("commence_time", fixture.get("utc_date", "?")))
     competition = fixture.get("competition", "?")
 
     home_stats = _find_team_stats(home, stats)
@@ -657,6 +714,12 @@ def _build_match_context(
     home_insights = _find_team_insights(home, insights)
     away_insights = _find_team_insights(away, insights)
     match_odds = _find_match_odds(home, away, odds)
+
+    # Reconstrucción dummy de match context para _format_match_signals con legacy format
+    dummy_mc = {
+        "home": {"insights": home_insights},
+        "away": {"insights": away_insights}
+    }
 
     ctx = f"""
 PARTIDO: {home} vs {away}
@@ -672,6 +735,8 @@ Fecha: {match_date} | Competencia: {competition}
 
 CUOTAS DEL MERCADO:
 {_format_odds_context(match_odds)}
+
+{_format_match_signals(dummy_mc)}
 """
 
     return {
@@ -842,67 +907,47 @@ Si tenías todo lo que necesitabas y la predicción es sólida, puedes escribir:
 REGLAS FUNDAMENTALES (LEER COMPLETO ANTES DE RESPONDER)
 ════════════════════════════════════════════════════════════
 
-1. ANCLA BAYESIANA — CUOTAS DEL MERCADO (PRIORIDAD MÁXIMA):
+1. DISCERNIMIENTO DE SEÑALES (LIMPIAS vs SOSPECHOSAS):
+   - Usa SEÑALES LIMPIAS como base prioritaria de tu análisis táctico y narrativo. Son verdades confirmadas.
+   - Trata SEÑALES SOSPECHOSAS con extrema precaución. Son contexto de advertencia, rumor, o información contaminada/desactualizada.
+   - NUNCA conviertas una señal sospechosa en hecho duro (Ej: no digas "Mbappé está lesionado" si la señal es sospechosa; di "Existe incertidumbre sobre Mbappé").
+   - Si una señal sospechosa aborda un tema crítico (lesiones, castigos, fatiga), repórtala como INCERTIDUMBRE CRÍTICA en key_factors o risk_factors, no como hecho comprobado.
+   - Si el 'suspicious_ratio' del resumen de señales es alto (ej > 0.3), o existen demasiados conflictos (ej duplicate_signals, mismatch), DEBES BAJAR TU CONVICCIÓN (confidence), porque estás prediciendo a ciegas bajo niebla. El reasoning debe reflejar cautela explícita frente a datos confusos.
+
+2. ANCLA BAYESIANA — CUOTAS DEL MERCADO (PRIORIDAD MÁXIMA):
    - Las probabilidades implícitas que aparecen en las CUOTAS DEL MERCADO al final del contexto
      son el MEJOR PREDICTOR DISPONIBLE. Representan el consenso de miles de analistas con dinero real.
    - TU PUNTO DE PARTIDA OBLIGATORIO es el favorito del mercado (⭐ FAVORITO DEL MERCADO).
-   - SOLO debes apartarte del favorito del mercado si tienes evidencia CONCRETA y RECIENTE:
-       * Lesión confirmada de un titular clave no reflejada en las cuotas
-       * Sanción o suspensión confirmada que el mercado no ha descontado
-       * Ventaja táctica o de localía extrema claramente superior al promedio
-   - Si no tienes evidencia concreta como las anteriores, TU PREDICCIÓN DEBE COINCIDIR
-     con el favorito del mercado.
-   - Si te apartas del favorito sin evidencia, tu riesgo de error sube drásticamente.
+   - SOLO debes apartarte del favorito del mercado si tienes evidencia CONCRETA, RECIENTE y LIMPIA:
+       * Lesión confirmada (SEÑAL LIMPIA) de un titular clave no reflejada en las cuotas
+       * Sanción o suspensión confirmada (SEÑAL LIMPIA) que el mercado no ha descontado
+       * Ventaja táctica o de localía extrema demostrable
+   - Si no tienes evidencia limpia como las anteriores, TU PREDICCIÓN DEBE COINCIDIR con el mercado.
 
-2. CALIBRACIÓN DE CONFIANZA (CRÍTICO):
+3. CALIBRACIÓN DE CONFIANZA (CRÍTICO):
    - `confidence` es tu estimación de probabilidad real del resultado (escala 0-100).
-   - Si no tienes evidencia que cambie las probabilidades del mercado: confidence ≈ prob. implícita del mercado ± 5%.
-   - Para superar confidence >= 70% necesitas justificación EXPLÍCITA en key_factors (señal concreta).
-   - confidence >= 75% solo si tienes 2+ señales confirmadas y recientes que refuerzan el resultado.
+   - Si no tienes evidencia limpia que contradiga al mercado: confidence ≈ prob. implícita ± 5%.
+   - Para superar confidence >= 70% necesitas justificación EXPLÍCITA en key_factors apoyada 100% en SEÑALES LIMPIAS.
    - PENALIZACIONES OBLIGATORIAS en confidence:
+       * 'suspicious_ratio' > 0.35: -10 puntos (niebla informativa).
        * Datos de stats con posición=99 (sin datos reales de ESPN): -12 puntos
        * Forma vacía o desconocida de algún equipo: -8 puntos
-       * Sin insights de YouTube para esta jornada: -5 puntos
-       * Partido entre equipos del mismo nivel con cuotas equilibradas (diferencia < 5%): -8 puntos
+       * Sin insights de YouTube/Web para esta jornada: -5 puntos
 
-3. DISTRIBUCIÓN HISTÓRICA (BASE):
+4. DISTRIBUCIÓN HISTÓRICA (BASE):
    - En CHI1: ~40% victorias local | ~27% empates | ~33% victorias visitante
    - En UCL fase eliminatoria: ~45% local | ~24% empates | ~31% visitante
-   - Si las cuotas muestran empate con probabilidad implícita >= 28%, el empate es un resultado
-     completamente plausible. NO lo descartes sin evidencia.
-   - Si el visitante tiene cuota <= 3.00 (prob > 33%), tiene chances REALES. No lo ignores.
+   - Si las cuotas muestran empate con probabilidad implícita >= 28%, el empate es plausible. NO lo descartes sin evidencia limpia.
 
-4. ANTI-SESGO AL LOCAL:
-   - El fútbol profesional moderno no tiene el sesgo histórico al local que tenía antes del 2010.
-   - Predecir siempre al local es una estrategia mediocre con ~40% de precisión.
-   - Que un equipo juegue de local NO es suficiente razón por sí sola para predecirle la victoria.
-   - Solo argumenta ventaja de localía si hay un factor concreto: cancha extrema (altura, calor),
-     historial reciente muy favorable en casa, o rival que viaja desde muy lejos.
+5. PONDERACIÓN TEMPORAL Y DE FUENTES:
+   - Usa fechas (as_of_date, date) para ponderar relevancia. Contexto > {stale_days} días vale menos, salvo cambios estructurales (cambio DT).
+   - Prioridad de Fuentes LIMPIAS: youtube/web > history.
+   - Señales [RUMOR] / SOSPECHOSAS: peso enormemente reducido. NUNCA pueden gatillar una decisión contra-mercado por sí solas.
 
-5. PONDERACIÓN TEMPORAL:
-   - Usa fechas (as_of_date, context_signals[].date) para ponderar relevancia.
-   - Contexto con más de {stale_days} días: baja su peso salvo que sea estructural (crisis institucional,
-     sanción prolongada, cambio de DT).
-
-6. PONDERACIÓN POR FUENTE:
-   - Prioridad: youtube/web > history. Si contradicen, usa youtube/web.
-   - Señales con `analyst_web_check`: alta utilidad, úsalas para confirmar/descartar bajas concretas.
-   - Señales marcadas [RUMOR]: peso reducido, no pueden ser el factor decisivo principal.
-
-9. CONTEXTO PSICOLÓGICO Y COMPETITIVO:
-   - Importancia del partido (definición, clásico, descenso, acceso a copa): motivación extra puede superar diferencias tácticas.
-   - Efecto DT nuevo: el equipo con DT recién asumido suele responder con mayor intensidad al principio.
-   - international_fatigue o heavy_rotation: reduce confianza en victoria del equipo afectado.
-   - extreme_venue (altitude, heat): hándicap severo para el visitante.
-   - aggregate_score_disadvantage en UCL: el equipo que va perdiendo atacará → más goles, escenarios abiertos.
-   - must_win_scenario: motivación extrema que puede compensar deficiencias técnicas.
-   - Crisis institucional (impago sueldos, conflicto camarín): puede impactar rendimiento aunque no se vea en las stats.
-
-10. REGLA DE ORO FINAL:
-    - Es mejor predecir con 55% de confianza real que con 75% de confianza falsa.
-    - Prefiere precisión a seguridad. Una predicción humilde y correcta vale más que una audaz e incorrecta.
-    - El output del Insights Agent ya hizo el trabajo de inteligencia. Tu trabajo es SINTETIZAR y DECIDIR, no inventar.
-    - Responde SOLO con el JSON, sin texto adicional.
+6. REGLA DE ORO FINAL:
+   - Es mejor predecir con 55% de confianza real que con 75% de confianza inventada sobre señales sospechosas.
+   - Prefiere precisión a seguridad ficticia. Una predicción humilde y correcta vale más que una audaz e incorrecta.
+   - Responde SOLO con el JSON, sin texto adicional.
 {_format_memory_section(competition)}"""
 
     return prompt
@@ -1052,6 +1097,55 @@ def _save_predictions_history(predictions: list[dict]):
         except (json.JSONDecodeError, OSError):
             existing = []
 
+    def _infer_prediction_date_str(item: dict) -> str:
+        raw = str(item.get("match_date") or "").strip()
+        if raw and raw not in {"None", "null", "?"}:
+            return raw[:10]
+        pid = str(item.get("prediction_id") or item.get("match_id") or "")
+        m = re.search(r"(202\d-\d{2}-\d{2})", pid)
+        if m:
+            return m.group(1)
+        gen = str(item.get("generated_at") or "").strip()
+        if gen and "T" in gen:
+            return gen[:10]
+        return ""
+
+    def _clean_history_entries(items: list[dict]) -> list[dict]:
+        """
+        Higiene operativa del historial:
+        - elimina registros heurísticos
+        - elimina predicciones demasiado futuras para la tabla de evaluación
+        """
+        try:
+            max_future_days = int(os.getenv("PREDICTIONS_HISTORY_MAX_FUTURE_DAYS", "1"))
+        except Exception:
+            max_future_days = 1
+        cutoff = (datetime.now(timezone.utc) + timedelta(days=max_future_days)).strftime("%Y-%m-%d")
+
+        cleaned = []
+        removed_heuristic = 0
+        removed_future = 0
+        for item in items:
+            if str(item.get("analyst_model_id") or "").strip().lower() == "heuristic":
+                removed_heuristic += 1
+                continue
+            date_str = _infer_prediction_date_str(item)
+            if date_str and date_str > cutoff:
+                removed_future += 1
+                continue
+            cleaned.append(item)
+
+        if removed_heuristic or removed_future:
+            logger.info(
+                "Historial limpiado antes de guardar: -%s heuristic, -%s futuros (> %s)",
+                removed_heuristic,
+                removed_future,
+                cutoff,
+            )
+        return cleaned
+
+    existing = _clean_history_entries(existing)
+
     # IDs existentes
     existing_ids = {p.get("prediction_id") for p in existing}
 
@@ -1118,7 +1212,8 @@ def _save_predictions_history(predictions: list[dict]):
         # Si no hay nada nuevo y el CSV ya existe, no hacemos nada extra
         return
 
-    # 3. Guardar JSON
+    # 3. Higiene final + Guardar JSON
+    existing = _clean_history_entries(existing)
     with open(history_file_json, "w", encoding="utf-8") as f:
         json.dump(existing, f, indent=2, ensure_ascii=False)
 
@@ -1250,184 +1345,19 @@ def _export_signals_audit(match_contexts: list[dict]):
                     source_type = "manual"
                 
                 # Attempt to extract player name if applicable
-                player = None
-                sig_type = str(sig.get("type", "unknown"))
-                if sig_type in {"injury_news", "disciplinary_issue"}:
-                    players = _extract_person_names_from_signal(sig)
-                    if players:
-                        player = players[0]
+                # --- CÁLCULO / PASSTHROUGH DE ATRIBUTOS ---
+                # Si el pipeline ejecutó el normalizer_agent moderno, la señal ya viene enriquecida.
+                subject_type = sig.get("subject_type", "unknown")
+                source_type = sig.get("source_type", "unknown")
+                player_clean = sig.get("player", "")
+                date_clean = sig.get("date", "")
+                is_suspicious = sig.get("is_suspicious", False)
+                suspicion_reasons = sig.get("suspicion_reasons", [])
                 
-                # Clean null representations
-                def clean_null(val):
-                    if not isinstance(val, str): return val
-                    v = val.strip().lower()
-                    if v in {"null", "none", "", "n/a", "unknown"}: return None
-                    return val
-                
-                player_clean = clean_null(player)
-                date_clean = clean_null(str(sig.get("date", "")))
-                
-                # Determine subject_type
-                subject_type = "unknown"
-                t_text_lower = t_text
-                if player_clean:
-                    coach_keywords = ["tecnico", "técnico", "dt", "entrenador", "mister", "manager", "dirige"]
-                    if any(k in t_text_lower for k in coach_keywords):
-                        subject_type = "coach"
-                    else:
-                        subject_type = "player"
-                else:
-                    team_keywords = ["equipo", "plantilla", "club", "dirigencia", "local", "visitante", "plantel"]
-                    comp_keywords = ["liga", "champions", "copa", "torneo", "jornada", "fecha", "calendario"]
-                    case_keywords = ["caso", "juicio", "demanda", "investigacion", "sancion original", "fifa", "tas", "tribunal", "directiva", "financier", "quiebra"]
-                    
-                    if any(k in t_text_lower for k in case_keywords):
-                        subject_type = "case"
-                    elif any(k in t_text_lower for k in comp_keywords):
-                        subject_type = "competition"
-                    elif any(k in t_text_lower for k in team_keywords):
-                        subject_type = "team"
-                
-                # Inyectar campos también en la señal intermedia previa al Analista
-                sig["player"] = player_clean
-                sig["subject_type"] = subject_type
-                
-                # --- CALCULAR SUSPICIOUS FLAGS ---
-                is_suspicious = False
-                raw_reasons = []
-                
-                # 1. team_not_in_match
-                if target_team not in (home_team, away_team):
-                    raw_reasons.append("team_not_in_match")
-                    
-                # 2. subject_type_type_mismatch
-                mismatch_triggered = False
-                if subject_type == "player" and sig_type in {"case", "competition_context", "legal_context", "managerial_context"}:
-                    mismatch_triggered = True
-                elif subject_type == "player":
-                    mismatch_coach = ["dt", "técnico", "tecnico", "mister", "entrenador", "evalúa rotaciones", "evalua rotaciones", "política de no arriesgar", "politica de no arriesgar"]
-                    mismatch_case = ["caso", "procesamiento", "justicia", "demanda", "sanción", "sancion", "fifa"]
-                    if any(w in t_text_lower for w in mismatch_coach + mismatch_case):
-                        mismatch_triggered = True
-                elif subject_type == "competition" and sig_type in {"injury_news", "disciplinary_issue", "availability", "rotation"}:
-                    mismatch_triggered = True
-                elif subject_type in {"coach", "case"} and sig_type in {"form", "recent_form"}:
-                    mismatch_triggered = True
-                elif subject_type == "unknown":
-                    import re
-                    # Heurística simple para "nombre propio" evidente
-                    if re.search(r'\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\b', str(sig.get("signal", ""))):
-                        mismatch_triggered = True
-                        
-                if mismatch_triggered:
-                    opponent_types = {"opponent_form", "opponent_crisis", "opponent_strength", "opponent_availability", "opponent_schedule", "opponent_context"}
-                    if scope == "opponent" and sig_type in opponent_types and subject_type in {"unknown", "team"}:
-                        # Suprimir falso positivo de rival
-                        pass
-                    else:
-                        raw_reasons.append("subject_type_type_mismatch")
-                    
-                # 3. foreign_entity_in_team_signal
-                if player_clean and subject_type == "player" and scope != "opponent":
-                    p_lower = player_clean.lower()
-                    opponent_observed = away_observed_players if target_team == home_team else home_observed_players
-                    self_observed = home_observed_players if target_team == home_team else away_observed_players
-                    
-                    # If player name explicitly matches the opponent's team name
-                    if _signal_team_match_scores(other_team, player_clean)[0] > 0:
-                        raw_reasons.append("foreign_entity_in_team_signal")
-                    # Or if the player is exclusively observed in the opponent's raw signals
-                    elif p_lower in opponent_observed and p_lower not in self_observed:
-                        raw_reasons.append("foreign_entity_in_team_signal")
-                    # Or if the signal mentions the opponent explicitly, and player is not confirmed as ours
-                    elif _signal_team_match_scores(other_team, t_text_lower)[0] > 0 and p_lower not in self_observed:
-                        raw_reasons.append("foreign_entity_in_team_signal")
-                
-                # 4. stale_or_implausible_history_signal
-                if source_type == "history":
-                    stale_words = ["cambio de dt", "histórico", "historico", "pasó de", "paso de", "era de", "mitad de temporada", "asume capitanía", "asume capitania"]
-                    if any(w in t_text_lower for w in stale_words):
-                        raw_reasons.append("stale_or_implausible_history_signal")
-                        
-                # 5. missing_date_for_time_sensitive_signal
-                time_sensitive_types = {"injury_news", "availability", "fatigue", "disciplinary_issue", "rotation", "schedule_load", "opponent_missing_players", "medical_doubt"}
-                if not date_clean and sig_type in time_sensitive_types:
-                    raw_reasons.append("missing_date_for_time_sensitive_signal")
-                    
-                # 6. possible_duplicate_signal
-                import unicodedata
-                import re
-                def normalize_for_dedup(s):
-                    s = str(s).lower()
-                    s = ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
-                    s = re.sub(r'[^\w\s]', '', s).strip()
-                    s = re.sub(r'\s+', ' ', s)
-                    s = s.replace("la champions", "champions")
-                    return s
-                
-                norm_text = normalize_for_dedup(t_text)
-                group_key = f"{match_id}_{target_team}_{sig_type}"
-                
-                is_dup = False
-                if group_key not in seen_texts:
-                    seen_texts[group_key] = []
-                else:
-                    for past_text in seen_texts[group_key]:
-                        if norm_text == past_text or norm_text in past_text or past_text in norm_text:
-                            is_dup = True
-                            break
-                if is_dup:
-                    raw_reasons.append("possible_duplicate_signal")
-                else:
-                    seen_texts[group_key].append(norm_text)
-                
-                # 7. scope_unknown_for_actionable_signal
-                actionable_types = {"injury_news", "disciplinary_issue", "squad_availability", "heavy_rotation", "medical_doubt", "medical_ok", "fatigue", "form", "schedule_load", "coach_change"}
-                if scope == "unknown" and sig_type in actionable_types:
-                    if sig_type in {"form", "schedule_load"}:
-                        if not date_clean or subject_type == "unknown":
-                            raw_reasons.append("scope_unknown_for_actionable_signal")
-                    else:
-                        raw_reasons.append("scope_unknown_for_actionable_signal")
-                    
-                # 8. manual_signal_low_clarity
-                if source_type == "manual" and (scope == "unknown" or subject_type == "unknown" or not date_clean):
-                    raw_reasons.append("manual_signal_low_clarity")
-                    
-                # 9. opponent_scope_attached_to_team
-                if scope == "opponent" and not is_opponent_type:
-                    raw_reasons.append("opponent_scope_attached_to_team")
-                    
-                # 10. low_information_signal
-                valid_signal_text = str(sig.get("signal", ""))
-                if not valid_signal_text or len(valid_signal_text.strip()) < 12:
-                    raw_reasons.append("low_information_signal")
-                else:
-                    generic_phrases = ["mal momento", "complicado", "buen momento", "en duda", "lesionado", "partido dificil", "sin informacion"]
-                    if valid_signal_text.strip().lower() in generic_phrases:
-                        raw_reasons.append("low_information_signal")
-                        
-                # Ordenar razones
-                priority_order = [
-                    "foreign_entity_in_team_signal",
-                    "subject_type_type_mismatch",
-                    "stale_or_implausible_history_signal",
-                    "possible_duplicate_signal",
-                    "missing_date_for_time_sensitive_signal",
-                    "scope_unknown_for_actionable_signal",
-                    "team_not_in_match",
-                    "manual_signal_low_clarity",
-                    "opponent_scope_attached_to_team",
-                    "low_information_signal"
-                ]
-                suspicion_reasons = sorted(raw_reasons, key=lambda x: priority_order.index(x) if x in priority_order else 99)
-                
-                if suspicion_reasons:
-                    is_suspicious = True
-                    
-                sig["is_suspicious"] = is_suspicious
-                sig["suspicion_reasons"] = suspicion_reasons
-                
+                # Inyectar scope genérico si faltase en la corrida actual
+                sig["signal_scope"] = scope
+                sig["team"] = target_team
+
                 row = {
                     "match_id": match_id,
                     "competition": competition,
@@ -1438,7 +1368,7 @@ def _export_signals_audit(match_contexts: list[dict]):
                     "subject_type": subject_type,
                     "source_type": source_type,
                     "source_name": prov_str,
-                    "type": sig_type,
+                    "type": str(sig.get("type", "unknown")),
                     "signal": str(sig.get("signal", "unknown")),
                     "date": date_clean,
                     "is_rumor": bool(sig.get("is_rumor", False)),
@@ -1449,61 +1379,36 @@ def _export_signals_audit(match_contexts: list[dict]):
                 }
                 rows.append(row)
                 
-        # Procesar primero para inyectar los flags en los diccionarios originales
+        # Procesar para armar filas de debug general (flat audit)
         process_team_signals(home_dict, home_team)
         process_team_signals(away_dict, away_team)
         
-        # --- PARTICIÓN DE SEÑALES ---
-        # Consolidamos todas las señales del partido (home + away)
-        all_match_signals = []
-        if home_dict and "insights" in home_dict and "context_signals" in home_dict["insights"]:
-            all_match_signals.extend(home_dict["insights"]["context_signals"])
-        if away_dict and "insights" in away_dict and "context_signals" in away_dict["insights"]:
-            all_match_signals.extend(away_dict["insights"]["context_signals"])
+        # --- PARTICIÓN DE SEÑALES PASSTHROUGH ---
+        # Si el match_context YA tiene la separación (vía normalizer -> signal_partitioner)
+        if "signals_clean" in mc and "signals_suspicious" in mc and "signals_summary" in mc:
+            partitioned_data.append({
+                "match_id": match_id,
+                "home_team": home_team,
+                "away_team": away_team,
+                "signals_clean": mc["signals_clean"],
+                "signals_suspicious": mc["signals_suspicious"],
+                "signals_summary": mc["signals_summary"]
+            })
+        else:
+            # FALLBACK LEGACY
+            logger.warning(f"WARNING: signal partition missing in match_context; using analyst-side fallback for match_id={match_id}")
+            from utils.signal_partitioner import partition_match_signals
+            # El particionador sabe cómo leer y reconstruir in-place
+            fallback_mc = partition_match_signals(mc.copy(), force_recompute=True)
+            partitioned_data.append({
+                "match_id": match_id,
+                "home_team": home_team,
+                "away_team": away_team,
+                "signals_clean": fallback_mc["signals_clean"],
+                "signals_suspicious": fallback_mc["signals_suspicious"],
+                "signals_summary": fallback_mc["signals_summary"]
+            })
             
-        signals_clean = []
-        signals_suspicious = []
-        reasons_counter = {}
-        
-        for sig in all_match_signals:
-            if not isinstance(sig, dict): continue
-            
-            if sig.get("is_suspicious", False):
-                signals_suspicious.append(sig)
-                for r in sig.get("suspicion_reasons", []):
-                    reasons_counter[r] = reasons_counter.get(r, 0) + 1
-            else:
-                signals_clean.append(sig)
-                
-        # Top reasons sorting
-        sorted_reasons = sorted(reasons_counter.items(), key=lambda x: x[1], reverse=True)
-        top_reasons = [k for k, v in sorted_reasons[:5]]
-        
-        total_sigs = len(signals_clean) + len(signals_suspicious)
-        ratio = round(len(signals_suspicious) / total_sigs, 2) if total_sigs > 0 else 0.0
-        
-        summary = {
-            "total": total_sigs,
-            "clean_count": len(signals_clean),
-            "suspicious_count": len(signals_suspicious),
-            "suspicious_ratio": ratio,
-            "top_suspicion_reasons": top_reasons
-        }
-        
-        # Inyectar estructura particionada en el context de este partido
-        mc["signals_clean"] = signals_clean
-        mc["signals_suspicious"] = signals_suspicious
-        mc["signals_summary"] = summary
-        
-        partitioned_data.append({
-            "match_id": match_id,
-            "home_team": home_team,
-            "away_team": away_team,
-            "signals_clean": signals_clean,
-            "signals_suspicious": signals_suspicious,
-            "signals_summary": summary
-        })
-        
     try:
         with open(audit_file, "w", encoding="utf-8") as f:
             json.dump(rows, f, indent=2, ensure_ascii=False)
@@ -1729,6 +1634,8 @@ Fecha: {mc.get('match_date', '?')} | Competencia: {label}
 
 CUOTAS DEL MERCADO:
 {odds_str}
+
+{_format_match_signals(mc)}
 """
                 matches_ctx.append({
                     "home": home,
@@ -1786,7 +1693,22 @@ CUOTAS DEL MERCADO:
             if comp_predictions:
                 # Enriquecer con metadata
                 now = datetime.now(timezone.utc).isoformat()
-                model_id = getattr(llm, "model", getattr(llm, "model_name", "unknown"))
+                # Extraer model_id de forma robusta:
+                # - ChatGoogleGenerativeAI: .model
+                # - ChatOpenAI: .model_name
+                # - ChatAnthropic: .model
+                raw_model = (
+                    getattr(llm, "model", None)
+                    or getattr(llm, "model_name", None)
+                    or "unknown"
+                )
+                # Normalizar aliases historicos
+                _MODEL_ALIASES = {"gpt5": "gpt-5", "gpt 5": "gpt-5"}
+                model_id = _MODEL_ALIASES.get(str(raw_model), str(raw_model))
+                # Normalizar nombres largos de Claude para que sean legibles y consistentes
+                if isinstance(model_id, str):
+                    if "claude" in model_id.lower():
+                        model_id = model_id  # Mantener el nombre completo (claude-sonnet-4-6, etc.)
                 for pred in comp_predictions:
                     pred["competition"] = label
                     pred["generated_at"] = now
@@ -1813,12 +1735,17 @@ CUOTAS DEL MERCADO:
                 # Heurística mejorada basada en posición + forma + insights
                 home_pos = home_stats.get("stats", {}).get("position", 99) if home_stats else 99
                 away_pos = away_stats.get("stats", {}).get("position", 99) if away_stats else 99
-                home_form = home_stats.get("stats", {}).get("form", "") if home_stats else ""
-                away_form = away_stats.get("stats", {}).get("form", "") if away_stats else ""
+                
+                # Manejar que get devuelva None explícito desde el origen (API)
+                home_form = (home_stats.get("stats", {}).get("form") or "") if home_stats else ""
+                away_form = (away_stats.get("stats", {}).get("form") or "") if away_stats else ""
 
                 # Contar wins en forma
                 home_wins = home_form.count("W")
                 away_wins = away_form.count("W")
+
+                # Arreglo de fecha a placeholder fallido a real
+                real_date = ctx.get("match_date", str(now))
 
                 # Predicción basada en múltiples factores
                 pos_diff = away_pos - home_pos  # positivo si away es peor (home ventaja)
@@ -1833,7 +1760,7 @@ CUOTAS DEL MERCADO:
                 else:
                     pred, conf = "X", 52
 
-                pid = f"{label}_{ctx['match_date'][:10]}_{ctx['home']}_vs_{ctx['away']}".replace(" ", "_")
+                pid = f"{label}_{real_date[:10]}_{ctx['home']}_vs_{ctx['away']}".replace(" ", "_")
 
                 # Construir rationale y factores
                 key_factors = []
@@ -1867,6 +1794,7 @@ CUOTAS DEL MERCADO:
                     "key_factors": key_factors or [f"Análisis heurístico: {ctx['home']} local"],
                     "risk_factors": risk_factors or ["Márgenes ajustados"],
                     "entities_impact": [],
+                    "analyst_model_id": "heuristic",  # Identificador claro para métrica en UI
                 })
 
             logger.info(f"✓ {label}: {len(matches_ctx)} predicciones heurísticas (sin LLM)")

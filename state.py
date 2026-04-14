@@ -111,3 +111,6 @@ class AgentState(TypedDict, total=False):
     # Analyst Web Checks output (auditoría de búsquedas en tiempo real)
     analyst_web_checks: Optional[list[dict[str, Any]]]
 
+    # Observabilidad Operativa (Tarea 5)
+    gate_summary: Optional[dict[str, Any]]
+

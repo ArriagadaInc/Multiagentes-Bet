@@ -107,7 +107,7 @@ existente y futuro Agente #3 (Analyzer).
   - FOOTBALL_DATA_BASE_URL
   - FIXTURES_STATUS, TIMEOUT, RETRIES, CACHE_TTL
 - Sección Agente #2 (Odds)
-  - ODDS_API_KEY: ad1d775d001c9771a9467db8f7c3884d [YA CONFIGURADA]
+  - ODDS_API_KEY: YOUR_ODDS_API_KEY_HERE
   - ODDS_REGIONS, MARKETS, TIMEOUT, RETRIES, CACHE_TTL
 
 #### `requirements.txt`
@@ -310,6 +310,6 @@ Agente #1 está completamente implementado, documentado y listo para:
 
 **API Keys requeridas para ejecutar:**
 - FOOTBALL_DATA_API_KEY: Obtener en https://www.football-data.org/client/register
-- ODDS_API_KEY: Ya configurada (ad1d775d001c9771a9467db8f7c3884d)
+- ODDS_API_KEY: Configurar en `.env` con tu clave real
 
 """

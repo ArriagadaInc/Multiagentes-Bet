@@ -433,6 +433,74 @@ class StatsAggregator:
         # Convertir a lista de dicts para el estado
         return [r.model_dump() for r in all_results_map.values()]
 
+
+def _build_expected_teams_by_competition(state: AgentState) -> Dict[str, set[str]]:
+    """
+    Construye el universo de equipos esperados por competencia desde fixtures/odds.
+    Sirve como guardrail para evitar contaminar una corrida con standings de otra liga.
+    """
+    normalizer = TeamNormalizer()
+    result: Dict[str, set[str]] = {}
+
+    for fix in state.get("fixtures", []) or []:
+        comp = str(fix.get("competition") or "").upper()
+        if not comp:
+            continue
+        result.setdefault(comp, set())
+        for side in ("home_team", "away_team"):
+            team = str(fix.get(side) or "").strip()
+            if team:
+                result[comp].add(normalizer.clean(team))
+
+    for odd in state.get("odds_canonical", []) or []:
+        comp = str(odd.get("competition") or "").upper()
+        if not comp:
+            continue
+        result.setdefault(comp, set())
+        for side in ("home_team", "away_team"):
+            team = str(odd.get(side) or "").strip()
+            if team:
+                result[comp].add(normalizer.clean(team))
+
+    return result
+
+
+def _filter_cross_competition_stats(state: AgentState, combined_stats: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Elimina stats cuya competencia no calza con los equipos realmente presentes en la corrida.
+    Ejemplo: standings de CHI1 etiquetados como CHI2.
+    """
+    normalizer = TeamNormalizer()
+    expected = _build_expected_teams_by_competition(state)
+    if not expected:
+        return combined_stats
+
+    filtered: List[Dict[str, Any]] = []
+    dropped = 0
+    for row in combined_stats:
+        comp = str(row.get("competition") or "").upper()
+        if not comp or comp not in expected or not expected[comp]:
+            filtered.append(row)
+            continue
+
+        team = str(row.get("team") or "").strip()
+        clean_team = normalizer.clean(team)
+        if clean_team in expected[comp]:
+            filtered.append(row)
+            continue
+
+        dropped += 1
+        logger.warning(
+            "STATS GUARDRAIL: descartando stat cross-competition | comp=%s | team=%s | expected_teams=%s",
+            comp,
+            team,
+            sorted(expected[comp])[:12],
+        )
+
+    if dropped:
+        logger.warning("STATS GUARDRAIL: %s stat(s) descartadas por contaminación entre competencias", dropped)
+    return filtered
+
 # ============================================================================
 # NODO LANGGRAPH
 # ============================================================================
@@ -452,6 +520,7 @@ def stats_agent_node(state: AgentState) -> AgentState:
 
     try:
         combined_stats = aggregator.aggregate(competitions)
+        combined_stats = _filter_cross_competition_stats(state, combined_stats)
         state["stats_by_team"] = combined_stats
         
         # Metadatos para el estado

@@ -213,7 +213,7 @@ FOOTBALL_DATA_API_KEY=tu_api_key_aqui
 ### Paso 2: Ya configurado (Odds API)
 
 ```bash
-ODDS_API_KEY=ad1d775d001c9771a9467db8f7c3884d
+ODDS_API_KEY=YOUR_ODDS_API_KEY_HERE
 ```
 
 ### Paso 3: Instalar dependencias

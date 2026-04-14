@@ -15,8 +15,9 @@ import sys
 from datetime import datetime
 
 from dotenv import load_dotenv
+from utils.network_env import sanitize_process_proxy_env
 
-from agents.web_agent import DEFAULT_WEB_PROMPT, run_web_search_agent
+from agents.web_agent import DEFAULT_WEB_PROMPT, run_web_search_agent, web_agent_node
 
 
 # Force UTF-8 en Windows
@@ -39,26 +40,69 @@ def parse_args():
     parser.add_argument("--prompt", default=DEFAULT_WEB_PROMPT, help="Prompt de búsqueda/panorama.")
     parser.add_argument("--output", default="web_agent_output.json", help="Archivo JSON de salida.")
     parser.add_argument("--save-raw", action="store_true", help="Guardar también texto bruto del modelo.")
+    parser.add_argument("--mode", choices=["search","node"], default="node", help="'search' usa LLM directo, 'node' corre el Web Agent por torneo usando odds/fixtures del pipeline.")
     return parser.parse_args()
 
 
 def main():
     load_dotenv()
+    sanitize_process_proxy_env()
     args = parse_args()
 
     logger.info("WEB AGENT RUNNER: iniciando")
-    result = run_web_search_agent(user_prompt=args.prompt)
 
-    # Persistir salida completa (incluye validación)
-    with open(args.output, "w", encoding="utf-8") as f:
-        json.dump(result, f, indent=2, ensure_ascii=False)
-    logger.info("Salida guardada en %s", args.output)
+    if args.mode == "search":
+        # Modo directo (texto crudo del modelo). Útil para depurar el prompt.
+        result = run_web_search_agent(user_prompt=args.prompt)
+        with open(args.output, "w", encoding="utf-8") as f:
+            json.dump(result, f, indent=2, ensure_ascii=False)
+        logger.info("Salida guardada en %s", args.output)
 
-    if args.save_raw and result.get("raw_text"):
-        raw_path = os.path.splitext(args.output)[0] + ".raw.txt"
-        with open(raw_path, "w", encoding="utf-8") as f:
-            f.write(result["raw_text"])
-        logger.info("Raw text guardado en %s", raw_path)
+        if args.save_raw and result.get("raw_text"):
+            raw_path = os.path.splitext(args.output)[0] + ".raw.txt"
+            with open(raw_path, "w", encoding="utf-8") as f:
+                f.write(result["raw_text"])
+            logger.info("Raw text guardado en %s", raw_path)
+
+    else:
+        # Modo nodo: construye un state mínimo desde artifacts del pipeline
+        def _load_json(path):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                return [] if path.endswith(".json") else {}
+
+        odds = _load_json("pipeline_odds.json") or []
+        fixtures = _load_json("pipeline_fixtures.json") or []
+
+        # Inferir competencias desde odds/fixtures
+        comp_keys = set()
+        for ev in odds:
+            key = (ev.get("competition") or "").upper()
+            if key:
+                comp_keys.add(key)
+        for fx in fixtures:
+            key = (fx.get("competition") or "").upper()
+            if key:
+                comp_keys.add(key)
+
+        competitions = [{"competition": k} for k in sorted(comp_keys)]
+
+        state = {
+            "odds_canonical": odds,
+            "fixtures": fixtures,
+            "competitions": competitions,
+            "meta": {}
+        }
+
+        state = web_agent_node(state)
+        # El nodo persiste en web_agent_output.json; para impresión, intentamos leerlo
+        try:
+            with open(args.output, "r", encoding="utf-8") as f:
+                result = json.load(f)
+        except Exception:
+            result = {"ok": True, "data": {"competitions": []}}
 
     print("\n" + "=" * 80)
     print("RESULTADO AGENTE WEB")

@@ -32,7 +32,7 @@ class TeamNormalizer:
     Permite cruzar nombres de diferentes fuentes (ESPN vs Odds API).
     """
 
-    def __init__(self, mapping_file: Optional[str] = "utils/chi1_golden_mapping.json"):
+    def __init__(self, mapping_files: Optional[List[str]] = None):
         # Mapeos manuales base
         self.manual_map = {
             "sport lisboa e benfica": "benfica",
@@ -46,29 +46,54 @@ class TeamNormalizer:
             "club atletico de madrid": "atletico de madrid",
             "bayer 04 leverkusen": "bayer leverkusen",
             "sporting cp": "sporting lisbon",
+            "sporting clube de portugal": "sporting lisbon",
+            "sporting club de portugal": "sporting lisbon",
         }
+
+        # Asegurar que los nombres canónicos (valores) también se resuelvan a sí mismos
+        # Esto previene que una entrada como "paris saint-germain" (que el slugifier procesa como "paris saint germain") 
+        # devuelva un "miss" en el diccionario manual.
+        for alias, canonical in list(self.manual_map.items()):
+            if canonical not in self.manual_map:
+                self.manual_map[canonical] = canonical
         
-        # Cargar Golden Mapping si existe
-        if mapping_file and os.path.exists(mapping_file):
-            try:
-                import json
-                with open(mapping_file, "r", encoding="utf-8") as f:
-                    golden_data = json.load(f)
-                    for entry in golden_data:
-                        canonical = entry.get("canonical_name")
-                        official = entry.get("official_name")
-                        aliases = entry.get("aliases") or []
-                        
-                        if canonical:
-                            # El nombre canónico se mapea a sí mismo
-                            self.manual_map[self.clean(canonical)] = canonical
-                            if official:
-                                self.manual_map[self.clean(official)] = canonical
-                            for alias in aliases:
-                                self.manual_map[self.clean(alias)] = canonical
-                logger.info(f"TeamNormalizer: {len(golden_data)} equipos cargados desde {mapping_file}")
-            except Exception as e:
-                logger.error(f"Error cargando Golden Mapping {mapping_file}: {e}")
+        # Si no se proveen archivos, buscar todos los golden_mapping en utils/
+        if mapping_files is None:
+            mapping_files = []
+            utils_dir = "utils"
+            if os.path.exists(utils_dir):
+                for f in os.listdir(utils_dir):
+                    if f.endswith("_golden_mapping.json"):
+                        mapping_files.append(os.path.join(utils_dir, f))
+        
+        # Cargar cada archivo de mapeo
+        for mf in mapping_files:
+            if os.path.exists(mf):
+                try:
+                    import json
+                    with open(mf, "r", encoding="utf-8") as f:
+                        golden_data = json.load(f)
+                        for entry in golden_data:
+                            canonical = entry.get("canonical_name")
+                            official = entry.get("official_name")
+                            aliases = entry.get("aliases") or []
+                            
+                            if canonical:
+                                # El nombre canónico se mapea a sí mismo
+                                self.manual_map[self.clean_simple(canonical)] = canonical
+                                if official:
+                                    self.manual_map[self.clean_simple(official)] = canonical
+                                for alias in aliases:
+                                    self.manual_map[self.clean_simple(alias)] = canonical
+                    logger.info(f"TeamNormalizer: {len(golden_data)} equipos cargados desde {mf}")
+                except Exception as e:
+                    logger.error(f"Error cargando Golden Mapping {mf}: {e}")
+
+    def clean_simple(self, name: str) -> str:
+        """Limpieza mínima para el mapeo (slugify-like)"""
+        if not name: return ""
+        # Usar slugify para que el match sea robusto a diacríticos y espacios
+        return slugify(name).replace("-", " ")
 
     def clean(self, name: str) -> str:
         """Limpieza básica de strings"""
@@ -93,8 +118,8 @@ class TeamNormalizer:
         
         cleaned = " ".join(clean_tokens)
         
-        # Mapeo manual directo
-        return self.manual_map.get(cleaned, cleaned)
+        # Mapeo manual directo pasándolo por clean_simple primero
+        return self.manual_map.get(self.clean_simple(cleaned), cleaned)
 
     def find_match(self, team_name: str, candidates: List[str], threshold: float = 0.6) -> Optional[str]:
         """

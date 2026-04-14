@@ -61,3 +61,21 @@ analyst_web_check_output.json
 youtube_insights_cache.json
 journalist_*.log
 journalist_*.json
+
+# Runtime data / local memory / user inputs
+token_usage.json
+youtube_api_cache.json
+youtube_source_failures_cache.json
+data/manual_odds_uploads/
+data/knowledge/backups/
+predictions/backups/
+data/inputs/manual_news_input.json
+data/knowledge/team_history.json
+predictions/analyst_memory.json
+predictions/analyst_wishlist.json
+predictions/evaluation_summary.csv
+predictions/evaluation_summary.json
+predictions/predictions_history.csv
+predictions/predictions_history.json
+predictions/roi_simulation.json
+bets/*.json

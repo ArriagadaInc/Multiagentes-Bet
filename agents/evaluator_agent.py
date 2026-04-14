@@ -19,7 +19,9 @@ logger = logging.getLogger(__name__)
 # Mapeo de ligas solicitado
 COMPETITION_MAP = {
     "CHI1": "chi.1",
-    "UCL": "uefa.champions"
+    "CHI2": "chi.2",
+    "UCL": "uefa.champions",
+    "COPA_CHILE": "chi.copa_chi"
 }
 
 PREDICTIONS_FILE = os.path.join("predictions", "predictions_history.json")
@@ -127,10 +129,8 @@ class ResultEvaluator:
         try:
             from utils.llm_factory import get_llm
             
-            llm = get_llm(
-                temperature=0,
-                callbacks=[TokenTrackingCallbackHandler()]
-            )
+            # No pasar callbacks aqui - llm_factory lo maneja
+            llm = get_llm(temperature=0)
             
             prompt = f"""Empareja el siguiente partido de nuestra base de datos con un evento de ESPN.
             
@@ -145,7 +145,19 @@ REGLAS:
 3. Considera que los nombres pueden variar (ej: "Real Madrid CF" vs "Real Madrid").
 """
             response = llm.invoke(prompt)
-            content = response.content.strip()
+            
+            raw_content = response.content if hasattr(response, "content") else str(response)
+            if isinstance(raw_content, list):
+                content = " ".join(
+                    part.get("text", "") if isinstance(part, dict) else str(part)
+                    for part in raw_content
+                ).strip()
+                if not content:
+                    logger.warning("llm_matching: lista vacía retornada por LLM")
+                    return None
+            else:
+                content = str(raw_content).strip()
+            
             if "NONE" in content: return None
             # Extraer solo el ID numérico si viene con texto
             match = re.search(r'(\d+)', content)
@@ -158,6 +170,15 @@ REGLAS:
         """Busca el evento coincidente en el scoreboard."""
         events = scoreboard.get("events", [])
         if not events: return None
+        
+        # --- OPTIMIZACIÓN DE TOKENS (v14.16) ---
+        # Si la predicción ya tiene un ID de evento de ESPN, intentamos match directo 
+        # Esto evita llamadas al LLM de matching en re-evaluaciones forzadas.
+        existing_id = pred.get("event_id")
+        if existing_id:
+            for ev in events:
+                if str(ev.get("id")) == str(existing_id):
+                    return ev
         
         home_target = self.normalize_name(pred.get("home_team"))
         away_target = self.normalize_name(pred.get("away_team"))
@@ -196,7 +217,7 @@ REGLAS:
                     
         return None
 
-    def evaluate_all(self):
+    def evaluate_all(self, force: bool = False):
         predictions = self.load_predictions()
         if not predictions:
             logger.info("No predictions found to evaluate.")
@@ -206,7 +227,8 @@ REGLAS:
         now_iso = datetime.now(timezone.utc).isoformat()
 
         for pred in predictions:
-            if pred.get("correct") is not None and pred.get("evaluation_status") == "OK":
+            # Si no es forzado, saltamos los ya evaluados OK
+            if not force and pred.get("correct") is not None and pred.get("evaluation_status") == "OK":
                 continue
             
             comp_id = pred.get("competition")
@@ -266,16 +288,22 @@ REGLAS:
                     (dt + timedelta(days=1)).strftime("%Y%m%d")
                 ]
             
+            leagues_to_try = [league]
+            if comp_id == "CHI2":
+                leagues_to_try.extend(["chi.1", "chi.copa_chi"])
+            
             event_found = None
-            for d in dates_to_try:
-                cache_key = (league, d)
-                if cache_key not in self.cache_scoreboards:
-                    self.cache_scoreboards[cache_key] = self.espn.get_scoreboard(league, d)
-                
-                sb = self.cache_scoreboards[cache_key]
-                if sb:
-                    event_found = self.find_event_id(pred, sb)
-                    if event_found: break
+            for curr_league in leagues_to_try:
+                for d in dates_to_try:
+                    cache_key = (curr_league, d)
+                    if cache_key not in self.cache_scoreboards:
+                        self.cache_scoreboards[cache_key] = self.espn.get_scoreboard(curr_league, d)
+                    
+                    sb = self.cache_scoreboards[cache_key]
+                    if sb:
+                        event_found = self.find_event_id(pred, sb)
+                        if event_found: break
+                if event_found: break
             
             if not event_found:
                 logger.debug(f"Event not found for {pred.get('home_team')} vs {pred.get('away_team')} around {date_yyyymmdd}. Try list: {dates_to_try}")
@@ -366,9 +394,10 @@ REGLAS:
         """Keep only the latest prediction for each match using a robust key."""
         unique_matches = {}
         for p in predictions:
-            home = p.get("home_team", "").strip()
-            away = p.get("away_team", "").strip()
-            comp = p.get("competition", "").strip()
+            if not p: continue
+            home = (p.get("home_team") or "").strip()
+            away = (p.get("away_team") or "").strip()
+            comp = (p.get("competition") or "").strip()
             event_id = p.get("event_id")
             
             if event_id:
@@ -424,7 +453,7 @@ REGLAS:
             
         by_model = {}
         for p in ok_preds:
-            m = p.get("analyst_model_id", "gpt5")
+            m = p.get("analyst_model_id") or "unknown"
             if m not in by_model: by_model[m] = {"total": 0, "correct": 0}
             by_model[m]["total"] += 1
             if p.get("correct") is True: by_model[m]["correct"] += 1
@@ -432,18 +461,32 @@ REGLAS:
         for m in by_model:
             by_model[m]["accuracy"] = round((by_model[m]["correct"] / by_model[m]["total"]) * 100, 2)
 
+        status_by_league = {}
+        for p in predictions:
+            comp = p.get("competition", "unknown")
+            status = p.get("evaluation_status", "PENDING")
+            if comp not in status_by_league:
+                status_by_league[comp] = {}
+            status_by_league[comp][status] = status_by_league[comp].get(status, 0) + 1
+
         summary = {
             "evaluated_at": datetime.now(timezone.utc).isoformat(),
             "total_evaluated": total,
             "total_correct": correct,
             "overall_accuracy_pct": round((correct / total) * 100, 2) if total > 0 else 0,
             "by_league": by_league,
+            "status_by_league": status_by_league,
             "by_model": by_model,
             "status_counts": {
                 "OK": total,
                 "PENDING": sum(1 for p in predictions if p.get("evaluation_status") == "PENDING"),
                 "NOT_FOUND": sum(1 for p in predictions if p.get("evaluation_status") == "NOT_FOUND"),
                 "NO_DATE": sum(1 for p in predictions if p.get("evaluation_status") == "NO_DATE")
+            },
+            "calibration_analysis": {
+                "shadow_mode": any(p.get("calibration_shadow_mode") for p in ok_preds),
+                "raw": self._calculate_calibration_buckets(ok_preds, "confidence_raw"),
+                "calibrated": self._calculate_calibration_buckets(ok_preds, "confidence_calibrated")
             }
         }
         
@@ -503,6 +546,47 @@ REGLAS:
             
         except Exception as e:
             logger.warning(f"No se pudo guardar el CSV de resumen: {e}")
+
+    def _calculate_calibration_buckets(self, predictions: List[Dict], field_name: str) -> Dict:
+        """Calcula la precisión por buckets de confianza para un campo específico."""
+        buckets = [
+            (50, 55, "50-55%"),
+            (55, 60, "55-60%"),
+            (60, 65, "60-65%"),
+            (65, 70, "65-70%"),
+            (70, 101, "70%+")
+        ]
+        
+        analysis = {}
+        for low, high, label in buckets:
+            # Filtrar predicciones en este bucket
+            bucket_preds = []
+            for p in predictions:
+                val = p.get(field_name)
+                # Fallback a 'confidence' si el campo específico no existe (compatibilidad)
+                if val is None:
+                    val = p.get("confidence")
+                
+                try:
+                    f_val = float(val)
+                    if low <= f_val < high:
+                        bucket_preds.append(p)
+                except (ValueError, TypeError):
+                    continue
+            
+            if not bucket_preds:
+                analysis[label] = {"total": 0, "correct": 0, "accuracy": 0}
+                continue
+                
+            total = len(bucket_preds)
+            correct = sum(1 for p in bucket_preds if p.get("correct") is True)
+            analysis[label] = {
+                "total": total,
+                "correct": correct,
+                "accuracy": round((correct / total) * 100, 2)
+            }
+            
+        return analysis
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)

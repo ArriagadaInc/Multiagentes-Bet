@@ -22,6 +22,7 @@ from typing import Any, Optional
 
 from state import AgentState
 from utils.normalizer import slugify, TeamNormalizer
+from utils.signal_partitioner import partition_match_signals
 
 logger = logging.getLogger(__name__)
 
@@ -388,6 +389,64 @@ def _merge_persistent_context_into_insights(
                 evidence = evidence.strip()
             # Limpiar prefijo persistido para el campo signal
             signal_text = re.sub(r"^\[CONTEXTO:[^\]]+\]\s*", "", signal_text, flags=re.IGNORECASE).strip()
+
+            combined_text = f"{signal_text} {evidence}".strip().lower()
+            from_manual_user = "noticia manual del usuario" in combined_text
+            looks_like_pseudo_json = (
+                '"home_team"' in signal_text
+                or '"away_team"' in signal_text
+                or '"match_id"' in signal_text
+                or '"availability_comparison"' in signal_text
+                or signal_text.startswith("{")
+                or signal_text.startswith("[")
+            )
+            looks_like_cross_schedule = bool(
+                re.search(r"\b\d{1,2}\s+de\s+[a-záéíóúñ]+\s*\d{1,2}:\d{2}\b", combined_text)
+            ) or any(
+                marker in combined_text
+                for marker in [
+                    "calendario de la semana critica",
+                    "los horarios han sido ajustados",
+                    "promedio goleador",
+                    "arquitectura del torneo",
+                    "partidos de vuelta de los cuartos de final",
+                ]
+            )
+            is_negative_absence_non_signal = any(
+                marker in combined_text
+                for marker in [
+                    "sin parte medico nuevo",
+                    "sin parte médico nuevo",
+                    "no han emergido reportes",
+                    "enfermeria practicamente vacia",
+                    "enfermería prácticamente vacía",
+                    "sin bajas estructurales nuevas",
+                    "sin lesiones nuevas",
+                ]
+            )
+            is_stale_cup_context = any(
+                marker in combined_text
+                for marker in [
+                    "efl cup",
+                    "carabao cup",
+                    "final de efl cup",
+                ]
+            )
+            is_low_value_other = sig_type.lower() == "other" and (
+                combined_text.startswith("no se registran en las ultimas")
+                or combined_text.startswith("no se registran en las últimas")
+            )
+
+            if (
+                looks_like_pseudo_json
+                or looks_like_cross_schedule
+                or (from_manual_user and len(combined_text) > 220)
+                or ((sig_type.lower() in {"injury_news", "availability"}) and is_negative_absence_non_signal)
+                or is_stale_cup_context
+                or is_low_value_other
+            ):
+                continue
+
             ctx_key = f"{sig_type.lower()}|{signal_text.lower()}"
             if signal_text and ctx_key not in existing_ctx_keys:
                 context_signals.append({
@@ -398,6 +457,23 @@ def _merge_persistent_context_into_insights(
                     "date": h.get("date"),
                     "source": "team_history",
                     "provenance": ["history"],
+                    "subject_type": h.get("subject_type"),
+                    "epistemic_status": h.get("epistemic_status"),
+                    "impact_axis": h.get("impact_axis"),
+                    "impact_level": h.get("impact_level"),
+                    "source_type": h.get("source_type"),
+                    "source_quality": h.get("source_quality"),
+                    "time_horizon": h.get("time_horizon"),
+                    "relevance_to_match": h.get("relevance_to_match"),
+                    "relevance_to_1x2": h.get("relevance_to_1x2"),
+                    "freshness_score": h.get("freshness_score"),
+                    "trust_score": h.get("trust_score"),
+                    "conflict_score": h.get("conflict_score"),
+                    "final_signal_score": h.get("final_signal_score"),
+                    "resolution_status": h.get("resolution_status"),
+                    "raw_excerpt": h.get("raw_excerpt"),
+                    "reasoning_note": h.get("reasoning_note"),
+                    "impact_note": h.get("impact_note"),
                 })
                 existing_ctx_keys.add(ctx_key)
             # También preparar bullet visible (si no está ya en insight textual)
@@ -434,9 +510,20 @@ def _build_match_id(competition: str, date_str: str, home: str, away: str) -> st
     Genera un match_id canónico y estable.
     """
     date_part = date_str[:10] if date_str else "nodate"
-    home_slug = slugify(home)
-    away_slug = slugify(away)
+    home_slug = slugify(normalizer_tool.clean(home) or home)
+    away_slug = slugify(normalizer_tool.clean(away) or away)
     return f"{competition}_{date_part}_{home_slug}_{away_slug}"
+
+
+def _build_match_key(competition: str, date_str: str, home: str, away: str) -> str:
+    """
+    Genera un match_key canónico y estable usando nombres normalizados.
+    Se usa como clave primaria de matching entre normalizer, gate y analyst.
+    """
+    date_part = date_str[:10] if date_str else "nodate"
+    home_slug = slugify(normalizer_tool.clean(home) or home)
+    away_slug = slugify(normalizer_tool.clean(away) or away)
+    return f"{competition}:{date_part}:{home_slug}:{away_slug}"
 
 
 def _extract_best_odds(odds_event: Optional[dict]) -> Optional[dict]:
@@ -455,6 +542,111 @@ def _extract_best_odds(odds_event: Optional[dict]) -> Optional[dict]:
         "bookmakers_count": odds_event.get("bookmakers_count", len(bookmakers)),
     }
 
+def _evaluate_signal_quality(ctx: dict, stats_quality_score: float) -> None:
+    """
+    Evalúa la higiene epistemológica de las señales en el partido y
+    enriquece el diccionario data_quality in-place.
+    """
+    summary = ctx.get("signals_summary", {})
+    signals_total = summary.get("total", 0)
+    clean_count = summary.get("clean_count", 0)
+    suspicious_count = summary.get("suspicious_count", 0)
+    suspicious_ratio = summary.get("suspicious_ratio", 0.0)
+    
+    # Extraer razones presentes en CUALQUIER señal sospechosa
+    sus_list = ctx.get("signals_suspicious", [])
+    all_reasons = set()
+    for s in sus_list:
+        for r in s.get("suspicion_reasons", []):
+            all_reasons.add(r)
+            
+    has_foreign_entity_issue = "foreign_entity_in_team_signal" in all_reasons
+    has_subject_type_mismatch = "subject_type_type_mismatch" in all_reasons
+    has_manual_low_clarity = "manual_signal_low_clarity" in all_reasons
+    has_stale_history_issue = "stale_or_implausible_history_signal" in all_reasons
+
+    has_severe = any([has_foreign_entity_issue, has_subject_type_mismatch, has_manual_low_clarity, has_stale_history_issue])
+    
+    signal_quality_score = 1.0
+    risk_level = "low"
+    explanation = "Contexto sano: pocas señales sospechosas y sin razones graves."
+
+    if signals_total == 0:
+        signal_quality_score = 0.5
+        risk_level = "medium"
+        explanation = "Sin señales contextuales suficientes; riesgo epistemológico neutro-conservador."
+    else:
+        # Castigo por ratio general
+        if suspicious_ratio >= 0.35:
+            signal_quality_score -= 0.3
+            risk_level = "high"
+            explanation = "Riesgo alto: gran proporción de señales dudosas frente a limpias."
+        elif suspicious_ratio >= 0.15:
+            signal_quality_score -= 0.15
+            risk_level = "medium"
+            if risk_level != "high":  # Solo si no fue seteado antes
+                explanation = "Riesgo medio: proporción moderada de señales dudosas."
+        
+        # Castigo por anomalías severas presentes independientemente del ratio
+        if has_severe:
+            risk_level = "high"
+            explanation = "Riesgo alto: detectadas señales sospechosas críticas (ej. entidad foránea o mismatch semántico) que comprometen el análisis."
+            if has_foreign_entity_issue:
+                signal_quality_score -= 0.25
+            else:
+                signal_quality_score -= 0.15
+                
+        # Castigo leve por volumen de ruidos menores
+        if "scope_unknown_for_actionable_signal" in all_reasons or "possible_duplicate_signal" in all_reasons:
+             signal_quality_score -= 0.05
+             if risk_level == "low":
+                 risk_level = "medium"
+                 explanation = "Riesgo medio: contexto con ruido leve (duplicidades o scopes inciertos)."
+
+    # --- 3. Integración de Calidad de Mercado (v12.0) ---
+    odds_obj = ctx.get("odds", {})
+    odds_source = (ctx.get("odds") or {}).get("odds_source_type", "official")
+    market_quality_score = 1.0
+    
+    if odds_source == "web_scraped":
+        # Penalización por incertidumbre de captura/latencia
+        market_quality_score = 0.65
+        if risk_level == "low":
+            risk_level = "medium"
+            explanation += " | Nota: Cuotas obtenidas vía Web Scraping (Riesgo de latencia)."
+
+    # Clamp al suelo
+    signal_quality_score = max(0.0, min(1.0, round(signal_quality_score, 2)))
+    
+    # Pesos v12.0: 60% Stats, 30% Señales, 10% Mercado
+    STATS_QUALITY_WEIGHT = 0.60
+    SIGNAL_QUALITY_WEIGHT = 0.30
+    MARKET_QUALITY_WEIGHT = 0.10
+    
+    overall_score = round(
+        (stats_quality_score * STATS_QUALITY_WEIGHT) + 
+        (signal_quality_score * SIGNAL_QUALITY_WEIGHT) +
+        (market_quality_score * MARKET_QUALITY_WEIGHT), 
+        2
+    )
+    
+    dq = ctx.get("data_quality", {})
+    dq["stats_quality_score"] = round(stats_quality_score, 2)
+    dq["signal_quality_score"] = signal_quality_score
+    dq["market_quality_score"] = market_quality_score
+    dq["score"] = overall_score
+    dq["overall_quality_score"] = overall_score
+    
+    dq["signals_total"] = signals_total
+    dq["signals_clean_count"] = clean_count
+    dq["signals_suspicious_count"] = suspicious_count
+    dq["signals_suspicious_ratio"] = suspicious_ratio
+    dq["top_suspicion_reasons"] = summary.get("top_suspicion_reasons", [])
+    
+    dq["signal_risk_level"] = risk_level
+    dq["has_severe_signal_issues"] = has_severe
+    dq["signal_explanation"] = explanation
+    ctx["data_quality"] = dq
 
 def _build_match_context(
     odds_event: dict,
@@ -468,14 +660,11 @@ def _build_match_context(
     home        = odds_event.get("home_team") or ""
     away        = odds_event.get("away_team") or ""
     competition = odds_event.get("competition") or ""
-    match_date  = str(odds_event.get("commence_time") or "")[:10]
-    match_key   = odds_event.get("match_key") # Fuente de verdad del Odds Fetcher
+    match_date  = str(odds_event.get("commence_time") or odds_event.get("utc_date") or "")[:10]
 
     # Ignorar eventos incompletos
     if not home or not away:
         return None
-
-    match_id = _build_match_id(competition, match_date, home, away)
 
     # Enrichment: buscar stats e insights
     home_stats    = _find_stats(home, stats_data)
@@ -504,8 +693,10 @@ def _build_match_context(
     normalizer = TeamNormalizer()
     home_canonical = (home_stats or {}).get("canonical_name") or normalizer.clean(home)
     away_canonical = (away_stats or {}).get("canonical_name") or normalizer.clean(away)
+    match_id = odds_event.get("match_id") or odds_event.get("fixture_id") or _build_match_id(competition, match_date, home_canonical, away_canonical)
+    match_key = odds_event.get("match_key") or _build_match_key(competition, match_date, home_canonical, away_canonical)
 
-    return {
+    ctx = {
         "match_id":    match_id,
         "match_key":   match_key,
         "competition": competition,
@@ -528,6 +719,14 @@ def _build_match_context(
         "missing_data": missing,
     }
 
+    # Enriquecer ctx separando y dictaminando senales limpias de sospechosas epistemologicas
+    ctx = partition_match_signals(ctx, force_recompute=True)
+    
+    # 2. Agregar puntuaciones híbridas de metadata al objeto
+    _evaluate_signal_quality(ctx, avg_quality)
+    
+    return ctx
+
 
 # ============================================================================
 # NODO PRINCIPAL
@@ -538,7 +737,8 @@ def normalizer_agent_node(state: AgentState) -> AgentState:
     Nodo LangGraph del Agente Normalizador.
 
     Lee:
-        state["odds_canonical"] - partidos + cuotas (fuente de verdad)
+        state["fixtures"]       - todos los partidos programados (fuente de verdad)
+        state["odds_canonical"] - cuotas encontradas
         state["stats_by_team"]  - estadísticas del stats_agent
         state["insights"]       - insights del insights_agent
 
@@ -550,25 +750,80 @@ def normalizer_agent_node(state: AgentState) -> AgentState:
     logger.info("=" * 60)
 
     odds_data     = state.get("odds_canonical") or []
+    fixtures_data = state.get("fixtures") or []
     stats_data    = state.get("stats_by_team")  or []
     insights_data = state.get("insights")       or []
     team_history  = _load_team_history()
 
-    logger.info(f"  Partidos (odds): {len(odds_data)}")
-    logger.info(f"  Stats:           {len(stats_data)}")
-    logger.info(f"  Insights:        {len(insights_data)}")
+    logger.info(f"  Fixtures (match source): {len(fixtures_data)}")
+    logger.info(f"  Odds disponibles:       {len(odds_data)}")
+    logger.info(f"  Stats:                  {len(stats_data)}")
+    logger.info(f"  Insights:               {len(insights_data)}")
 
     match_contexts = []
+    matched_odds_keys = set()
 
-    for odds_ev in odds_data:
-        ctx = _build_match_context(odds_ev, stats_data, insights_data, team_history=team_history)
+    # Mapear odds por match_key para búsqueda rápida
+    odds_map = {}
+    for o in odds_data:
+        # Usar slug de equipos para linkear
+        h_slug = slugify(normalizer_tool.clean(o.get("home_team", "")) or o.get("home_team", ""))
+        a_slug = slugify(normalizer_tool.clean(o.get("away_team", "")) or o.get("away_team", ""))
+        key = f"{h_slug}_{a_slug}"
+        odds_map[key] = o
+
+    # 1. Prioridad: Procesar Fixtures Oficiales
+    for fix in fixtures_data:
+        # Encontrar odds para este fixture
+        h_slug = slugify(normalizer_tool.clean(fix.get("home_team", "")) or fix.get("home_team", ""))
+        a_slug = slugify(normalizer_tool.clean(fix.get("away_team", "")) or fix.get("away_team", ""))
+        key = f"{h_slug}_{a_slug}"
+        odds_ev = odds_map.get(key)
+        
+        if odds_ev:
+            matched_odds_keys.add(key)
+            base_event = odds_ev
+        else:
+            # Si no hay odds_ev, pasamos el fixture con campos mínimos para el builder
+            base_event = {
+                "competition": fix.get("competition"),
+                "home_team": fix.get("home_team"),
+                "away_team": fix.get("away_team"),
+                "utc_date": fix.get("utc_date"),
+                "match_id": fix.get("fixture_id"),
+                "match_key": _build_match_key(
+                    fix.get("competition", ""),
+                    str(fix.get("utc_date") or "")[:10],
+                    fix.get("home_team", ""),
+                    fix.get("away_team", ""),
+                ),
+                "no_odds": True
+            }
+        
+        ctx = _build_match_context(base_event, stats_data, insights_data, team_history=team_history)
         if ctx is None:
             continue
         match_contexts.append(ctx)
 
         status = "✅" if not ctx["missing_data"] else "⚠️ "
-        missing_str = ", ".join(ctx["missing_data"]) if ctx["missing_data"] else "ninguno"
-        logger.info(f"  {status} {ctx['match_id']} | Faltantes: {missing_str}")
+        logger.info(f"  {status} {ctx['match_id']} | Fuente: Fixture{' + Odds' if odds_ev else ''}")
+
+    # 2. Resiliencia: Procesar Odds huérfanos (sin fixture oficial)
+    orphans = []
+    for key, o in odds_map.items():
+        if key not in matched_odds_keys:
+            # Verificar que pertenezca a una competencia activa en el estado
+            active_comps = {c.get("competition") for c in state.get("competitions", [])}
+            if o.get("competition") in active_comps:
+                orphans.append(o)
+    
+    if orphans:
+        logger.info(f"  RESILIENCIA: Procesando {len(orphans)} eventos de cuotas sin fixture oficial asociado.")
+        for o in orphans:
+            ctx = _build_match_context(o, stats_data, insights_data, team_history=team_history)
+            if ctx:
+                match_contexts.append(ctx)
+                logger.info(f"  ✨ {ctx['match_id']} | Fuente: Mercado (Odds-based)")
 
     logger.info(f"NORMALIZER AGENT: {len(match_contexts)} MatchContext generados")
     state["match_contexts"] = match_contexts

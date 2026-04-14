@@ -23,7 +23,8 @@ from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from state import AgentState
 from utils.http import HTTPClient
 from utils.cache import CacheManager
-from utils.normalizer import slugify
+from utils.normalizer import slugify, TeamNormalizer
+from agents.manual_odds_agent import get_recent_manual_match_keys
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,9 @@ class OddsFetcher:
     # Mapping: competition label -> API endpoint
     ENDPOINTS = {
         "UCL": "soccer_uefa_champs_league",
-        "CHI1": "soccer_chile_campeonato"
+        "CHI1": "soccer_chile_campeonato",
+        # Correct The Odds API sport key for Copa Libertadores
+        "COPA": "soccer_conmebol_copa_libertadores"
     }
     
     def __init__(
@@ -146,7 +149,8 @@ class OddsFetcher:
                 "cache_hit": bool
             }
         """
-        endpoint_key = self.ENDPOINTS.get(competition_label)
+        # Allow environment override per competition (e.g., ODDS_ENDPOINT_COPA)
+        endpoint_key = os.getenv(f"ODDS_ENDPOINT_{competition_label}") or self.ENDPOINTS.get(competition_label)
         if not endpoint_key:
             return {
                 "success": False,
@@ -484,6 +488,8 @@ def odds_fetcher_node(state: AgentState) -> AgentState:
         logger.info(f"Applying odds date filter: {date_from} to {date_to}")
     
     # Fetch for each competition
+    manual_copa_keys = get_recent_manual_match_keys("COPA")
+    normalizer = TeamNormalizer()
     for comp in state.get("competitions", []):
         comp_label = comp.get("competition", "?")
         
@@ -499,7 +505,10 @@ def odds_fetcher_node(state: AgentState) -> AgentState:
         # Handle errors
         if not result["success"]:
             error_msg = result["error"] or "Unknown error"
-            logger.error(f"Error fetching odds for {comp_label}: {error_msg}")
+            if "Unknown competition" in error_msg:
+                logger.info(f"Omitiendo cuotas API para {comp_label}: {error_msg} (se usará fallback web)")
+            else:
+                logger.error(f"Error fetching odds for {comp_label}: {error_msg}")
             state["meta"]["errors"]["odds"][comp_label] = error_msg
             state["meta"]["odds_counts"][comp_label] = 0
             continue
@@ -524,6 +533,20 @@ def odds_fetcher_node(state: AgentState) -> AgentState:
             ]
             logger.info(
                 f"Applied odds date filter: {before} -> {len(normalized)} events in window"
+            )
+
+        # COPA: si el usuario ya cargó cuotas manuales recientes, acotamos el
+        # universo de odds API al mismo set de partidos para no reabrir la corrida.
+        if comp_label == "COPA" and manual_copa_keys:
+            before = len(normalized)
+            def _copa_manual_key(event: dict[str, Any]) -> str:
+                return (
+                    f"COPA:{normalizer.clean(str(event.get('home_team', '') or ''))}:"
+                    f"{normalizer.clean(str(event.get('away_team', '') or ''))}"
+                )
+            normalized = [e for e in normalized if _copa_manual_key(e) in manual_copa_keys]
+            logger.info(
+                f"Applied COPA manual odds scope: {before} -> {len(normalized)} events aligned to manual universe"
             )
         
         # Add to combined list
