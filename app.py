@@ -7,13 +7,35 @@ import re
 import sys
 import subprocess
 import time
+import shutil
+import hashlib
 import streamlit.components.v1 as components
 from datetime import datetime
+from dotenv import load_dotenv
 from utils.normalizer import slugify, TeamNormalizer
 from utils.token_tracker import load_token_usage, reset_tokens
 from utils.wishlist import save_analyst_wishlist
+from utils.network_env import sanitize_process_proxy_env
+from agents.manual_odds_agent import (
+    clear_manual_odds_store,
+    extract_manual_odds_from_image,
+    load_manual_odds_store,
+    save_manual_odds_entry,
+    save_uploaded_manual_odds_image,
+)
+from agents.betano_ocr_agent import (
+    extract_betano_odds_from_image,
+    save_uploaded_betano_image,
+)
+from agents.bettor_agent import (
+    build_betano_eligible_bets,
+    optimize_simple_bet_portfolio,
+)
 
 # --- CONFIGURATION ---
+load_dotenv(".env")
+sanitize_process_proxy_env()
+
 st.set_page_config(
     page_title="Betting Agent AI",
     page_icon="⚽",
@@ -24,60 +46,234 @@ st.set_page_config(
 # --- STYLES ---
 st.markdown("""
     <style>
-    /* Global settings */
-    .main {
-        background-color: #0e1117;
-        color: #ffffff;
-    }
-    h1, h2, h3, p, li {
-        color: #e6e6e6 !important;
-    }
-    
-    /* Buttons */
-    .stButton>button {
-        width: 100%;
-        border-radius: 5px;
-        height: 3em;
-        background-color: #ff4b4b;
-        color: white;
-        font-weight: bold;
-        border: none;
-    }
-    .stButton>button:hover {
-        background-color: #ff6b6b;
-        color: white;
+    :root {
+        --bg: #0b1220;
+        --bg-soft: #111a2b;
+        --panel: rgba(16, 24, 40, 0.92);
+        --panel-2: rgba(20, 30, 50, 0.96);
+        --stroke: rgba(148, 163, 184, 0.18);
+        --stroke-strong: rgba(148, 163, 184, 0.30);
+        --text: #e5eefc;
+        --muted: #9fb0c9;
+        --accent: #3ea6ff;
+        --accent-2: #16c79a;
+        --danger: #ff5d73;
+        --warning: #ffb347;
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+        --radius: 16px;
     }
 
-    /* Metrics (KPIs) */
+    .stApp {
+        background:
+            radial-gradient(circle at top left, rgba(62,166,255,0.16), transparent 24%),
+            radial-gradient(circle at top right, rgba(22,199,154,0.10), transparent 20%),
+            linear-gradient(180deg, #09111d 0%, #0b1220 38%, #0a101a 100%);
+        color: var(--text);
+    }
+
+    .main .block-container {
+        max-width: 1520px;
+        padding-top: 1.25rem;
+        padding-bottom: 3rem;
+    }
+
+    html, body, [class*="css"] {
+        font-family: "Segoe UI", "IBM Plex Sans", "Source Sans Pro", sans-serif;
+    }
+
+    h1, h2, h3, h4, p, li, label, span, div {
+        color: var(--text);
+    }
+
+    p, li, .stCaption, .stMarkdown, [data-testid="stMetricLabel"] {
+        color: var(--muted) !important;
+    }
+
+    [data-testid="stSidebar"] {
+        background:
+            linear-gradient(180deg, rgba(13, 20, 34, 0.98), rgba(10, 16, 28, 0.98));
+        border-right: 1px solid var(--stroke);
+    }
+
+    [data-testid="stSidebar"] .block-container {
+        padding-top: 1.2rem;
+    }
+
+    .app-hero {
+        position: relative;
+        overflow: hidden;
+        background:
+            linear-gradient(135deg, rgba(62,166,255,0.16), rgba(22,199,154,0.10)),
+            linear-gradient(180deg, rgba(17,26,43,0.92), rgba(10,16,28,0.94));
+        border: 1px solid var(--stroke);
+        border-radius: 22px;
+        padding: 1.4rem 1.5rem 1.25rem 1.5rem;
+        margin-bottom: 1.2rem;
+        box-shadow: var(--shadow);
+    }
+
+    .app-hero:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+        transform: translateX(-100%);
+    }
+
+    .app-hero-title {
+        font-size: 1.8rem;
+        line-height: 1.1;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: #f7fbff;
+        margin-bottom: 0.45rem;
+    }
+
+    .app-hero-subtitle {
+        max-width: 980px;
+        font-size: 0.98rem;
+        color: var(--muted);
+        margin-bottom: 0.9rem;
+    }
+
+    .hero-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+    }
+
+    .hero-pill {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid var(--stroke);
+        border-radius: 999px;
+        padding: 0.42rem 0.75rem;
+        font-size: 0.82rem;
+        color: #dbe9ff;
+    }
+
+    .stButton > button {
+        width: 100%;
+        min-height: 2.9rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: linear-gradient(135deg, #167bd8, #0d5ea8);
+        color: #f8fbff;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        box-shadow: 0 10px 22px rgba(13, 94, 168, 0.28);
+        transition: all 0.18s ease;
+    }
+
+    .stButton > button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255,255,255,0.16);
+        background: linear-gradient(135deg, #2389e6, #0f6fbe);
+        color: #ffffff;
+    }
+
+    .stButton > button[kind="secondary"] {
+        background: linear-gradient(135deg, #3f4c63, #283449);
+        box-shadow: none;
+    }
+
+    [data-testid="stMetric"] {
+        background: linear-gradient(180deg, rgba(17,26,43,0.92), rgba(10,16,28,0.92));
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        padding: 0.8rem 0.95rem;
+        box-shadow: var(--shadow);
+    }
+
     [data-testid="stMetricValue"] {
-        color: #ffffff !important;
+        color: #f7fbff !important;
         font-size: 1.8rem !important;
+        letter-spacing: -0.03em;
     }
-    [data-testid="stMetricLabel"] {
-        color: #b0b3b8 !important;
+
+    [data-testid="stMetricLabel"] p {
+        color: var(--muted) !important;
+        font-weight: 600;
     }
-    
-    /* Expanders & Containers */
-    .streamlit-expanderHeader {
-        background-color: #262730;
-        color: white !important;
-        border-radius: 5px;
+
+    [data-testid="stTabs"] {
+        gap: 0.35rem;
     }
-    
-    /* Custom Card Styling */
-    .css-1r6slb0 {  /* Default card container adjustment if needed */
-        background-color: #262730;
-        border: 1px solid #41444b;
-        padding: 15px;
+
+    [data-testid="stTabs"] [role="tablist"] {
+        background: rgba(12, 18, 31, 0.82);
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        padding: 0.3rem;
+        box-shadow: var(--shadow);
+    }
+
+    [data-testid="stTabs"] [role="tab"] {
         border-radius: 10px;
+        padding: 0.55rem 0.9rem;
+        color: var(--muted) !important;
+        font-weight: 600;
     }
-    
-    /* Make sure expander text is visible */
-    .streamlit-expanderContent {
-        background-color: #1a1c24;
-        color: #e6e6e6 !important;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
+
+    [data-testid="stTabs"] [aria-selected="true"] {
+        background: linear-gradient(135deg, rgba(62,166,255,0.18), rgba(22,199,154,0.10));
+        color: #f7fbff !important;
+        border: 1px solid rgba(62,166,255,0.25);
+    }
+
+    .streamlit-expanderHeader {
+        background: linear-gradient(180deg, rgba(17,26,43,0.95), rgba(13,20,34,0.95));
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        color: #f1f6ff !important;
+    }
+
+    [data-testid="stExpander"] {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .streamlit-expanderContent,
+    [data-testid="stExpanderDetails"] {
+        background: rgba(12, 18, 31, 0.70);
+        border: 1px solid var(--stroke);
+        border-top: none;
+        border-bottom-left-radius: 14px;
+        border-bottom-right-radius: 14px;
+    }
+
+    [data-testid="stTextArea"] textarea,
+    [data-testid="stTextInput"] input,
+    [data-testid="stSelectbox"] div[data-baseweb="select"],
+    [data-testid="stMultiSelect"] div[data-baseweb="select"] {
+        background: rgba(12, 18, 31, 0.80) !important;
+        border-radius: 12px !important;
+    }
+
+    [data-baseweb="select"] > div,
+    [data-testid="stTextArea"] textarea,
+    [data-testid="stTextInput"] input {
+        border: 1px solid var(--stroke) !important;
+        color: var(--text) !important;
+    }
+
+    [data-testid="stDataFrame"],
+    .stTable,
+    [data-testid="stJson"] {
+        background: rgba(12, 18, 31, 0.72);
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .stCodeBlock, pre {
+        border-radius: 14px !important;
+        border: 1px solid var(--stroke) !important;
+        background: #0b1322 !important;
+    }
+
+    hr {
+        border-color: var(--stroke) !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -90,10 +286,16 @@ FILES = {
     "odds": "pipeline_odds.json",
     "stats": "pipeline_stats.json",
     "insights": "pipeline_insights.json",
+    "match_contexts": "pipeline_match_contexts.json",
     "analyst_web_checks": "pipeline_analyst_web_checks.json",
     "journalist": "journalist_test_output.json",
     "team_history": "data/knowledge/team_history.json",
-    "analyst_wishlist": "predictions/analyst_wishlist.json"
+    "analyst_wishlist": "predictions/analyst_wishlist.json",
+    "signals_partitioned": "pipeline_signals_partitioned.json",
+    "trace_report": "pipeline_trace_report.json",
+    "betano_ocr": "pipeline_betano_ocr.json",
+    "betano_normalized": "pipeline_betano_normalized.json",
+    "betting_portfolio": "pipeline_betting_portfolio.json",
 }
 MANUAL_NEWS_FILE = os.path.join("data", "inputs", "manual_news_input.json")
 
@@ -124,6 +326,106 @@ def load_team_history_data():
     data = load_data("team_history")
     return data if isinstance(data, dict) else {}
 
+
+def _history_entry_id(team: str, item: dict, idx: int) -> str:
+    raw = json.dumps({
+        "team": team,
+        "idx": idx,
+        "date": item.get("date"),
+        "competition": item.get("competition"),
+        "kind": item.get("kind"),
+        "signal_type": item.get("signal_type"),
+        "insight": item.get("insight"),
+    }, ensure_ascii=False, sort_keys=True)
+    return hashlib.md5(raw.encode("utf-8")).hexdigest()
+
+
+def flatten_team_history_for_editor(team_history: dict):
+    rows = []
+    original_map = {}
+    for team, entries in (team_history or {}).items():
+        if not isinstance(entries, list):
+            continue
+        for idx, item in enumerate(entries):
+            if not isinstance(item, dict):
+                continue
+            entry_id = str(item.get("entry_id") or _history_entry_id(team, item, idx))
+            item_copy = dict(item)
+            item_copy["entry_id"] = entry_id
+            original_map[entry_id] = {"team": team, "item": item_copy}
+            rows.append({
+                "Seleccionar": False,
+                "entry_id": entry_id,
+                "Equipo": team,
+                "Fecha": item_copy.get("date", ""),
+                "PersistedAt": item_copy.get("persisted_at", ""),
+                "Competencia": item_copy.get("competition", ""),
+                "Tipo": item_copy.get("kind", "insight"),
+                "SignalType": item_copy.get("signal_type", ""),
+                "Insight": item_copy.get("insight", ""),
+                "Confianza": item_copy.get("confidence", None),
+                "Rumor": bool(item_copy.get("is_rumor", False)),
+                "Rival": item_copy.get("rival", ""),
+                "Provenance": ", ".join(item_copy.get("provenance", []) or []),
+                "SourceUrls": "\n".join(item_copy.get("source_urls", []) or []),
+            })
+    return pd.DataFrame(rows), original_map
+
+
+def backup_team_history_file():
+    src = FILES.get("team_history")
+    if not src or not os.path.exists(src):
+        return None
+    backup_dir = os.path.join("data", "knowledge", "backups")
+    os.makedirs(backup_dir, exist_ok=True)
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    dst = os.path.join(backup_dir, f"team_history_{stamp}.json")
+    shutil.copy2(src, dst)
+    return dst
+
+
+def save_team_history_from_editor_df(editor_df: pd.DataFrame, original_map: dict):
+    output = {}
+    for _, row in editor_df.iterrows():
+        entry_id = str(row.get("entry_id") or "").strip()
+        if not entry_id or entry_id not in original_map:
+            continue
+        original = dict(original_map[entry_id]["item"])
+        team = str(row.get("Equipo") or original_map[entry_id]["team"]).strip()
+        original["entry_id"] = entry_id
+        original["date"] = str(row.get("Fecha") or "").strip()
+        original["persisted_at"] = str(row.get("PersistedAt") or original.get("persisted_at") or "").strip()
+        original["competition"] = str(row.get("Competencia") or "").strip()
+        original["kind"] = str(row.get("Tipo") or "insight").strip() or "insight"
+        original["signal_type"] = str(row.get("SignalType") or "").strip()
+        original["insight"] = str(row.get("Insight") or "").strip()
+        conf = row.get("Confianza")
+        original["confidence"] = None if pd.isna(conf) else float(conf)
+        original["is_rumor"] = bool(row.get("Rumor", False))
+        original["rival"] = str(row.get("Rival") or "").strip()
+        source_urls_raw = str(row.get("SourceUrls") or "").strip()
+        original["source_urls"] = [u.strip() for u in source_urls_raw.splitlines() if u.strip()]
+        output.setdefault(team, []).append(original)
+
+    path = FILES.get("team_history")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
+    return output
+
+
+def merge_history_subset_into_full(full_df: pd.DataFrame, subset_df: pd.DataFrame) -> pd.DataFrame:
+    merged = full_df.copy()
+    if merged.empty or subset_df.empty or "entry_id" not in merged.columns or "entry_id" not in subset_df.columns:
+        return merged
+    subset_map = {str(row["entry_id"]): row for _, row in subset_df.iterrows()}
+    for idx, row in merged.iterrows():
+        entry_id = str(row.get("entry_id") or "")
+        if entry_id in subset_map:
+            for col, val in subset_map[entry_id].items():
+                merged.at[idx, col] = val
+    return merged
+
 def load_manual_news_text():
     """Carga el texto de noticias manuales ingresadas por usuario (si existe)."""
     if not os.path.exists(MANUAL_NEWS_FILE):
@@ -135,25 +437,39 @@ def load_manual_news_text():
     except Exception:
         return ""
 
-def save_manual_news_text(text: str):
-    """Persiste noticias manuales para que las consuma el insights_agent."""
+def load_manual_news_competition():
+    """Carga la competencia seleccionada para las noticias manuales."""
+    if not os.path.exists(MANUAL_NEWS_FILE):
+        return "CHI1"
+    try:
+        with open(MANUAL_NEWS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return str((data or {}).get("competition") or "CHI1")
+    except Exception:
+        return "CHI1"
+
+def save_manual_news_text(text: str, competition: str = "CHI1"):
+    """Persiste noticias manuales + competencia para que las consuma el insights_agent."""
     os.makedirs(os.path.dirname(MANUAL_NEWS_FILE), exist_ok=True)
     payload = {
         "updated_at": datetime.now().isoformat(),
         "text": text.strip(),
+        "competition": competition.strip() or "CHI1",
     }
     with open(MANUAL_NEWS_FILE, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
 def _on_save_manual_news():
-    """Callback Streamlit: guarda noticias manuales desde session_state."""
-    save_manual_news_text(st.session_state.get("manual_news_text", ""))
-    st.session_state["manual_news_status"] = ("success", "Noticias manuales guardadas.")
+    """Callback Streamlit: guarda noticias manuales + competencia desde session_state."""
+    text = st.session_state.get("manual_news_text", "")
+    competition = st.session_state.get("manual_news_competition", "CHI1")
+    save_manual_news_text(text, competition)
+    st.session_state["manual_news_status"] = ("success", f"Noticias guardadas para {competition}.")
 
 def _on_clear_manual_news():
     """Callback Streamlit: limpia widget + persistencia de noticias manuales."""
     st.session_state["manual_news_text"] = ""
-    save_manual_news_text("")
+    save_manual_news_text("", "CHI1")
     st.session_state["manual_news_status"] = ("info", "Noticias manuales limpiadas.")
 
 def get_odds_info(match_name, all_odds):
@@ -212,7 +528,7 @@ def run_pipeline_script(ligas: list = None):
         
         # Capturar var entorno actual, setear EXPENSIVE_MODE
         env_vars = os.environ.copy()
-        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", True) else "false"
+        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", False) else "false"
 
         # Start Process (Merge stdout/stderr)
         process = subprocess.Popen(
@@ -309,7 +625,7 @@ def run_partial_pipeline_from_journalist_script():
 
         # Capturar var entorno actual, setear EXPENSIVE_MODE
         env_vars = os.environ.copy()
-        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", True) else "false"
+        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", False) else "false"
 
         process = subprocess.Popen(
             cmd,
@@ -386,7 +702,7 @@ def run_web_agent_script(user_prompt: str):
             return False, "No existe run_web_agent.py"
 
         env_vars = os.environ.copy()
-        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", True) else "false"
+        env_vars["EXPENSIVE_MODE"] = "true" if st.session_state.get("expensive_mode", False) else "false"
 
         cmd = [sys.executable, script_name, "--prompt", user_prompt]
         result = subprocess.run(
@@ -409,12 +725,12 @@ with st.sidebar:
     
     st.subheader("⚙️ Panel de Control")
     
-    st.toggle("✨ Modo Caro (GPT-5)", value=True, key="expensive_mode", help="Si se apaga, usará Gemini 2.5 Flash-Lite para ahorrar costos.")
+    st.toggle("✨ Modo Caro (GPT-5)", value=False, key="expensive_mode", help="Si se apaga, usará Gemini 2.5 Flash-Lite para ahorrar costos.")
     st.markdown("---")
     
     liga_sidebar = st.selectbox(
         "⚽ Liga",
-        options=["CHI1", "UCL", "Ambas"],
+        options=["CHI1", "CHI2", "UCL", "COPA", "Todas"],
         index=0,
         key="sidebar_liga_sel",
         help="Elige la liga a analizar en este ciclo."
@@ -424,11 +740,23 @@ with st.sidebar:
     st.subheader("?? Noticias Manuales (Insights)")
     if "manual_news_text" not in st.session_state:
         st.session_state["manual_news_text"] = load_manual_news_text()
+    if "manual_news_competition" not in st.session_state:
+        st.session_state["manual_news_competition"] = load_manual_news_competition()
+    
+    # Selector de competencia
+    st.selectbox(
+        "🏆 Competencia para esta noticia:",
+        options=["CHI1", "CHI2", "UCL", "COPA"],
+        index=["CHI1", "CHI2", "UCL", "COPA"].index(st.session_state["manual_news_competition"]),
+        key="manual_news_competition",
+        help="Elige la liga a la que corresponde esta noticia"
+    )
+    
     st.text_area(
         "Agrega noticias/contexto (el agente de insights las ponderar? si aplican)",
         key="manual_news_text",
-        height=140,
-        placeholder="Ej: Real Madrid viene de pol?mica racial con alta presi?n medi?tica...\nHuachipato rota por Copa Libertadores..."
+        height=600,
+        placeholder="Ej: Real Madrid viene de pol?mica racial con alta presi?n medi?tica...\nHuachipato rota por Copa Libertadores...\n(La competencia se define arriba ↑)\n\n[Capacidad: +40,000 caracteres]"
     )
     status_tuple = st.session_state.pop("manual_news_status", None)
     if status_tuple:
@@ -448,12 +776,12 @@ with st.sidebar:
     # ── Selector de liga ────────────────────────────────────────────────────
     liga_exec = st.selectbox(
         "⚽ Liga a ejecutar",
-        options=["CHI1", "UCL", "Ambas"],
+        options=["CHI1", "CHI2", "UCL", "COPA", "Todas"],
         index=0,
         key="pipeline_liga_exec",
-        help="CHI1 = Solo Chile | UCL = Solo Champions | Ambas = las dos juntas"
+        help="CHI1/CHI2 = Solo Chile | UCL = Champions | COPA = Libertadores | Todas = todas juntas"
     )
-    _ligas_arg = None if liga_exec == "Ambas" else [liga_exec]
+    _ligas_arg = None if liga_exec == "Todas" else [liga_exec]
     btn_label = f"🚀 EJECUTAR ANÁLISIS ({liga_exec})"
     if st.button(btn_label):
         success, logs = run_pipeline_script(ligas=_ligas_arg)
@@ -487,7 +815,25 @@ with st.sidebar:
         st.caption(f"Última actualización: {st.session_state['last_run'].strftime('%H:%M:%S')}")
 
 # --- MAIN PAGE ---
-st.title("🧠 Dashboard de Análisis Deportivo IA")
+st.markdown(
+    """
+    <div class="app-hero">
+        <div class="app-hero-title">Betting Agent AI</div>
+        <div class="app-hero-subtitle">
+            Plataforma de análisis deportivo multiagente para scouting contextual, validación de señales,
+            predicción y detección de valor de mercado. Misma estructura operativa, mejor presentación.
+        </div>
+        <div class="hero-pills">
+            <span class="hero-pill">Multiagente</span>
+            <span class="hero-pill">CHI1 · CHI2 · UCL · COPA</span>
+            <span class="hero-pill">Traceabilidad por partido</span>
+            <span class="hero-pill">Web research controlado</span>
+            <span class="hero-pill">Persistencia de insights</span>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Load Data
 bets_data = load_data("apuestas")
@@ -495,6 +841,10 @@ preds_data = load_data("predicciones")
 fixtures_data = load_data("fixtures")
 journalist_data = load_data("journalist")
 analyst_web_checks_data = load_data("analyst_web_checks")
+signals_partitioned_data = load_data("signals_partitioned")
+trace_report_data = load_data("trace_report")
+stats_raw_data = load_data("stats")
+odds_raw_data = load_data("odds")
 team_history_data = load_team_history_data()
 
 # --- QUOTA ALERTS ---
@@ -676,10 +1026,29 @@ def _render_signal_provenance_badges(sig: dict):
     st.caption(f"Fuentes: {badge_line}")
 
 
-def _render_trace_journalist_videos(team_name, journalist_data, videos_from_insights=None):
+def _render_trace_journalist_videos(team_name, journalist_data, videos_from_insights=None, citations=None):
     """Renderiza el descubrimiento de videos para un equipo en el rastreo."""
     
-    # Priorizar videos que ya vienen en el MatchContext (videos reales usados en el run)
+    # 1. Cruzar con citas para mostrar solo los realmente utilizados, si es posible
+    used_videos = []
+    if citations and videos_from_insights:
+        for c in citations:
+            c_text = c.get("text", "") if isinstance(c, dict) else str(c)
+            for v in videos_from_insights:
+                if v.get("url", "") in c_text or v.get("title", "") in c_text:
+                    if v not in used_videos:
+                        used_videos.append(v)
+                        
+    if used_videos:
+        st.write(f"🎥 **Videos utilizados por el Analista ({len(used_videos)}):**")
+        for v in used_videos[:5]: # Mostrar hasta 5
+            st.markdown(f"- [{v.get('title')[:70]}...]({v.get('url')})")
+            channel = v.get("channel")
+            channel_name = channel if isinstance(channel, str) else channel.get("title") if isinstance(channel, dict) else "N/A"
+            st.caption(f"   Canal: {channel_name} ✅")
+        return
+        
+    # 2. Comportamiento por defecto (todos los procesados)
     if videos_from_insights:
         st.write(f"🎥 **Videos procesados en este run ({len(videos_from_insights)}):**")
         for v in videos_from_insights[:5]: # Mostrar hasta 5
@@ -701,6 +1070,7 @@ def _render_trace_journalist_videos(team_name, journalist_data, videos_from_insi
         for vid in comp_group.get("videos", []):
             rel = vid.get("relevance", {})
             matched = rel.get("matched_keywords", [])
+            
             # Verificación simple: si el equipo está en los keywords match
             if any(t_slug in slugify(str(m)) for m in matched) or \
                t_slug in slugify(vid.get("title", "")) or \
@@ -714,20 +1084,132 @@ def _render_trace_journalist_videos(team_name, journalist_data, videos_from_insi
     st.write(f"🎥 **Videos descubiertos ({len(team_videos)}):**")
     for v in team_videos[:3]: # Mostrar top 3
         st.markdown(f"- [{v.get('title')[:60]}...]({v.get('url')})")
-        st.caption(f"   Canal: {v.get('channel', {}).get('title')} | Rel: {v.get('relevance', {}).get('score', 0):.2f}")
+        st.caption(f"   Canal: {v.get('channel', {}).get('title') if isinstance(v.get('channel'), dict) else v.get('channel')} | Rel: {v.get('relevance', {}).get('score', 0):.2f}")
+
+
+def _render_signals_partitioned(prediction, signals_data, stats_data=None, odds_data=None):
+    """Muestra los insumos completos del analista (señales, stats, mercado)."""
+    
+    pid = prediction.get("prediction_id", "")
+    h_team = prediction.get("home_team", "")
+    a_team = prediction.get("away_team", "")
+    match_name = f"{h_team} vs {a_team}"
+    
+    p_home = slugify(h_team)
+    p_away = slugify(a_team)
+    
+    # 1. Buscar Señales Particionadas con matching flexible
+    match_signals = None
+    if signals_data:
+        for ms in signals_data:
+            if ms.get("match_id") == pid:
+                match_signals = ms
+                break
+            # Matching por slugs (con lógica 'in' para manejar "Deportes", etc.)
+            ms_h = slugify(ms.get("home_team", ""))
+            ms_a = slugify(ms.get("away_team", ""))
+            if (ms_h in p_home or p_home in ms_h) and (ms_a in p_away or p_away in ms_a):
+                match_signals = ms
+                break
+
+    # 2. Obtener Stats y Odds para complementar
+    h_stats = get_stats_info(h_team, stats_data or [])
+    a_stats = get_stats_info(a_team, stats_data or [])
+    m_odds = get_odds_info(match_name, odds_data or [])
+
+    # TABS PRINCIPALES DE INSUMOS
+    t_sig, t_stats, t_market = st.tabs(["📡 Señales Tácticas", "📊 Stats ESPN", "💰 Mercado"])
+
+    with t_sig:
+        if not match_signals:
+            st.info("No se hallaron señales específicas en la auditoría para este partido.")
+        else:
+            clean = match_signals.get("signals_clean", [])
+            suspicious = match_signals.get("signals_suspicious", [])
+            summary = match_signals.get("signals_summary", {})
+            st.caption(f"Audit ID: {match_signals.get('match_id')}")
+            st.markdown(f"**Resumen:** {summary.get('clean_count', 0)} Validadas | {summary.get('suspicious_count', 0)} Sospechosas")
+            
+            s_ok, s_err = st.tabs(["✅ Validadas", "⚠️ Sospechosas"])
+            with s_ok:
+                if not clean: st.caption("Sin señales validadas.")
+                else:
+                    for s in clean:
+                        with st.container():
+                            st.markdown(f"**{s.get('team', '').upper()}** | {s.get('type', 'Signal')}")
+                            st.write(f"👉 {s.get('signal')}")
+                            if s.get("evidence"): st.caption(f"Evidencia: {s.get('evidence')}")
+                            badges = [f"📅 {s.get('date')}" if s.get('date') else None, 
+                                      f"🎯 {s.get('confidence')*100:.0f}%" if s.get('confidence') else None]
+                            prov = s.get("provenance", [])
+                            if prov: badges.append(f"🔗 `{' '.join(prov)}`")
+                            st.caption(" | ".join([b for b in badges if b]))
+                            st.divider()
+            with s_err:
+                if not suspicious: st.caption("Sin señales de riesgo.")
+                else:
+                    for s in suspicious:
+                        with st.container():
+                            st.markdown(f"**{s.get('team', '').upper()}** | {s.get('type', 'Signal')}")
+                            st.write(f"❌ {s.get('signal')}")
+                            reasons = s.get("suspicion_reasons", [])
+                            if reasons: st.warning(f"Motivo Descarte: {', '.join(reasons)}")
+                            st.divider()
+
+    with t_stats:
+        if not h_stats and not a_stats:
+            st.warning("No hay estadísticas disponibles para este enfrentamiento.")
+        else:
+            st.write("**Contexto Atómico (ESPN)**")
+            for t_label, t_data in [("Local", h_stats), ("Visita", a_stats)]:
+                if t_data:
+                    with st.expander(f"📌 {t_data.get('team', t_label)}"):
+                        s = t_data.get("stats", {})
+                        c_raw, c_val = st.columns(2)
+                        c_raw.metric("Posición", s.get("position", "?"))
+                        c_val.metric("Puntos", s.get("points", "?"))
+                        st.write(f"**Forma:** `{s.get('form', 'N/A')}`")
+                        st.caption(f"Goles: {s.get('goals_for', '?')} F / {s.get('goals_against', '?')} C")
+                else:
+                    st.caption(f"Sin datos para el equipo {t_label}.")
+
+    with t_market:
+        if not m_odds:
+            st.warning("No se encontraron cuotas de mercado para este partido.")
+        else:
+            st.write("**Ancla Bayesiana (Mercado)**")
+            o = m_odds.get("odds", {})
+            p = m_odds.get("market_probabilities", {})
+            st.json({
+                "Cuotas (1-X-2)": f"{o.get('home', '?')} - {o.get('draw', '?')} - {o.get('away', '?')}",
+                "Probabilidades Implícitas (%)": f"{p.get('home_prob', '?')}% - {p.get('draw_prob', '?')}% - {p.get('away_prob', '?')}%",
+                "Fuente": m_odds.get("source", "The Odds API")
+            })
 
 
 def _render_trace_gate_agent(mc):
-    """Renderiza la validación del Gate Agent."""
+    """Renderiza la validación del Gate Agent incluyendo métricas de calidad semántica."""
     if not mc:
         return
     
     q_data = mc.get("data_quality", {})
-    score = q_data.get("score", 1.0)
+    score = q_data.get("score", 1.0) # Historical stats score
     notes = q_data.get("notes", [])
     
+    # Nuevos campos de Calidad de Señal
+    sig_score = q_data.get("signal_quality_score", 1.0)
+    sig_risk = q_data.get("signal_risk_level", "low").upper()
+    overall = q_data.get("overall_quality_score", score)
+    reasons = q_data.get("top_suspicion_reasons", [])
+    explanation = q_data.get("signal_explanation", "")
+
+    # Mapeo de colores
+    # q_color se mantiene para la estructura externa basado en el score de stats
     q_color = "#2ecc71" if score >= 0.7 else "#f1c40f" if score >= 0.4 else "#e74c3c"
     
+    # Color específico para riesgo semántico
+    risk_color = "🟢" if sig_risk == "LOW" else "🟡" if sig_risk == "MEDIUM" else "🔴"
+
     st.markdown(f"""
     <div style="background-color: #1a1c24; padding: 15px; border-radius: 10px; border-left: 8px solid {q_color}; margin-top: 10px;">
         <h4 style="margin:0; color:{q_color};">🛡️ Gate Agent: Validation Score {score:.2f}</h4>
@@ -736,6 +1218,22 @@ def _render_trace_gate_agent(mc):
         </p>
     </div>
     """, unsafe_allow_html=True)
+
+    # Bloque de Calidad Epistemológica (Signals)
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Signal Quality", f"{sig_score:.2f}")
+    c2.metric("Nivel de Riesgo", f"{risk_color} {sig_risk}")
+    c3.metric("Overall Score", f"{overall:.2f}", help="Mix: 70% Stats + 30% Signals")
+
+    if explanation:
+        st.info(f"**Diagnóstico Semántico:** {explanation}")
+
+    if reasons:
+        st.markdown("**Motivos de Sospecha / Ruido detectados:**")
+        cols = st.columns(len(reasons) if len(reasons) < 3 else 3)
+        for i, r in enumerate(reasons[:6]): # Mostrar hasta 6
+            with cols[i % 3]:
+                st.caption(f"⚠️ {r}")
 
 
 def _normalize_ui_text(text: str) -> str:
@@ -797,7 +1295,7 @@ def _render_trace_team_insights(team_label, team_insights):
                 sig_text = sig.get("signal", "")
                 sig_ev = sig.get("evidence", "")
                 sig_conf = sig.get("confidence", None)
-                sig_date = sig.get("date", None)
+                sig_date = sig.get("date") or as_of_date
                 sig_rumor = bool(sig.get("is_rumor", False))
                 conf_txt = f" (conf. {sig_conf:.2f})" if isinstance(sig_conf, (int, float)) else ""
                 date_txt = f" [{sig_date}]" if sig_date else ""
@@ -833,21 +1331,549 @@ def _render_trace_team_insights(team_label, team_insights):
 # KPI ROW ... (mantener igual)
 
 # TABS
-tab_bets, tab_preds, tab_results, tab_wishlist, tab_trace, tab_data, tab_audit, tab_budget, tab_arch, tab_history, tab_web, tab_logs, tab_memory = st.tabs([
-    "💰 Pronósticos", 
-    "🧠 Predicciones", 
-    "📈 Resultados",
-    "📝 Bitácora (Wishlist)",
-    "🕵️ Rastreo de Agentes", 
-    "📊 Inspector",
-    "🔍 Auditoría de APIs",
-    "💸 Presupuesto",
-    "🧩 Arquitectura",
-    "📁 Insights Persistentes",
-    "🌐 Agente Web",
-    "📜 Logs",
-    "🤖 Memoria del Analista"])
+def _trace_stage_label(stage_key: str) -> str:
+    labels = {
+        "fixtures_agent": "1. Fixtures Agent",
+        "web_fixtures_agent": "1.1 Web Fixtures / Web Odds Audit",
+        "odds_agent": "2. Odds Agent",
+        "stats_agent": "3. Stats Agent",
+        "journalist_agent": "4. Journalist Agent",
+        "web_agent": "5. Web Agent",
+        "insights_agent": "6. Insights Agent",
+        "normalizer_agent": "7. Normalizer Agent",
+        "gate_agent": "8. Gate Agent",
+        "analyst_agent": "9. Analyst Agent",
+        "bettor_agent": "10. Bettor Agent",
+    }
+    return labels.get(stage_key, stage_key)
 
+
+def _stage_has_meaningful_data(stage_data) -> bool:
+    if not stage_data:
+        return False
+    if isinstance(stage_data, dict):
+        for value in stage_data.values():
+            if value in ({}, [], None, "", ()):
+                continue
+            return True
+        return False
+    if isinstance(stage_data, list):
+        return len(stage_data) > 0
+    return True
+
+
+def _render_trace_match_header(trace_match: dict):
+    comp = trace_match.get("competition") or "—"
+    date = trace_match.get("match_date") or "—"
+    match_id = trace_match.get("match_id") or "—"
+    trace = trace_match.get("trace") or {}
+    filled = sum(1 for k, v in trace.items() if k != "transitions" and _stage_has_meaningful_data(v))
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Competencia", comp)
+    c2.metric("Fecha", date)
+    c3.metric("Match ID", match_id)
+    c4.metric("Etapas con datos", f"{filled}/10")
+
+
+def _render_trace_report_match(trace_match: dict):
+    _render_trace_match_header(trace_match)
+    trace = trace_match.get("trace") or {}
+    for stage_key in [
+        "fixtures_agent", "web_fixtures_agent", "odds_agent", "stats_agent", "journalist_agent",
+        "web_agent", "insights_agent", "normalizer_agent", "gate_agent", "analyst_agent", "bettor_agent",
+    ]:
+        stage_data = trace.get(stage_key) or {}
+        with st.expander(_trace_stage_label(stage_key), expanded=(stage_key in {"analyst_agent", "insights_agent", "normalizer_agent"})):
+            if not _stage_has_meaningful_data(stage_data):
+                st.info("Sin datos para esta etapa.")
+                continue
+            if stage_key == "analyst_agent":
+                if stage_data.get("input_context"):
+                    st.markdown("**Input al Analista**")
+                    st.json(stage_data.get("input_context"), expanded=False)
+                if stage_data.get("analyst_web_checks"):
+                    st.markdown("**Analyst Web Check(s)**")
+                    st.json(stage_data.get("analyst_web_checks"), expanded=False)
+                if stage_data.get("prompt"):
+                    st.markdown("**Prompt ejecutado**")
+                    st.code(stage_data.get("prompt"), language="text")
+                if stage_data.get("raw_llm_output"):
+                    st.markdown("**Salida cruda del modelo**")
+                    st.code(stage_data.get("raw_llm_output"), language="text")
+                if stage_data.get("parsed_output") is not None:
+                    st.markdown("**Salida parseada**")
+                    st.json(stage_data.get("parsed_output"), expanded=False)
+                if stage_data.get("final_predictions"):
+                    st.markdown("**Predicci?n final persistida**")
+                    st.json(stage_data.get("final_predictions"), expanded=False)
+                if stage_data.get("error"):
+                    st.error(stage_data.get("error"))
+                continue
+            if stage_key == "bettor_agent":
+                if stage_data.get("prediction_input"):
+                    st.markdown("**Input al Bettor**")
+                    st.json(stage_data.get("prediction_input"), expanded=False)
+                if stage_data.get("market_odds"):
+                    st.markdown("**Odds de mercado usadas**")
+                    st.json(stage_data.get("market_odds"), expanded=False)
+                if stage_data.get("match_context"):
+                    st.markdown("**Contexto recibido**")
+                    st.json(stage_data.get("match_context"), expanded=False)
+                if stage_data.get("value_analysis_output"):
+                    st.markdown("**Salida del Bettor**")
+                    st.json(stage_data.get("value_analysis_output"), expanded=False)
+                if stage_data.get("tips"):
+                    st.markdown("**Tips persistidos**")
+                    st.json(stage_data.get("tips"), expanded=False)
+                if not any(stage_data.get(k) for k in ["prediction_input", "market_odds", "match_context", "value_analysis_output", "tips"]):
+                    st.json(stage_data, expanded=False)
+                continue
+            if stage_key == "journalist_agent":
+                videos = stage_data.get("matched_videos") or []
+                comp_videos = stage_data.get("competition_videos") or []
+                errs = stage_data.get("competition_errors") or []
+                c1, c2, c3 = st.columns(3)
+                c1.metric("Videos específicos", len(videos))
+                c2.metric("Videos competencia", len(comp_videos))
+                c3.metric("Errores", len(errs))
+                if errs:
+                    st.warning(" | ".join(str(e) for e in errs[:3]))
+                st.json(stage_data, expanded=False)
+                continue
+            if stage_key == "web_agent":
+                home_count = len(stage_data.get("home_web_signals") or [])
+                away_count = len(stage_data.get("away_web_signals") or [])
+                c1, c2 = st.columns(2)
+                c1.metric("Señales web local", home_count)
+                c2.metric("Señales web visita", away_count)
+                st.json(stage_data, expanded=False)
+                continue
+            if stage_key == "normalizer_agent":
+                dq = stage_data.get("data_quality") or {}
+                c1, c2, c3 = st.columns(3)
+                c1.metric("Score", f"{dq.get('overall_quality_score', 0):.2f}" if dq else "—")
+                c2.metric("Señales limpias", len(stage_data.get("signals_clean") or []))
+                c3.metric("Señales sospechosas", len(stage_data.get("signals_suspicious") or []))
+                st.json(stage_data, expanded=False)
+                continue
+            st.json(stage_data, expanded=False)
+    transitions = trace.get("transitions") or {}
+    if transitions:
+        with st.expander("Delta entre etapas", expanded=False):
+            st.json(transitions, expanded=False)
+
+def _reset_manual_odds_ui_state():
+    """Limpia la extracción OCR temporal para evitar reuso accidental."""
+    st.session_state["manual_odds_extraction_ui"] = None
+    st.session_state["manual_odds_extraction_path_ui"] = None
+    st.session_state["manual_odds_uploader_nonce"] = st.session_state.get("manual_odds_uploader_nonce", 0) + 1
+
+
+def _write_json_artifact(path: str, payload):
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+
+
+def _reset_betano_optimizer_ui_state():
+    st.session_state["betano_ocr_extraction_ui"] = None
+    st.session_state["betano_ocr_image_path_ui"] = None
+    st.session_state["betano_optimizer_result_ui"] = None
+    st.session_state["betano_uploader_nonce"] = st.session_state.get("betano_uploader_nonce", 0) + 1
+
+
+def render_manual_odds_ui():
+    st.header("?? Carga Manual de Cuotas")
+    st.caption(
+        "Canal manual y trazable para cargar cuotas 1X2 desde una captura. "
+        "Pensado para contingencia cuando no hay cobertura API/web."
+    )
+
+    if "manual_odds_extraction_ui" not in st.session_state:
+        st.session_state["manual_odds_extraction_ui"] = None
+    if "manual_odds_extraction_path_ui" not in st.session_state:
+        st.session_state["manual_odds_extraction_path_ui"] = None
+    if "manual_odds_uploader_nonce" not in st.session_state:
+        st.session_state["manual_odds_uploader_nonce"] = 0
+
+    pipeline_running = st.session_state.get("pipeline_running", False)
+
+    mo1, mo2, mo3 = st.columns([1, 1, 1])
+    manual_competition = mo1.selectbox(
+        "Competencia OCR",
+        ["CHI2", "CHI1", "UCL", "COPA"],
+        index=0,
+        key="manual_odds_competition_ui",
+        disabled=pipeline_running,
+    )
+    manual_bookmaker_hint = mo2.text_input(
+        "Casa / operador (hint)",
+        value="Xperto",
+        key="manual_odds_bookmaker_hint_ui",
+        disabled=pipeline_running,
+    )
+    manual_market_hint = mo3.text_input(
+        "Mercado (hint)",
+        value="Resultado Final del Partido",
+        key="manual_odds_market_hint_ui",
+        disabled=pipeline_running,
+    )
+
+    uploader_key = f"manual_odds_uploader_ui_{st.session_state['manual_odds_uploader_nonce']}"
+    uploaded_manual_odds = st.file_uploader(
+        "Sube una captura de cuotas pre-match 1X2",
+        type=["png", "jpg", "jpeg", "webp"],
+        key=uploader_key,
+        disabled=pipeline_running,
+    )
+
+    if uploaded_manual_odds is not None:
+        st.image(uploaded_manual_odds, caption="Vista previa de la captura", use_container_width=True)
+
+    mo_run1, mo_run2 = st.columns([1, 1])
+    if mo_run1.button("Extraer cuotas desde imagen", disabled=(uploaded_manual_odds is None or pipeline_running), key="manual_odds_extract_btn"):
+        try:
+            image_path = save_uploaded_manual_odds_image(uploaded_manual_odds.name, uploaded_manual_odds.getvalue())
+            with st.spinner("Extrayendo cuotas con OCR multimodal..."):
+                extraction = extract_manual_odds_from_image(image_path=image_path, competition_hint=manual_competition)
+            payload = extraction.get("data") or {}
+            if not payload.get("bookmaker") and manual_bookmaker_hint.strip():
+                payload["bookmaker"] = manual_bookmaker_hint.strip()
+            if not payload.get("market_name") and manual_market_hint.strip():
+                payload["market_name"] = manual_market_hint.strip()
+            if not payload.get("competition") and manual_competition.strip():
+                payload["competition"] = manual_competition.strip()
+            st.session_state["manual_odds_extraction_ui"] = extraction
+            st.session_state["manual_odds_extraction_path_ui"] = image_path
+            st.success("Extracci?n OCR completada. Revisa y confirma antes de guardar.")
+        except Exception as e:
+            st.error(f"Error extrayendo cuotas manuales: {e}")
+
+    if mo_run2.button("Limpiar store de cuotas manuales", disabled=pipeline_running, key="manual_odds_clear_store_btn"):
+        try:
+            clear_manual_odds_store()
+            _reset_manual_odds_ui_state()
+            st.success("Store de cuotas manuales limpiado.")
+        except Exception as e:
+            st.error(f"No se pudo limpiar el store: {e}")
+
+    extraction = st.session_state.get("manual_odds_extraction_ui")
+    if extraction and extraction.get("ok"):
+        payload = extraction.get("data") or {}
+        st.markdown("**Revisi?n de extracci?n**")
+        meta1, meta2, meta3, meta4 = st.columns(4)
+        meta1.metric("Competencia", payload.get("competition") or manual_competition)
+        meta2.metric("Casa", payload.get("bookmaker") or manual_bookmaker_hint or "-")
+        meta3.metric("Mercado", payload.get("market_name") or manual_market_hint or "-")
+        meta4.metric("Filas detectadas", len(payload.get("matches") or []))
+
+        rows_df = pd.DataFrame(payload.get("matches") or [])
+        if rows_df.empty:
+            st.warning("La extracci?n no detect? filas utilizables. Revisa la imagen o sube otra captura.")
+        else:
+            edited_rows = st.data_editor(
+                rows_df,
+                use_container_width=True,
+                num_rows="dynamic",
+                key="manual_odds_editor_ui",
+                disabled=pipeline_running,
+            )
+
+            save1, save2, save3 = st.columns([1, 1, 1])
+            if save1.button("Guardar e inyectar cuotas manuales", disabled=pipeline_running, key="manual_odds_save_btn"):
+                try:
+                    reviewed_rows = edited_rows.to_dict(orient="records")
+                    reviewed_rows = [r for r in reviewed_rows if r.get("home_team") and r.get("away_team")]
+                    entry = {
+                        "competition": payload.get("competition") or manual_competition,
+                        "bookmaker": payload.get("bookmaker") or manual_bookmaker_hint,
+                        "market_name": payload.get("market_name") or manual_market_hint,
+                        "extraction_confidence": payload.get("extraction_confidence") or 0.0,
+                        "notes": payload.get("notes") or "",
+                        "source_image_name": os.path.basename(st.session_state.get("manual_odds_extraction_path_ui") or ""),
+                        "source_image_path": st.session_state.get("manual_odds_extraction_path_ui"),
+                        "matches": reviewed_rows,
+                    }
+                    before_count = len((load_manual_odds_store().get("entries") or []))
+                    saved = save_manual_odds_entry(entry)
+                    after_count = len((load_manual_odds_store().get("entries") or []))
+                    st.success(
+                        (
+                            f"Cuotas manuales guardadas ({len(reviewed_rows)} fila(s)). La pr?xima corrida del pipeline las fusionar? en odds_canonical."
+                        ) if after_count > before_count else
+                        "La misma captura ya estaba guardada. No se duplic? la entrada."
+                    )
+                    with st.expander("Entrada guardada", expanded=False):
+                        st.json(saved, expanded=False)
+                    _reset_manual_odds_ui_state()
+                except Exception as e:
+                    st.error(f"No se pudo guardar la entrada manual: {e}")
+
+            if save2.button("Ver salida OCR cruda", key="manual_odds_raw_btn"):
+                st.json(extraction, expanded=False)
+
+            if save3.button("Guardar + Ejecutar Pipeline", disabled=pipeline_running, key="manual_odds_save_run_btn"):
+                try:
+                    reviewed_rows = edited_rows.to_dict(orient="records")
+                    reviewed_rows = [r for r in reviewed_rows if r.get("home_team") and r.get("away_team")]
+                    entry = {
+                        "competition": payload.get("competition") or manual_competition,
+                        "bookmaker": payload.get("bookmaker") or manual_bookmaker_hint,
+                        "market_name": payload.get("market_name") or manual_market_hint,
+                        "extraction_confidence": payload.get("extraction_confidence") or 0.0,
+                        "notes": payload.get("notes") or "",
+                        "source_image_name": os.path.basename(st.session_state.get("manual_odds_extraction_path_ui") or ""),
+                        "source_image_path": st.session_state.get("manual_odds_extraction_path_ui"),
+                        "matches": reviewed_rows,
+                    }
+                    before_count = len((load_manual_odds_store().get("entries") or []))
+                    save_manual_odds_entry(entry)
+                    after_count = len((load_manual_odds_store().get("entries") or []))
+                    if after_count > before_count:
+                        st.info("Cuotas manuales guardadas. Ejecutando pipeline...")
+                    else:
+                        st.info("La captura ya estaba guardada. Ejecutando pipeline con la entrada existente...")
+                    _reset_manual_odds_ui_state()
+                    success, logs = run_pipeline_script(ligas=[entry["competition"]])
+                    st.session_state["pipeline_logs"] = logs
+                    if success:
+                        st.session_state["last_run"] = datetime.now()
+                        st.success("Pipeline ejecutado con cuotas manuales cargadas.")
+                        time.sleep(1)
+                        st.rerun()
+                    else:
+                        st.error("El pipeline fall? despu?s de guardar las cuotas manuales.")
+                except Exception as e:
+                    st.error(f"No se pudo guardar y ejecutar el pipeline: {e}")
+
+    manual_store = load_manual_odds_store()
+    manual_entries = manual_store.get("entries") or []
+    if manual_entries:
+        st.markdown("**Store actual de cuotas manuales**")
+        store_rows = []
+        for entry in manual_entries[-10:]:
+            store_rows.append({
+                "captured_at": entry.get("captured_at"),
+                "competition": entry.get("competition"),
+                "bookmaker": entry.get("bookmaker"),
+                "market_name": entry.get("market_name"),
+                "rows": len(entry.get("matches") or []),
+                "source_image": entry.get("source_image_name"),
+            })
+        st.dataframe(pd.DataFrame(store_rows), use_container_width=True, hide_index=True)
+        with st.expander("Ver pipeline_manual_odds.json", expanded=False):
+            st.json(manual_store, expanded=False)
+
+
+
+def render_betano_optimizer_ui():
+    st.header("?? Betano Optimizer")
+    st.caption(
+        "Carga una captura de Betano, extrae cuotas 1X2, cr?zalas con las predicciones actuales "
+        "y optimiza c?mo repartir un bankroll fijo."
+    )
+
+    if "betano_ocr_extraction_ui" not in st.session_state:
+        st.session_state["betano_ocr_extraction_ui"] = None
+    if "betano_ocr_image_path_ui" not in st.session_state:
+        st.session_state["betano_ocr_image_path_ui"] = None
+    if "betano_optimizer_result_ui" not in st.session_state:
+        st.session_state["betano_optimizer_result_ui"] = None
+    if "betano_uploader_nonce" not in st.session_state:
+        st.session_state["betano_uploader_nonce"] = 0
+
+    pipeline_running = st.session_state.get("pipeline_running", False)
+    predictions = load_data("predicciones")
+    match_contexts = load_data("match_contexts")
+
+    c1, c2, c3 = st.columns([1, 1, 1])
+    competition = c1.selectbox(
+        "Competencia objetivo",
+        ["COPA", "CHI1", "CHI2", "UCL"],
+        index=0,
+        key="betano_competition_ui",
+        disabled=pipeline_running,
+    )
+    bankroll_clp = int(c2.number_input("Bankroll (CLP)", min_value=1000, value=10000, step=500, disabled=pipeline_running))
+    mode = c3.selectbox(
+        "Perfil",
+        ["conservative", "balanced", "aggressive"],
+        index=1,
+        key="betano_mode_ui",
+        disabled=pipeline_running,
+    )
+
+    uploader_key = f"betano_uploader_ui_{st.session_state['betano_uploader_nonce']}"
+    uploaded_betano = st.file_uploader(
+        "Sube una captura de Betano con cuotas 1X2",
+        type=["png", "jpg", "jpeg", "webp"],
+        key=uploader_key,
+        disabled=pipeline_running,
+    )
+    if uploaded_betano is not None:
+        st.image(uploaded_betano, caption="Vista previa Betano", use_container_width=True)
+
+    r1, r2 = st.columns([1, 1])
+    if r1.button("Extraer boleta Betano", disabled=(uploaded_betano is None or pipeline_running), key="betano_extract_btn"):
+        try:
+            image_path = save_uploaded_betano_image(uploaded_betano.name, uploaded_betano.getvalue())
+            with st.spinner("Leyendo cuotas Betano con OCR multimodal..."):
+                extraction = extract_betano_odds_from_image(image_path=image_path, competition_hint=competition)
+            st.session_state["betano_ocr_extraction_ui"] = extraction
+            st.session_state["betano_ocr_image_path_ui"] = image_path
+            st.session_state["betano_optimizer_result_ui"] = None
+            _write_json_artifact(FILES["betano_ocr"], extraction)
+            st.success("Captura Betano extra?da. Revisa las filas antes de optimizar.")
+        except Exception as e:
+            st.error(f"No se pudo extraer la boleta Betano: {e}")
+
+    if r2.button("Limpiar optimizador", disabled=pipeline_running, key="betano_clear_btn"):
+        _reset_betano_optimizer_ui_state()
+        st.success("Estado del optimizador limpiado.")
+
+    extraction = st.session_state.get("betano_ocr_extraction_ui")
+    if extraction and extraction.get("ok"):
+        payload = extraction.get("data") or {}
+        rows_df = pd.DataFrame(payload.get("matches") or [])
+        meta1, meta2, meta3, meta4 = st.columns(4)
+        meta1.metric("Bookmaker", payload.get("bookmaker") or "Betano")
+        meta2.metric("Competencia", payload.get("competition") or competition)
+        meta3.metric("Filas OCR", len(payload.get("matches") or []))
+        meta4.metric("Predicciones disponibles", len(predictions or []))
+
+        if rows_df.empty:
+            st.warning("No se detectaron filas utilizables en la captura.")
+        else:
+            edited_rows = st.data_editor(
+                rows_df,
+                use_container_width=True,
+                num_rows="dynamic",
+                key="betano_editor_ui",
+                disabled=pipeline_running,
+            )
+            b1, b2 = st.columns([1, 1])
+            if b1.button("Optimizar bankroll", disabled=(pipeline_running or not predictions), key="betano_optimize_btn"):
+                try:
+                    reviewed_rows = [r for r in edited_rows.to_dict(orient="records") if r.get("home_team") and r.get("away_team")]
+                    normalized = build_betano_eligible_bets(
+                        ocr_payload={
+                            "competition": payload.get("competition") or competition,
+                            "bookmaker": payload.get("bookmaker") or "Betano",
+                            "market_name": payload.get("market_name") or "Resultado Final",
+                            "extraction_confidence": payload.get("extraction_confidence") or 0.0,
+                            "matches": reviewed_rows,
+                        },
+                        predictions=predictions or [],
+                        match_contexts=match_contexts or [],
+                    )
+                    portfolio = optimize_simple_bet_portfolio(
+                        eligible_bets=normalized.get("eligible_bets") or [],
+                        bankroll_clp=bankroll_clp,
+                        mode=mode,
+                        include_combos=True,
+                    )
+                    result_bundle = {
+                        "generated_at": datetime.now().isoformat(),
+                        "ocr": extraction,
+                        "normalized": normalized,
+                        "portfolio": portfolio,
+                    }
+                    st.session_state["betano_optimizer_result_ui"] = result_bundle
+                    _write_json_artifact(FILES["betano_normalized"], normalized)
+                    _write_json_artifact(FILES["betting_portfolio"], portfolio)
+                    st.success("Portafolio generado.")
+                except Exception as e:
+                    st.error(f"No se pudo optimizar la boleta: {e}")
+
+            if b2.button("Ver OCR crudo", key="betano_raw_btn"):
+                st.json(extraction, expanded=False)
+
+    result_bundle = st.session_state.get("betano_optimizer_result_ui")
+    if result_bundle:
+        normalized = result_bundle.get("normalized") or {}
+        portfolio = result_bundle.get("portfolio") or {}
+        eligible_bets = normalized.get("eligible_bets") or []
+        rejected_bets = normalized.get("rejected_bets") or []
+
+        st.subheader("Picks elegibles")
+        if eligible_bets:
+            st.dataframe(pd.DataFrame([{
+                "Partido": f"{x.get('home_team')} vs {x.get('away_team')}",
+                "Pick": x.get("selection"),
+                "Cuota": x.get("odds_decimal"),
+                "Conf. analista": f"{float(x.get('analyst_confidence') or 0):.0f}%",
+                "Prob. estimada": f"{float(x.get('estimated_probability') or 0) * 100:.1f}%",
+                "Prob. impl?cita": f"{float(x.get('implied_probability') or 0) * 100:.1f}%",
+                "Edge": f"{float(x.get('edge') or 0) * 100:.1f}%",
+                "EV/u": round(float(x.get("expected_value_per_unit") or 0.0), 3),
+                "Gate": x.get("gate_status"),
+            } for x in eligible_bets]), use_container_width=True, hide_index=True)
+        else:
+            st.info("No quedaron picks elegibles tras OCR, normalizaci?n y filtros.")
+
+        if rejected_bets:
+            with st.expander("Ver picks rechazados", expanded=False):
+                st.dataframe(pd.DataFrame(rejected_bets), use_container_width=True, hide_index=True)
+
+        st.subheader("Plan recomendado")
+        summary = portfolio.get("portfolio_summary") or {}
+        p1, p2, p3, p4 = st.columns(4)
+        p1.metric("Total apostado", f"${int(summary.get('total_staked_clp') or 0):,}".replace(",", "."))
+        p2.metric("Caja reservada", f"${int(summary.get('hold_cash_clp') or 0):,}".replace(",", "."))
+        p3.metric("EV esperado", f"${int(summary.get('expected_value_clp') or 0):,}".replace(",", "."))
+        p4.metric("ROI esperado", f"{float(summary.get('expected_roi_pct_on_staked') or 0.0):.2f}%")
+
+        tickets = portfolio.get("recommended_tickets") or []
+        if tickets:
+            display_rows = []
+            for t in tickets:
+                if t.get("ticket_type") == "single":
+                    display_rows.append({
+                        "Tipo": "Simple",
+                        "Selecci?n": f"{t.get('home_team')} vs {t.get('away_team')} -> {t.get('selection')}",
+                        "Cuota": t.get("odds_decimal"),
+                        "Stake": int(t.get("stake_clp") or 0),
+                        "Confianza": t.get("recommendation_confidence", "-"),
+                        "Prob. estimada": f"{float(t.get('estimated_probability') or 0) * 100:.1f}%",
+                        "EV/u": round(float(t.get("expected_value_per_unit") or 0.0), 3),
+                        "Ganancia esperada": int(t.get("expected_profit_clp") or 0),
+                    })
+                else:
+                    display_rows.append({
+                        "Tipo": "Combinada 2",
+                        "Selecci?n": " + ".join(f"{leg.get('match')} -> {leg.get('selection')}" for leg in (t.get("legs") or [])),
+                        "Cuota": t.get("combo_odds_decimal"),
+                        "Stake": int(t.get("stake_clp") or 0),
+                        "Confianza": t.get("recommendation_confidence", "-"),
+                        "Prob. estimada": f"{float(t.get('estimated_probability') or 0) * 100:.1f}%",
+                        "EV/u": round(float(t.get("expected_value_per_unit") or 0.0), 3),
+                        "Ganancia esperada": int(t.get("expected_profit_clp") or 0),
+                    })
+            st.dataframe(pd.DataFrame(display_rows), use_container_width=True, hide_index=True)
+        else:
+            st.warning("El optimizador no recomienda apostar con las cuotas y probabilidades actuales.")
+
+        with st.expander("Artefactos generados", expanded=False):
+            st.code(FILES["betano_ocr"])
+            st.code(FILES["betano_normalized"])
+            st.code(FILES["betting_portfolio"])
+
+tab_bets, tab_preds, tab_results, tab_wishlist, tab_trace, tab_trace_report, tab_data, tab_audit, tab_budget, tab_arch, tab_history, tab_manual_odds, tab_betano, tab_web, tab_logs, tab_memory = st.tabs([
+    "?? Pron?sticos", 
+    "?? Predicciones", 
+    "?? Resultados",
+    "?? Bit?cora (Wishlist)",
+    "??? Rastreo de Agentes", 
+    "?? Trace Report",
+    "?? Inspector",
+    "?? Auditor?a de APIs",
+    "?? Presupuesto",
+    "?? Arquitectura",
+    "?? Insights Persistentes",
+    "?? Cuotas Manuales",
+    "?? Betano Optimizer",
+    "?? Agente Web",
+    "?? Logs",
+    "?? Memoria del Analista"])
 
 
 with tab_bets:
@@ -888,9 +1914,10 @@ with tab_bets:
                     "Pick": b.get("pick"),
                     "Cuota": b.get("odds"),
                     "Edge": f"{b.get('edge_pct'):.1f}%",
-                    "Confianza": f"{b.get('confidence')}%",
+                    "Riesgo": "🟢 Low" if b.get("signal_risk_level") == "low" else "🟡 Mid" if b.get("signal_risk_level") == "medium" else "🔴 High" if b.get("signal_risk_level") == "high" else "??",
+                    "Stake": f"{b.get('stake_units')}u",
                     "Bookie": b.get("bookmaker"),
-                    "Stake": f"{b.get('stake_units')}u"
+                    "Origen": "🌐 WEB" if b.get("odds_source_type") == "web_scraped" else "📡 API"
                 } for b in bank_singles])
                 
                 st.dataframe(df_bank, use_container_width=True, hide_index=True)
@@ -921,7 +1948,9 @@ with tab_bets:
                         "Pick": b.get("pick"),
                         "Cuota": b.get("odds"),
                         "Edge": f"{b.get('edge_pct'):.1f}%",
+                        "Riesgo": "🟢 Low" if b.get("signal_risk_level") == "low" else "🟡 Mid" if b.get("signal_risk_level") == "medium" else "🔴 High" if b.get("signal_risk_level") == "high" else "??",
                         "Stake": f"{b.get('stake_units')}u",
+                        "Origen": "🌐 WEB" if b.get("odds_source_type") == "web_scraped" else "📡 API",
                         "Racional": b.get("rationale")
                     } for b in pasada_singles])
                     st.dataframe(df_pasada, use_container_width=True, hide_index=True)
@@ -992,6 +2021,10 @@ with tab_preds:
                         if p.get("key_factors"):
                             for kf in p.get("key_factors"):
                                 st.markdown(f"- {kf}")
+                        
+                        st.markdown("---")
+                        with st.expander("📡 Insumos del Analista (Señales Recibidas)"):
+                            _render_signals_partitioned(p, signals_partitioned_data, stats_raw_data, odds_raw_data)
 
 with tab_wishlist:
     st.header("📝 Intereses y Necesidades del Analista")
@@ -1034,8 +2067,17 @@ with tab_wishlist:
     if not wishlist_data:
         st.info("No hay requerimientos registrados en la bitácora actualmente.")
     else:
-        # Resumen de estadísticas
-        all_items = wishlist_data
+        # Extraer items reales de la lista anidada por partido
+        all_items = []
+        for entry in wishlist_data:
+            match_name = entry.get("match", "Desconocido")
+            comp = entry.get("competition", "Desconocida")
+            recorded = entry.get("recorded_at", "")
+            for i in entry.get("items", []):
+                i["added_at"] = recorded
+                i["match"] = match_name
+                i["comp"] = comp
+                all_items.append(i)
         
         if all_items:
             wcol1, wcol2, wcol3 = st.columns(3)
@@ -1086,25 +2128,44 @@ with tab_wishlist:
                     
                     with st.container():
                         c1, c2 = st.columns([0.8, 0.2])
-                        c1.markdown(f"**{prio_color} [{prio}] {cat}**")
+                        c1.markdown(f"**{prio_color} [{prio}] {cat}** | {item.get('comp', '?')}")
                         c2.caption(f"🗓️ {added}")
                         st.write(f"👉 {item.get('need')}")
                         if affected:
-                            st.caption(f"Equipos: {', '.join(affected)}")
+                            st.caption(f"Equipos: {', '.join(affected)} | ⚽ {item.get('match', '')}")
                         else:
-                            st.caption("🌎 Interés Global")
+                            st.caption(f"🌎 Interés Global | ⚽ {item.get('match', '')}")
                         st.divider()
 
 with tab_results:
     st.header("📈 Evaluación de Rendimiento")
     st.caption("El Agente Revisor/Evaluador corre como proceso separado (standalone), no forma parte del pipeline principal.")
-    if st.button("🔎 Ejecutar Agente Revisor (Standalone)", key="run_evaluator_standalone_btn"):
+    
+    col_btn_rev, col_force_rev = st.columns([0.6, 0.4])
+    
+    do_force = col_force_rev.checkbox("Forzar re-evaluación total", help="Vuelve a procesar todos los partidos, incluso los ya evaluados (útil si cambió el normalizador o modelos)")
+    
+    if col_btn_rev.button("🔎 Ejecutar Agente Revisor (Standalone)", key="run_evaluator_standalone_btn", use_container_width=True):
         with st.spinner("Ejecutando Agente Revisor / Evaluador..."):
             try:
-                result = subprocess.run([sys.executable, "run_evaluator.py"], capture_output=True, text=True)
+                # Construir comando con argumentos
+                cmd = [sys.executable, "run_evaluator.py"]
+                if do_force:
+                    cmd.append("--force")
+                
+                # Ejecución robusta en Windows con shell=True y copia de entorno
+                result = subprocess.run(
+                    cmd, 
+                    capture_output=True, 
+                    text=True, 
+                    shell=True,
+                    env=os.environ.copy(),
+                    encoding="utf-8",
+                    errors="replace"
+                )
+                
                 if result.returncode == 0:
                     st.success("Evaluación completada con éxito.")
-                    st.rerun()
                 else:
                     st.error(f"Error al ejecutar el evaluador: {result.stderr}")
             except Exception as e:
@@ -1198,7 +2259,12 @@ with tab_results:
                         "odds_source": "Origen Cuota",
                         "profit": "G/P (CLP)"
                     })
-                    st.dataframe(df_roi_ui[["Fecha", "Partido", "Pick", "Acertado", "Cuota", "Origen Cuota", "G/P (CLP)"]], use_container_width=True, hide_index=True)
+                    df_roi_ui["Fecha"] = pd.to_datetime(df_roi_ui["Fecha"], errors="coerce")
+                    st.dataframe(
+                        df_roi_ui[["Fecha", "Partido", "Pick", "Acertado", "Cuota", "Origen Cuota", "G/P (CLP)"]], 
+                        use_container_width=True, hide_index=True,
+                        column_config={"Fecha": st.column_config.DatetimeColumn("Fecha", format="DD/MM/YYYY HH:mm")}
+                    )
         else:
             st.info("No hay datos de simulación de ROI. Haz clic en 'Recalcular ROI' para generarlos.")
         
@@ -1213,7 +2279,7 @@ with tab_results:
             if _evals:
                 total_acc = 0
                 for item in _evals:
-                    model = item.get("analyst_model_id", "gpt5")
+                    model = item.get("analyst_model_id") or "unknown"
                     comp = item.get("competition", "unknown")
                     
                     if model not in acc_by_model: acc_by_model[model] = {"total": 0, "count": 0}
@@ -1295,8 +2361,9 @@ with tab_results:
             with open(predictions_history_file, "r", encoding="utf-8") as f:
                 history_data = json.load(f)
             
-            # Filtrar los que tienen evaluación
-            evaluated_history = [p for p in history_data if p.get("evaluation_status") == "OK"]
+            # Filtrar los que tienen evaluación o intento de ella (para mostrar Temuco y otros con gaps)
+            # Filtrar los que tienen evaluación o incluso los pendientes (None)
+            evaluated_history = [p for p in history_data if p.get("evaluation_status") in ["OK", "NOT_FOUND", "NO_DATE", None, "PENDING"]]
             
             if evaluated_history:
                 # Deduplicación robusa: Priorizar event_id, luego nombres normalizados
@@ -1347,40 +2414,34 @@ with tab_results:
                             file_name="resumen_evaluacion.csv",
                             )
 
-                # Procesar fecha para hacerla legible
+                # Procesar fecha para hacerla legible y sortable en la UI
                 for item in dedup_history:
                     raw_date = item.get("match_date")
+                    parsed_dt = None
                     if raw_date and "T" in str(raw_date) and str(raw_date) not in ("None", "?", "null"):
                         try:
-                            # Parse "2026-02-19T20:14:04Z" to "19/02 20:14"
-                            dt = datetime.fromisoformat(str(raw_date).replace("Z", "+00:00"))
-                            item["match_date"] = dt.strftime("%d/%m %H:%M")
-                            continue
+                            parsed_dt = datetime.fromisoformat(str(raw_date).replace("Z", "").split("+")[0])
                         except ValueError:
                             pass
                     
-                    # Intentar extraer de prediction_id o match_id
-                    match_id = item.get("prediction_id", "") or item.get("match_id", "")
-                    m_date = re.search(r'202\d-\d{2}-\d{2}', str(match_id))
-                    if m_date:
-                        try:
-                            dt = datetime.strptime(m_date.group(0), "%Y-%m-%d")
-                            item["match_date"] = dt.strftime("%d/%m")
-                            continue
-                        except ValueError:
-                            pass
-                    
-                    # Intentar extraer de generated_at
-                    gen_date = item.get("generated_at")
-                    if gen_date and "T" in str(gen_date):
-                        try:
-                            dt = datetime.fromisoformat(str(gen_date).replace("Z", "+00:00"))
-                            item["match_date"] = dt.strftime("%d/%m (Gen)")
-                            continue
-                        except ValueError:
-                            pass
-                    
-                    item["match_date"] = "Sin Fecha"
+                    if not parsed_dt:
+                        match_id = item.get("prediction_id", "") or item.get("match_id", "")
+                        m_date = re.search(r'202\d-\d{2}-\d{2}', str(match_id))
+                        if m_date:
+                            try:
+                                parsed_dt = datetime.strptime(m_date.group(0), "%Y-%m-%d")
+                            except ValueError:
+                                pass
+                                
+                    if not parsed_dt:
+                        gen_date = item.get("generated_at")
+                        if gen_date and "T" in str(gen_date):
+                            try:
+                                parsed_dt = datetime.fromisoformat(str(gen_date).replace("Z", "").split("+")[0])
+                            except ValueError:
+                                pass
+                                
+                    item["match_date"] = parsed_dt if parsed_dt else None
                     
                 for item in dedup_history:
                     # Métrica: Precisión del Marcador
@@ -1422,6 +2483,7 @@ with tab_results:
                     "score_prediction": "Obj. Marc.",
                     "actual_score": "Marcador Real",
                     "score_acc": "Prec.",
+                    "evaluation_status": "Estado",
                     "correct": "Acierto",
                     "analyst_model_id": "Modelo"
                 }
@@ -1430,11 +2492,34 @@ with tab_results:
                 valid_disp_cols = {k: v for k, v in disp_cols.items() if k in h_df.columns}
                 table_df = h_df[list(valid_disp_cols.keys())].rename(columns=valid_disp_cols)
                 
-                # Formatear acierto con emoji
-                if "Acierto" in table_df.columns:
-                    table_df["Acierto"] = table_df["Acierto"].apply(lambda x: "✅" if x else "❌")
+                # Ordenar por Fecha (descendente)
+                if "Fecha" in table_df.columns:
+                    table_df = table_df.sort_values(by="Fecha", ascending=False)
                 
-                st.dataframe(table_df, use_container_width=True, hide_index=True)
+                # Formatear acierto con emoji y limpiar nulos
+                if "Acierto" in table_df.columns:
+                    table_df["Acierto"] = table_df.apply(
+                        lambda x: "✅" if x["Acierto"] is True else ("❌" if x["Acierto"] is False else "⏳"),
+                        axis=1
+                    )
+                
+                if "Marcador Real" in table_df.columns:
+                    table_df["Marcador Real"] = table_df["Marcador Real"].fillna("—")
+                
+                if "Prec." in table_df.columns:
+                    table_df["Prec."] = table_df.apply(
+                        lambda x: x["Prec."] if x["Estado"] == "OK" else "—",
+                        axis=1
+                    )
+                
+                st.dataframe(
+                    table_df, 
+                    use_container_width=True, 
+                    hide_index=True,
+                    column_config={
+                        "Fecha": st.column_config.DatetimeColumn("Fecha", format="DD/MM/YYYY HH:mm")
+                    }
+                )
             else:
                 st.info("No hay partidos evaluados en el historial todavía.")
         else:
@@ -1485,12 +2570,17 @@ with tab_trace:
                     if not teams_web:
                         st.info("No hay detalles por equipo en este run.")
                     else:
-                        for tw in teams_web:
+                        def _newest_date(tw):
+                            dates = [str(s.get("date") or "0000-00-00") for s in (tw.get("context_signals") or [])]
+                            return max(dates) if dates else "0000-00-00"
+                        
+                        teams_web_sorted = sorted(teams_web, key=_newest_date, reverse=True)
+                        for tw in teams_web_sorted:
                             t_name = tw.get("team", "Equipo Desconocido")
                             t_res = tw.get("last_result") or ""
                             t_ctx = tw.get("raw_context") or ""
                             
-                            # Resaltar si hay hitos importantes (evitar error de NoneType)
+                            # Resaltar si hay hitos importantes
                             text_to_search = (str(t_res) + str(t_ctx)).lower()
                             is_key_context = any(k in text_to_search for k in ["elimino", "clasifico", "campeon", "descendio", "crisis", "quiebra"])
                             
@@ -1498,13 +2588,15 @@ with tab_trace:
                             if t_res: st.markdown(f"> `{t_res}`")
                             if t_ctx: st.write(t_ctx)
                             
-                            # Mostrar señales si existen
+                            # Mostrar señales si existen, ordenadas cronológicamente
                             sigs = tw.get("context_signals") or []
                             if sigs:
-                                cols = st.columns(len(sigs) if len(sigs) < 4 else 4)
-                                for idx, s in enumerate(sigs[:4]):
+                                sigs_sorted = sorted(sigs, key=lambda x: str(x.get("date") or "0000-00-00"), reverse=True)
+                                cols = st.columns(len(sigs_sorted) if len(sigs_sorted) < 4 else 4)
+                                for idx, s in enumerate(sigs_sorted[:4]):
                                     with cols[idx]:
-                                        st.caption(f"🎯 {s.get('signal')[:40]}...")
+                                        date_str = f"[{s.get('date')}] " if s.get("date") else ""
+                                        st.caption(f"🎯 {date_str}{s.get('signal')[:40]}...")
                             st.divider()
     else:
         st.info("No hay datos de contexto global disponibles todavía.")
@@ -1610,19 +2702,25 @@ with tab_trace:
             # PASO 1: INSUMOS (Stats & Odds)
             st.subheader("1. Insumos Base (Stats & Odds)")
             
-            # Odds compactas
+            # Odds compactas con Provenance
             odds_info = mc.get("odds") if mc else None
             if odds_info:
+                is_web = odds_info.get("odds_source_type") == "web_scraped"
+                badge_html = f'<span style="background-color: #555; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; margin-left: 10px;">🌐 WEB SCRAPED</span>' if is_web else ""
+                source_url = odds_info.get("source_url")
+                source_link = f'<br><a href="{source_url}" style="font-size: 0.8em; color: #aaa;" target="_blank">🔗 Ver fuente de datos</a>' if source_url and is_web else ""
+                
                 st.markdown(f"""
                 <div style="background-color: #1a1c24; padding: 10px; border-radius: 5px; margin-bottom: 10px; border-left: 5px solid #ff4b4b;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span><strong>📊 Cuotas: {home_team} vs {away_team}</strong> ({odds_info.get('bookmaker', '?')})</span>
+                        <span><strong>📊 Cuotas: {home_team} vs {away_team}</strong> ({odds_info.get('bookmaker', '?')}){badge_html}</span>
                     </div>
                     <div style="display: flex; justify-content: space-around; margin-top: 5px; font-size: 0.9em;">
                         <div>🏠 1: <strong>{odds_info.get('home_odds')}</strong></div>
                         <div>🤝 X: <strong>{odds_info.get('draw_odds')}</strong></div>
                         <div>✈️ 2: <strong>{odds_info.get('away_odds')}</strong></div>
                     </div>
+                    {source_link}
                 </div>
                 """, unsafe_allow_html=True)
             else:
@@ -1654,10 +2752,12 @@ with tab_trace:
             cp1, cp2 = st.columns(2)
             with cp1: 
                 v_home = (home_insights.get("video") or {}).get("videos") if home_insights else None
-                _render_trace_journalist_videos(home_team, journalist_data, videos_from_insights=v_home)
+                c_home = home_insights.get("insight_meta", {}).get("citations", []) if home_insights else []
+                _render_trace_journalist_videos(home_team, journalist_data, videos_from_insights=v_home, citations=c_home)
             with cp2: 
                 v_away = (away_insights.get("video") or {}).get("videos") if away_insights else None
-                _render_trace_journalist_videos(away_team, journalist_data, videos_from_insights=v_away)
+                c_away = away_insights.get("insight_meta", {}).get("citations", []) if away_insights else []
+                _render_trace_journalist_videos(away_team, journalist_data, videos_from_insights=v_away, citations=c_away)
 
             # PASO 3: INTELIGENCIA (Insights & Web)
             st.markdown("⬇️")
@@ -1735,6 +2835,37 @@ with tab_trace:
                 """, unsafe_allow_html=True)
             else:
                 st.info("ℹ️ No se encontró valor suficiente para apostar.")
+
+
+with tab_trace_report:
+    st.header("?? Trace Report por Partido")
+    st.markdown("Reporte estructurado de entrada/salida por agente, con foco en el Analista y el Bettor.")
+
+    trace_matches = []
+    if isinstance(trace_report_data, dict):
+        trace_matches = trace_report_data.get("matches") or []
+
+    if not trace_matches:
+        st.info("No existe `pipeline_trace_report.json` todav?a. Ejecuta el pipeline para generarlo.")
+    else:
+        st.caption(f"Generado: {trace_report_data.get('generated_at', 'N/A')}")
+        summary = trace_report_data.get("summary") or {}
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Partidos", summary.get("total_matches", 0))
+        c2.metric("Con traza analista", summary.get("with_analyst_trace", 0))
+        c3.metric("Con traza bettor", summary.get("with_bettor_trace", 0))
+
+        options = [m.get("match_id") or m.get("match_label") for m in trace_matches]
+        trace_by_key = {(m.get("match_id") or m.get("match_label")): m for m in trace_matches}
+        selected_trace_key = st.selectbox(
+            "Selecciona un partido para inspecci?n completa",
+            options,
+            format_func=lambda key: f"{trace_by_key[key].get('match_label')} [{trace_by_key[key].get('competition')}]"
+        )
+        trace_match = trace_by_key.get(selected_trace_key)
+        if trace_match:
+            st.subheader(trace_match.get("match_label", "Partido"))
+            _render_trace_report_match(trace_match)
 
 
 with tab_budget:
@@ -1836,6 +2967,7 @@ with tab_audit:
                     "Casa":        str(bm0.get("home_odds") or "—"),
                     "Empate":      str(bm0.get("draw_odds") or "—"),
                     "Visita":      str(bm0.get("away_odds") or "—"),
+                    "Origen":      "🌐 WEB" if f.get("odds_source_type") == "web_scraped" else "📡 API",
                     "# Casas":     str(f.get("bookmakers_count") or len(bms)),
                 })
             st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
@@ -2339,31 +3471,20 @@ with tab_history:
     if not team_history_data:
         st.info("No hay historial persistente todav?a. Ejecuta el pipeline (o el parcial desde periodista) para generarlo.")
     else:
-        rows = []
-        for team, entries in team_history_data.items():
-            if not isinstance(entries, list):
-                continue
-            for item in entries:
-                if not isinstance(item, dict):
-                    continue
-                rows.append({
-                    "Equipo": team,
-                    "Fecha": item.get("date", ""),
-                    "Competencia": item.get("competition", ""),
-                    "Tipo": item.get("kind", "insight"),
-                    "Insight": item.get("insight", ""),
-                    "SignalType": item.get("signal_type", ""),
-                    "Confianza": item.get("confidence", None),
-                })
+        hist_df, original_map = flatten_team_history_for_editor(team_history_data)
 
-        if not rows:
+        if hist_df.empty:
             st.info("El archivo existe pero no contiene entradas legibles.")
         else:
-            hist_df = pd.DataFrame(rows)
             hist_df["Fecha"] = hist_df["Fecha"].fillna("")
+            hist_df["PersistedAt"] = hist_df["PersistedAt"].fillna("")
             hist_df["Competencia"] = hist_df["Competencia"].fillna("")
             hist_df["Tipo"] = hist_df["Tipo"].fillna("insight")
+            hist_df["SignalType"] = hist_df["SignalType"].fillna("")
             hist_df["Insight"] = hist_df["Insight"].fillna("")
+            hist_df["Rival"] = hist_df["Rival"].fillna("")
+            hist_df["Provenance"] = hist_df["Provenance"].fillna("")
+            hist_df["SourceUrls"] = hist_df["SourceUrls"].fillna("")
 
             c1, c2, c3 = st.columns([2, 1, 1])
             team_options = ["(Todos)"] + sorted(hist_df["Equipo"].dropna().unique().tolist())
@@ -2389,15 +3510,82 @@ with tab_history:
                     filtered["Insight"].astype(str).str.lower().str.contains(q, na=False)
                     | filtered["Equipo"].astype(str).str.lower().str.contains(q, na=False)
                     | filtered["SignalType"].astype(str).str.lower().str.contains(q, na=False)
+                    | filtered["Provenance"].astype(str).str.lower().str.contains(q, na=False)
+                    | filtered["Rival"].astype(str).str.lower().str.contains(q, na=False)
                 ]
 
             filtered = filtered.sort_values(by=["Fecha", "Equipo"], ascending=[False, True])
             st.caption(f"Registros: {len(filtered)} / {len(hist_df)}")
-            st.dataframe(filtered, use_container_width=True, hide_index=True)
+
+            with st.expander("Mantenedor de Señales", expanded=True):
+                st.caption("Permite editar, eliminar y guardar señales persistentes con backup automático.")
+                edited_df = st.data_editor(
+                    filtered,
+                    use_container_width=True,
+                    hide_index=True,
+                    num_rows="fixed",
+                    key="team_history_editor",
+                    column_config={
+                        "Seleccionar": st.column_config.CheckboxColumn("Eliminar", default=False),
+                        "entry_id": st.column_config.TextColumn("entry_id", disabled=True, width="small"),
+                        "Equipo": st.column_config.TextColumn("Equipo", disabled=True, width="medium"),
+                        "Fecha": st.column_config.TextColumn("Fecha"),
+                        "PersistedAt": st.column_config.TextColumn("PersistedAt", disabled=True, width="medium"),
+                        "Competencia": st.column_config.TextColumn("Competencia"),
+                        "Tipo": st.column_config.TextColumn("Tipo"),
+                        "SignalType": st.column_config.TextColumn("SignalType"),
+                        "Insight": st.column_config.TextColumn("Insight", width="large"),
+                        "Confianza": st.column_config.NumberColumn("Confianza", min_value=0.0, max_value=1.0, step=0.01),
+                        "Rumor": st.column_config.CheckboxColumn("Rumor"),
+                        "Rival": st.column_config.TextColumn("Rival"),
+                        "Provenance": st.column_config.TextColumn("Provenance", disabled=True, width="medium"),
+                        "SourceUrls": st.column_config.TextColumn("SourceUrls", width="large"),
+                    },
+                    disabled=["entry_id", "Equipo", "PersistedAt", "Provenance"],
+                )
+
+                selected_count = int(edited_df["Seleccionar"].fillna(False).sum()) if "Seleccionar" in edited_df.columns else 0
+                csave, cdel, cinfo = st.columns([1, 1, 2])
+                cinfo.caption(f"Seleccionadas para eliminar: {selected_count}")
+
+                if csave.button("Guardar cambios", key="team_history_save_btn"):
+                    backup_path = backup_team_history_file()
+                    merged_df = merge_history_subset_into_full(hist_df, edited_df)
+                    save_df = merged_df.copy()
+                    if "Seleccionar" in save_df.columns:
+                        save_df = save_df[~save_df["Seleccionar"].fillna(False)].copy()
+                    save_team_history_from_editor_df(save_df, original_map)
+                    st.success(f"Cambios guardados en `team_history.json`.{f' Backup: `{backup_path}`' if backup_path else ''}")
+                    st.rerun()
+
+                if cdel.button("Eliminar seleccionadas", key="team_history_delete_btn"):
+                    if selected_count <= 0:
+                        st.warning("No hay filas seleccionadas para eliminar.")
+                    else:
+                        backup_path = backup_team_history_file()
+                        merged_df = merge_history_subset_into_full(hist_df, edited_df)
+                        save_df = merged_df.copy()
+                        save_df = save_df[~save_df["Seleccionar"].fillna(False)].copy()
+                        save_team_history_from_editor_df(save_df, original_map)
+                        st.success(f"Se eliminaron {selected_count} señales.{f' Backup: `{backup_path}`' if backup_path else ''}")
+                        st.rerun()
+
+                risk_rows = edited_df[
+                    edited_df["Insight"].astype(str).str.contains(r'\"home_team\"|\"away_team\"|calendario de la semana|15:00', case=False, na=False)
+                ]
+                if not risk_rows.empty:
+                    st.warning(f"Se detectaron {len(risk_rows)} filas con patrones potencialmente contaminados. Revisa antes de guardar.")
+
+with tab_manual_odds:
+    render_manual_odds_ui()
+
+with tab_betano:
+    render_betano_optimizer_ui()
 
 with tab_web:
-    st.header("🌐 Agente Web (Standalone)")
-    st.caption("Búsqueda web con OpenAI Responses + web_search. No está integrado aún al pipeline principal.")
+    st.header("???? Agente Web (Standalone)")
+    st.caption("B??squeda web con OpenAI Responses + web_search. No est?? integrado a??n al pipeline principal.")
+    st.info("La carga manual de cuotas por imagen ahora vive en la pesta??a `Cuotas Manuales` para evitar confusiones operativas.")
 
     default_web_prompt = (
         "Busca en internet un panorama ACTUAL (prioriza últimos 7 días y, si falta cobertura, amplía hasta 14 días) "
@@ -2663,6 +3851,76 @@ with tab_memory:
                     with open(REVIEWER_LOG_FILE, "r", encoding="utf-8") as _lf:
                         _prev_log = _lf.read()
                     st.code(_prev_log, language="text")
+                except Exception:
+                    st.warning("No se pudo leer el log anterior.")
+
+    st.divider()
+
+    # ── Botón Ejecutar Guardia Nocturno (Fact Checker) ────
+    st.subheader("🌙 Guardia Nocturno (Auditor Factual)")
+    st.caption("Ejecuta el auditor standalone para detectar y auto-corregir alucinaciones cruzando la memoria con búsquedas Web.")
+
+    col_bn1, col_bn2 = st.columns([2, 3])
+    with col_bn1:
+        run_night_watchman = st.button(
+            "🛡️ Activar Guardia Nocturno",
+            type="secondary",
+            key="btn_run_night_watchman",
+            help="Cruza los insights guardados con DuckDuckGo para purgar datos erróneos del historial."
+        )
+
+    WATCHMAN_LOG_FILE = _os.path.join("predictions", "watchman_last_run.log")
+
+    if run_night_watchman:
+        st.info("⏳ Ejecutando Guardia Nocturno. Esto tomará unos minutos dependiendo de las verificaciones necesarias...")
+        try:
+            proc_nw = subprocess.Popen(
+                [sys.executable, "scripts/audit_facts.py"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                bufsize=1,
+            )
+
+            with st.status("🛠️ Auditando Base de Conocimientos...", expanded=True) as status_nw:
+                log_placeholder_nw = st.empty()
+                full_logs_nw = ""
+
+                while True:
+                    line_nw = proc_nw.stdout.readline()
+                    if not line_nw and proc_nw.poll() is not None:
+                        break
+                    if line_nw:
+                        full_logs_nw += line_nw
+                        log_placeholder_nw.code(full_logs_nw[-10000:], language="text")
+
+                try:
+                    _os.makedirs("predictions", exist_ok=True)
+                    with open(WATCHMAN_LOG_FILE, "w", encoding="utf-8") as _lf_nw:
+                        _lf_nw.write(full_logs_nw)
+                except Exception:
+                    pass
+
+                if proc_nw.returncode == 0:
+                    status_nw.update(label="✅ Guardia Nocturno completado!", state="complete", expanded=False)
+                    st.success("Historial auditado y saneado exitosamente.")
+                else:
+                    status_nw.update(label="❌ Error en el Guardia Nocturno", state="error", expanded=True)
+                
+                time.sleep(1)
+                st.rerun()
+
+        except Exception as _e_nw:
+            st.error(f"❌ Error lanzando el Guardia Nocturno: {_e_nw}")
+
+    else:
+        if _os.path.exists(WATCHMAN_LOG_FILE):
+            with st.expander("📋 Log de la última auditoría", expanded=False):
+                try:
+                    with open(WATCHMAN_LOG_FILE, "r", encoding="utf-8") as _lf_nw:
+                        st.code(_lf_nw.read(), language="text")
                 except Exception:
                     st.warning("No se pudo leer el log anterior.")
 

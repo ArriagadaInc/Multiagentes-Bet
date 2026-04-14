@@ -11,6 +11,7 @@ from typing import Optional, Any
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from utils.network_env import sanitize_process_proxy_env
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +68,12 @@ class HTTPClient:
             but we handle additional retry logic in get() method for
             better control over backoff and logging.
         """
+        # Sanitizar proxies inválidos antes de construir la sesión.
+        sanitize_process_proxy_env()
         session = requests.Session()
+        # requests usa variables *_PROXY del entorno por defecto. Ya saneamos el
+        # proceso, pero mantenemos trust_env activo para no romper proxies reales.
+        session.trust_env = True
         
         # Create retry strategy for failed connections
         retry_strategy = Retry(

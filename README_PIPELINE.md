@@ -56,7 +56,7 @@ pip install -r requirements.txt
    ```
 
 **The Odds API:**
-- Ya configurado: `ODDS_API_KEY=ad1d775d001c9771a9467db8f7c3884d`
+- Configurar en `.env`: `ODDS_API_KEY=YOUR_ODDS_API_KEY_HERE`
 
 #### Ejemplo .env completo
 
@@ -70,7 +70,7 @@ FIXTURES_RETRIES=2
 FIXTURES_CACHE_TTL_SECONDS=900
 
 # Odds
-ODDS_API_KEY=ad1d775d001c9771a9467db8f7c3884d
+ODDS_API_KEY=YOUR_ODDS_API_KEY_HERE
 ODDS_BASE_URL=https://api.odds.to
 ODDS_REGIONS=eu
 ODDS_MARKETS=h2h

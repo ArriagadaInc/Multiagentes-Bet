@@ -22,7 +22,7 @@ import json
 import logging
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Any, Optional
 
 from state import AgentState
@@ -327,12 +327,15 @@ def _merge_analyst_web_check_signals(team_insights: Optional[dict], check_result
 # ============================================================================
 
 def _make_llm() -> Optional[Any]:
-    """Crea instancia del LLM según el factory."""
+    """Crea instancia del LLM según el factory.
+    - EXPENSIVE_MODE=true  → Claude claude-sonnet-4-6 (razonamiento profundo)
+    - EXPENSIVE_MODE=false → Gemini con fallback a gpt-4o-mini
+    """
     try:
         from utils.llm_factory import get_llm
         return get_llm(
             temperature=0.3,
-            callbacks=[TokenTrackingCallbackHandler()]
+            profile="analyst_core"
         )
     except Exception as e:
         logger.error(f"Fallo al inicializar el modelo en get_llm: {e}")
@@ -374,10 +377,18 @@ def _find_team_insights(team_name: str, insights: list[dict]) -> Optional[dict]:
 
 def _find_match_odds(home: str, away: str, odds: list[dict]) -> Optional[dict]:
     """
-    Busca odds coincidente usando lógica difusa.
+    Busca odds coincidente usando lógica difusa y normalizada.
     """
     if not odds:
         return None
+        
+    try:
+        from utils.normalizer import TeamNormalizer
+        normalizer = TeamNormalizer()
+        home = normalizer.clean(home) or home
+        away = normalizer.clean(away) or away
+    except Exception:
+        pass
         
     # 1. Match Exacto de nombres normalizados
     target_slug = f"{home} vs {away}".lower().strip()
@@ -386,6 +397,13 @@ def _find_match_odds(home: str, away: str, odds: list[dict]) -> Optional[dict]:
         # Check normal
         g_home = game.get('home_team', '')
         g_away = game.get('away_team', '')
+        
+        try:
+            g_home = normalizer.clean(g_home) or g_home
+            g_away = normalizer.clean(g_away) or g_away
+        except Exception:
+            pass
+            
         g_slug = f"{g_home} vs {g_away}".lower().strip()
         
         if g_slug == target_slug:
@@ -688,7 +706,7 @@ def _build_match_context(
     if not home or not away:
         return None
 
-    match_date = fixture.get("match_date", fixture.get("commence_time", "?"))
+    match_date = fixture.get("match_date", fixture.get("commence_time", fixture.get("utc_date", "?")))
     competition = fixture.get("competition", "?")
 
     home_stats = _find_team_stats(home, stats)
@@ -1079,6 +1097,55 @@ def _save_predictions_history(predictions: list[dict]):
         except (json.JSONDecodeError, OSError):
             existing = []
 
+    def _infer_prediction_date_str(item: dict) -> str:
+        raw = str(item.get("match_date") or "").strip()
+        if raw and raw not in {"None", "null", "?"}:
+            return raw[:10]
+        pid = str(item.get("prediction_id") or item.get("match_id") or "")
+        m = re.search(r"(202\d-\d{2}-\d{2})", pid)
+        if m:
+            return m.group(1)
+        gen = str(item.get("generated_at") or "").strip()
+        if gen and "T" in gen:
+            return gen[:10]
+        return ""
+
+    def _clean_history_entries(items: list[dict]) -> list[dict]:
+        """
+        Higiene operativa del historial:
+        - elimina registros heurísticos
+        - elimina predicciones demasiado futuras para la tabla de evaluación
+        """
+        try:
+            max_future_days = int(os.getenv("PREDICTIONS_HISTORY_MAX_FUTURE_DAYS", "1"))
+        except Exception:
+            max_future_days = 1
+        cutoff = (datetime.now(timezone.utc) + timedelta(days=max_future_days)).strftime("%Y-%m-%d")
+
+        cleaned = []
+        removed_heuristic = 0
+        removed_future = 0
+        for item in items:
+            if str(item.get("analyst_model_id") or "").strip().lower() == "heuristic":
+                removed_heuristic += 1
+                continue
+            date_str = _infer_prediction_date_str(item)
+            if date_str and date_str > cutoff:
+                removed_future += 1
+                continue
+            cleaned.append(item)
+
+        if removed_heuristic or removed_future:
+            logger.info(
+                "Historial limpiado antes de guardar: -%s heuristic, -%s futuros (> %s)",
+                removed_heuristic,
+                removed_future,
+                cutoff,
+            )
+        return cleaned
+
+    existing = _clean_history_entries(existing)
+
     # IDs existentes
     existing_ids = {p.get("prediction_id") for p in existing}
 
@@ -1145,7 +1212,8 @@ def _save_predictions_history(predictions: list[dict]):
         # Si no hay nada nuevo y el CSV ya existe, no hacemos nada extra
         return
 
-    # 3. Guardar JSON
+    # 3. Higiene final + Guardar JSON
+    existing = _clean_history_entries(existing)
     with open(history_file_json, "w", encoding="utf-8") as f:
         json.dump(existing, f, indent=2, ensure_ascii=False)
 
@@ -1625,7 +1693,22 @@ CUOTAS DEL MERCADO:
             if comp_predictions:
                 # Enriquecer con metadata
                 now = datetime.now(timezone.utc).isoformat()
-                model_id = getattr(llm, "model", getattr(llm, "model_name", "unknown"))
+                # Extraer model_id de forma robusta:
+                # - ChatGoogleGenerativeAI: .model
+                # - ChatOpenAI: .model_name
+                # - ChatAnthropic: .model
+                raw_model = (
+                    getattr(llm, "model", None)
+                    or getattr(llm, "model_name", None)
+                    or "unknown"
+                )
+                # Normalizar aliases historicos
+                _MODEL_ALIASES = {"gpt5": "gpt-5", "gpt 5": "gpt-5"}
+                model_id = _MODEL_ALIASES.get(str(raw_model), str(raw_model))
+                # Normalizar nombres largos de Claude para que sean legibles y consistentes
+                if isinstance(model_id, str):
+                    if "claude" in model_id.lower():
+                        model_id = model_id  # Mantener el nombre completo (claude-sonnet-4-6, etc.)
                 for pred in comp_predictions:
                     pred["competition"] = label
                     pred["generated_at"] = now
@@ -1652,12 +1735,17 @@ CUOTAS DEL MERCADO:
                 # Heurística mejorada basada en posición + forma + insights
                 home_pos = home_stats.get("stats", {}).get("position", 99) if home_stats else 99
                 away_pos = away_stats.get("stats", {}).get("position", 99) if away_stats else 99
-                home_form = home_stats.get("stats", {}).get("form", "") if home_stats else ""
-                away_form = away_stats.get("stats", {}).get("form", "") if away_stats else ""
+                
+                # Manejar que get devuelva None explícito desde el origen (API)
+                home_form = (home_stats.get("stats", {}).get("form") or "") if home_stats else ""
+                away_form = (away_stats.get("stats", {}).get("form") or "") if away_stats else ""
 
                 # Contar wins en forma
                 home_wins = home_form.count("W")
                 away_wins = away_form.count("W")
+
+                # Arreglo de fecha a placeholder fallido a real
+                real_date = ctx.get("match_date", str(now))
 
                 # Predicción basada en múltiples factores
                 pos_diff = away_pos - home_pos  # positivo si away es peor (home ventaja)
@@ -1672,7 +1760,7 @@ CUOTAS DEL MERCADO:
                 else:
                     pred, conf = "X", 52
 
-                pid = f"{label}_{ctx['match_date'][:10]}_{ctx['home']}_vs_{ctx['away']}".replace(" ", "_")
+                pid = f"{label}_{real_date[:10]}_{ctx['home']}_vs_{ctx['away']}".replace(" ", "_")
 
                 # Construir rationale y factores
                 key_factors = []
@@ -1706,6 +1794,7 @@ CUOTAS DEL MERCADO:
                     "key_factors": key_factors or [f"Análisis heurístico: {ctx['home']} local"],
                     "risk_factors": risk_factors or ["Márgenes ajustados"],
                     "entities_impact": [],
+                    "analyst_model_id": "heuristic",  # Identificador claro para métrica en UI
                 })
 
             logger.info(f"✓ {label}: {len(matches_ctx)} predicciones heurísticas (sin LLM)")

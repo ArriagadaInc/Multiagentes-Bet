@@ -19,10 +19,19 @@ import json
 import logging
 import os
 import re
-from datetime import datetime, timezone
-from typing import Any, Optional
+import hashlib
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone, timedelta
+from typing import Any, Optional, List
 
 from utils.token_tracker import track_tokens
+from utils.llm_factory import get_llm
+
+try:
+    from langchain_community.tools import DuckDuckGoSearchRun
+    ddg_search = DuckDuckGoSearchRun()
+except Exception:
+    ddg_search = None
 
 try:
     from openai import OpenAI
@@ -32,72 +41,79 @@ except Exception:  # pragma: no cover - falla controlada en runtime si falta SDK
 logger = logging.getLogger(__name__)
 
 
-DEFAULT_ANALYST_WEB_CHECK_MODEL = os.getenv("ANALYST_WEB_CHECK_MODEL", "gpt-4.1")
+DEFAULT_ANALYST_WEB_CHECK_MODEL = os.getenv("ANALYST_WEB_CHECK_MODEL", "gpt-4o")
 DEFAULT_ANALYST_WEB_CHECK_TOOL = os.getenv("ANALYST_WEB_CHECK_TOOL_TYPE", "web_search")
 
+ANALYST_WEB_CHECK_CACHE_FILE = "data/cache/analyst_web_check_cache.json"
+CACHE_TTL_HOURS = 12
 
-def _make_client() -> Optional["OpenAI"]:
-    """Crea cliente OpenAI con timeout configurable."""
-    if OpenAI is None:
-        logger.error("openai package no disponible para analyst_web_check")
-        return None
-    if not os.getenv("OPENAI_API_KEY"):
-        logger.error("OPENAI_API_KEY no configurada")
-        return None
+def _get_cache_key(request: dict) -> str:
+    match_id = str(request.get("match_id", "")).strip()
+    questions = "|".join([str(q).strip() for q in request.get("questions", [])])
+    raw = f"{match_id}::{questions}"
+    return hashlib.md5(raw.encode()).hexdigest()
+
+def _load_cache() -> dict:
+    if os.path.exists(ANALYST_WEB_CHECK_CACHE_FILE):
+        try:
+            with open(ANALYST_WEB_CHECK_CACHE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {}
+
+def _save_cache(cache: dict):
+    os.makedirs(os.path.dirname(ANALYST_WEB_CHECK_CACHE_FILE), exist_ok=True)
     try:
-        timeout_s = float(os.getenv("ANALYST_WEB_CHECK_TIMEOUT_SECONDS", "60"))
-    except ValueError:
-        timeout_s = 60.0
-    return OpenAI(timeout=timeout_s)
+        with open(ANALYST_WEB_CHECK_CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        logger.warning(f"Error guardando caché de Web Check: {e}")
+
+def _get_check_llm():
+    """Obtiene el LLM para web-check."""
+    return get_llm(model_name=DEFAULT_ANALYST_WEB_CHECK_MODEL)
+
+class ContextSignal(BaseModel):
+    type: str = Field(description="injury_news|disciplinary_issue|home_venue_issue|coach_change|player_role_context|other")
+    signal: str = Field(description="señal breve")
+    evidence: str = Field(description="hecho resumido con contexto de rol si aplica")
+    date: Optional[str] = Field(None, description="YYYY-MM-DD o null")
+    confidence: float = Field(default=0.0)
+    is_rumor: bool = Field(default=False)
+    provenance: List[str] = Field(default_factory=lambda: ["analyst_web_check"])
+
+class SourceInfo(BaseModel):
+    title: str
+    url: str
+    publisher: str
+    published_at: Optional[str] = Field(None, description="YYYY-MM-DD o desconocido")
+
+class CheckResult(BaseModel):
+    question: str
+    status: str = Field(description="confirmed|partially_confirmed|unconfirmed|conflicting|not_found")
+    answer_summary: str
+    context_signals: List[ContextSignal] = Field(default_factory=list)
+    sources: List[SourceInfo] = Field(default_factory=list)
+    confidence: float = Field(default=0.0)
+
+class WebCheckOutput(BaseModel):
+    as_of_date: str
+    match_id: str
+    lookback_days: int
+    trigger_reason: str
+    checks: List[CheckResult] = Field(default_factory=list)
 
 
-def _response_to_text(resp: Any) -> str:
-    """
-    Extrae texto de Responses API de forma defensiva.
-    Soporta variantes de SDK que exponen `output_text` o `output`.
-    """
-    txt = getattr(resp, "output_text", None)
-    if isinstance(txt, str) and txt.strip():
-        return txt.strip()
-
-    try:
-        chunks: list[str] = []
-        for item in (getattr(resp, "output", None) or []):
-            if getattr(item, "type", None) != "message":
-                continue
-            for c in (getattr(item, "content", None) or []):
-                if getattr(c, "type", None) in ("output_text", "text"):
-                    t = getattr(c, "text", None)
-                    if isinstance(t, str):
-                        chunks.append(t)
-        if chunks:
-            return "\n".join(chunks).strip()
-    except Exception:
-        pass
-
-    return str(resp)
+def _make_client():
+    """Mantenemos por compatibilidad interna si se forza Expensive Mode."""
+    if OpenAI is None: return None
+    return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-def _strip_markdown_fences(text: str) -> str:
-    """Quita fences ```json si el modelo responde con markdown."""
-    t = (text or "").strip()
-    if t.startswith("```"):
-        t = re.sub(r"^```(?:json)?\s*\n?", "", t)
-        t = re.sub(r"\n?```\s*$", "", t)
-    return t.strip()
-
-
-def _extract_json_candidate(text: str) -> str:
-    """
-    Extrae el bloque JSON principal si el modelo mezcla texto y JSON.
-    Esto hace el parser más resiliente sin cambiar semántica.
-    """
-    t = _strip_markdown_fences(text)
-    i = t.find("{")
-    j = t.rfind("}")
-    if i != -1 and j != -1 and j > i:
-        return t[i : j + 1]
-    return t
+# Helper obsoleto eliminado: _response_to_text
+# Helper obsoleto eliminado: _strip_markdown_fences
+# Helper obsoleto eliminado: _extract_json_candidate
 
 
 def _build_check_prompt(request: dict[str, Any]) -> str:
@@ -150,104 +166,17 @@ CONTEXTO PREVIO (solo para orientar, no asumir que es verdad):
 ALCANCE (muy importante):
 - Prioriza confirmar lesiones, suspendidos, expulsiones, castigos, dudas médicas y sanciones.
 - También puedes confirmar cambios de DT o castigos de localía SI la pregunta lo pide.
-- Si la pregunta menciona un jugador/persona (ej: Assadi, Vidal), puedes buscar una referencia breve útil para pronóstico:
-  quién es, rol (goleador/arquero titular/figura/capitán/DT), y relevancia aproximada en el equipo.
+- Si la pregunta menciona un jugador/persona (ej: Assadi, Vidal), puedes buscar una referencia breve útil para pronóstico.
 - No hagas scouting general de toda la competencia.
 - Si no encuentras confirmación, dilo claramente.
 - Si la info es rumor/no confirmada, márcala como rumor.
 - Incluye fecha cuando exista.
 - Usa español.
-
-Responde SOLO con JSON válido (sin markdown) con esta estructura:
-{{
-  "as_of_date": "{today}",
-  "match_id": "{match_id}",
-  "lookback_days": {lookback_days},
-  "trigger_reason": "{trigger_reason}",
-  "checks": [
-    {{
-      "question": "texto de la pregunta",
-      "status": "confirmed|partially_confirmed|unconfirmed|conflicting|not_found",
-      "answer_summary": "respuesta breve",
-      "context_signals": [
-        {{
-          "type": "injury_news|disciplinary_issue|home_venue_issue|coach_change|player_role_context|other",
-          "signal": "señal breve",
-          "evidence": "hecho resumido con contexto de rol si aplica (ej: goleador, arquero titular, capitán, DT)",
-          "date": "YYYY-MM-DD o null",
-          "confidence": 0.0,
-          "is_rumor": false,
-          "provenance": ["analyst_web_check"]
-        }}
-      ],
-      "sources": [
-        {{
-          "title": "título",
-          "url": "https://...",
-          "publisher": "medio",
-          "published_at": "YYYY-MM-DD o desconocido"
-        }}
-      ],
-      "confidence": 0.0
-    }}
-  ]
-}}
 """.strip()
 
 
-def _validate_check_output(data: dict[str, Any]) -> tuple[bool, list[str]]:
-    """
-    Valida el contrato mínimo del analyst_web_check.
-    Validación suave: tolera faltantes menores para no bloquear prototipado.
-    """
-    errors: list[str] = []
-    if not isinstance(data, dict):
-        return False, ["La salida no es un objeto JSON."]
-
-    if not isinstance(data.get("as_of_date"), str):
-        errors.append("Falta `as_of_date` (string).")
-    if not isinstance(data.get("checks"), list):
-        errors.append("Falta `checks` (list).")
-        return False, errors
-
-    for i, chk in enumerate(data.get("checks") or []):
-        if not isinstance(chk, dict):
-            errors.append(f"checks[{i}] no es objeto.")
-            continue
-        for field in ("question", "status", "answer_summary"):
-            if not isinstance(chk.get(field), str):
-                errors.append(f"checks[{i}].{field} inválido.")
-        if not isinstance(chk.get("context_signals"), list):
-            errors.append(f"checks[{i}].context_signals debe ser lista.")
-        if not isinstance(chk.get("sources"), list):
-            errors.append(f"checks[{i}].sources debe ser lista.")
-    return len(errors) == 0, errors
-
-
-def _repair_json_with_llm(client: "OpenAI", broken_text: str) -> str:
-    """
-    Repara JSON malformado usando una llamada corta sin web_search.
-    Se usa solo si el parser falla.
-    """
-    model = os.getenv("ANALYST_WEB_CHECK_REPAIR_MODEL", "gpt-4.1-mini")
-    prompt = f"""
-Corrige el siguiente JSON MALFORMADO para que sea JSON válido.
-No cambies el significado ni inventes datos.
-Responde SOLO con JSON válido.
-
-JSON MALFORMADO:
-{broken_text}
-""".strip()
-    resp = client.responses.create(model=model, input=prompt, max_output_tokens=3000)
-    
-    # Track tokens manually for direct OpenAI SDK call
-    if hasattr(resp, 'usage') and resp.usage:
-        track_tokens(
-            model=model,
-            prompt_tokens=getattr(resp.usage, 'prompt_tokens', 0),
-            completion_tokens=getattr(resp.usage, 'completion_tokens', 0)
-        )
-    return _response_to_text(resp)
+# Función validación obsoleta eliminada: _validate_check_output
+# Función reparación LLM obsoleta eliminada: _repair_json_with_llm
 
 
 def run_analyst_web_check(request: dict[str, Any]) -> dict[str, Any]:
@@ -256,15 +185,32 @@ def run_analyst_web_check(request: dict[str, Any]) -> dict[str, Any]:
     Este entrypoint está pensado para ser reutilizado por `analyst_agent` en el futuro.
     """
     started_at = datetime.now(timezone.utc).isoformat()
-    client = _make_client()
-    if client is None:
+    llm = _get_check_llm()
+    if llm is None:
         return {
             "ok": False,
-            "error": "OpenAI client no disponible (revisar OPENAI_API_KEY / SDK).",
+            "error": "LLM no disponible (revisar llm_factory).",
             "started_at": started_at,
         }
+        
+    cache_key = _get_cache_key(request)
+    cache = _load_cache()
+    
+    # HIT DE CACHÉ
+    if cache_key in cache:
+        entry = cache[cache_key]
+        saved_at = entry.get("completed_at")
+        if saved_at:
+            try:
+                dt = datetime.fromisoformat(saved_at)
+                if datetime.now(timezone.utc) - dt < timedelta(hours=CACHE_TTL_HOURS):
+                    logger.info("ANALYST WEB CHECK: [HIT] Retornando de caché (key: %s)", cache_key)
+                    entry["from_cache"] = True
+                    return entry
+            except Exception:
+                pass
+    model = getattr(llm, "model_name", getattr(llm, "model", DEFAULT_ANALYST_WEB_CHECK_MODEL))
 
-    model = DEFAULT_ANALYST_WEB_CHECK_MODEL
     tool_type = DEFAULT_ANALYST_WEB_CHECK_TOOL
     prompt = _build_check_prompt(request)
 
@@ -274,48 +220,61 @@ def run_analyst_web_check(request: dict[str, Any]) -> dict[str, Any]:
     )
 
     try:
-        resp = client.responses.create(
-            model=model,
-            input=prompt,
-            tools=[{"type": tool_type}],
-            max_output_tokens=5000,
-        )
-
-        # Track tokens manually for direct OpenAI SDK call
-        if hasattr(resp, 'usage') and resp.usage:
-            track_tokens(
-                model=model,
-                prompt_tokens=getattr(resp.usage, 'prompt_tokens', 0),
-                completion_tokens=getattr(resp.usage, 'completion_tokens', 0)
-            )
-        raw_text = _response_to_text(resp)
-
+        expensive_mode = os.getenv("EXPENSIVE_MODE", "false").lower() in ("true", "1", "yes")
+        
+        llm_with_struct = llm.with_structured_output(WebCheckOutput)
         parsed = None
-        validation_errors: list[str] = []
-        try:
-            parsed = json.loads(_extract_json_candidate(raw_text))
-        except json.JSONDecodeError:
-            logger.info("ANALYST WEB CHECK: JSON inválido, intentando reparación automática...")
-            repaired = _repair_json_with_llm(client, _extract_json_candidate(raw_text))
-            raw_text = raw_text + "\n\n### REPAIRED_JSON\n" + repaired
-            parsed = json.loads(_extract_json_candidate(repaired))
+        raw_text = ""
+        
+        if expensive_mode and "gpt-" in str(model).lower():
+            # Pasada por openai directo obsoleta para structured_output robusto, forzamos Langchain.
+            logger.info("ANALYST WEB CHECK: Utilizando Langchain structured output en lugar de client bruto para %s", model)
+            resp = llm_with_struct.invoke(prompt)
+            if hasattr(resp, "model_dump"):
+                parsed = resp.model_dump()
+            elif hasattr(resp, "dict"):
+                parsed = resp.dict()
+            else:
+                parsed = resp
+        else:
+            # Ruta Económica (Gemini + DDG)
+            search_context = ""
+            if ddg_search:
+                search_context = ddg_search.run(request.get("trigger_reason", "futbol noticias"))
+            
+            full_prompt = f"{prompt}\n\nCONTEXTO BÚSQUEDA WEB:\n{search_context}"
+            resp = llm_with_struct.invoke(full_prompt)
+            if hasattr(resp, "model_dump"):
+                parsed = resp.model_dump()
+            elif hasattr(resp, "dict"):
+                parsed = resp.dict()
+            else:
+                parsed = resp
+            
+            track_tokens(model=model, prompt_tokens=len(full_prompt)//4, completion_tokens=500)
 
-        ok_valid, validation_errors = _validate_check_output(parsed or {})
         result = {
-            "ok": bool(ok_valid),
+            "ok": True if parsed else False,
             "started_at": started_at,
             "completed_at": datetime.now(timezone.utc).isoformat(),
             "model": model,
             "tool_type": tool_type,
             "data": parsed or {},
-            "validation_errors": validation_errors,
+            "validation_errors": [],
             "raw_text": raw_text,
+            "parse_repaired": False,
+            "parse_repair_failed": False,
+            "from_cache": False
         }
-        if ok_valid:
-            logger.info("ANALYST WEB CHECK: salida válida")
-        else:
-            logger.warning("ANALYST WEB CHECK: salida inválida (%d errores)", len(validation_errors))
+        
+        # GUARDAR EN CACHÉ
+        if result["ok"]:
+            cache[cache_key] = result
+            _save_cache(cache)
+            logger.info("ANALYST WEB CHECK: [SAVED] Caché actualizada (key: %s)", cache_key)
+            
         return result
+
 
     except Exception as e:
         logger.error("ANALYST WEB CHECK error: %s", e, exc_info=True)

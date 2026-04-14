@@ -1,0 +1,262 @@
+[
+    {
+        "canonical_name": "fluminense",
+        "official_name": "Fluminense Football Club",
+        "aliases": ["flu", "fluminense fc", "fluminense rio", "tricolor carioca", "torres"]
+    },
+    {
+        "canonical_name": "palmeiras",
+        "official_name": "SE Palmeiras",
+        "aliases": ["palmeiras sp", "verdão", "verdao", "palestra", "palestra italia", "manchester paulista"]
+    },
+    {
+        "canonical_name": "botafogo",
+        "official_name": "Botafogo FR",
+        "aliases": ["botafogo rio", "botafogo de futebol", "estrela solitária", "estrela solitaria", "general severiano"]
+    },
+    {
+        "canonical_name": "cruzeiro",
+        "official_name": "Cruzeiro Esporte Clube",
+        "aliases": ["cruzeiro mg", "raposa", "celeste", "minas gerais"]
+    },
+    {
+        "canonical_name": "ec bahia",
+        "official_name": "EC Bahia",
+        "aliases": ["bahia", "bahia fc", "bahia ba", "tricolor baiano", "bahiano"]
+    },
+    {
+        "canonical_name": "sport club internacional",
+        "official_name": "Sport Club Internacional",
+        "aliases": ["inter", "internacional", "internacional rs", "colorado", "rubro-negro"]
+    },
+    {
+        "canonical_name": "grêmio",
+        "official_name": "Grêmio Football Club",
+        "aliases": ["gremio", "gremio rs", "tricolor", "tricolor gaúcho", "tricolor gaucho"]
+    },
+    {
+        "canonical_name": "atlético mineiro",
+        "official_name": "Clube Atlético Mineiro",
+        "aliases": ["atletico mineiro", "atletico mg", "atletico minas", "galo", "campão de campões", "campeon de campeonex"]
+    },
+    {
+        "canonical_name": "fortaleza",
+        "official_name": "Fortaleza Esporte Clube",
+        "aliases": ["fortaleza ce", "leão do pici", "leao do pici", "leão", "leao"]
+    },
+    {
+        "canonical_name": "santos",
+        "official_name": "Santos Futebol Clube",
+        "aliases": ["santos sp", "peixe", "santista", "meninos da vila"]
+    },
+    {
+        "canonical_name": "corinthians",
+        "official_name": "Sport Club Corinthians Paulista",
+        "aliases": ["corinthians sp", "timão", "timao", "coringão", "coringa"]
+    },
+    {
+        "canonical_name": "são paulo",
+        "official_name": "São Paulo Football Club",
+        "aliases": ["sao paulo", "spfc", "tricolor paulista", "peixada"]
+    },
+    {
+        "canonical_name": "river plate",
+        "official_name": "Club Atlético River Plate",
+        "aliases": ["river", "millonarios", "river buenos aires", "superclásico", "superclasico"]
+    },
+    {
+        "canonical_name": "boca juniors",
+        "official_name": "Club Atlético Boca Juniors",
+        "aliases": ["boca", "xeneize", "bombonera", "boca buenos aires"]
+    },
+    {
+        "canonical_name": "independiente",
+        "official_name": "Club Atlético Independiente",
+        "aliases": ["independiente", "rojo", "independiente ba", "roji-negro", "roji negro"]
+    },
+    {
+        "canonical_name": "racing club",
+        "official_name": "Racing Club",
+        "aliases": ["racing", "racing club", "racing argentina", "ajedrez", "celeste y blanco"]
+    },
+    {
+        "canonical_name": "san lorenzo",
+        "official_name": "Club Atlético San Lorenzo de Almagro",
+        "aliases": ["san lorenzo", "ciclón", "ciclon", "matador", "santo lorenzo"]
+    },
+    {
+        "canonical_name": "vélez sarsfield",
+        "official_name": "Club Atlético Vélez Sarsfield",
+        "aliases": ["velez", "velez sarsfield", "fortín", "fortin", "linojero"]
+    },
+    {
+        "canonical_name": "argentinos juniors",
+        "official_name": "Asociación Atlética Argentinos Juniors",
+        "aliases": ["argentinos", "argentinos juniors", "bicampeón", "bicampeon", "la paternal"]
+    },
+    {
+        "canonical_name": "newell's old boys",
+        "official_name": "Club Atlético Newell's Old Boys",
+        "aliases": ["newells", "newell", "newell's old boys", "lepra", "rosarino"]
+    },
+    {
+        "canonical_name": "olympia",
+        "official_name": "Club Olympia",
+        "aliases": ["olimpia", "olimpia paraguay", "olimpia pa", "décima", "decima"]
+    },
+    {
+        "canonical_name": "cerro porteño",
+        "official_name": "Cerro Porteño",
+        "aliases": ["cerro porteno", "rojo habanero", "azulgrana", "cerro"]
+    },
+    {
+        "canonical_name": "nacional uruguay",
+        "official_name": "Club Nacional de Football",
+        "aliases": ["nacional", "nacional uruguay", "tricolor", "bolso"]
+    },
+    {
+        "canonical_name": "peñarol",
+        "official_name": "Peñarol",
+        "aliases": ["penarol", "peñarol uruguay", "carbonero", "manya"]
+    },
+    {
+        "canonical_name": "millonarios colombia",
+        "official_name": "Millonarios Fútbol Club",
+        "aliases": ["millonarios", "millonarios colombia", "embajador", "azul cielo"]
+    },
+    {
+        "canonical_name": "atlético nacional",
+        "official_name": "Atlético Nacional",
+        "aliases": ["atletico nacional", "nacional", "nacional colombia", "verde", "verdolaga", "millo 1946"]
+    },
+    {
+        "canonical_name": "colo-colo",
+        "official_name": "Club Social y Deportivo Colo-Colo",
+        "aliases": ["colo colo", "colocolo", "cacique", "alba blanca"]
+    },
+    {
+        "canonical_name": "universidad de chile",
+        "official_name": "Club Universidad de Chile",
+        "aliases": ["u de chile", "la u", "azules", "chuncho"]
+    },
+    {
+        "canonical_name": "alianza lima",
+        "official_name": "Alianza Lima",
+        "aliases": ["alianza", "alianza lima", "íntimos", "intimos", "blanquiazul"]
+    },
+    {
+        "canonical_name": "sporting cristal",
+        "official_name": "Sporting Cristal",
+        "aliases": ["sporting", "sporting cristal", "rimense", "celeste"]
+    },
+    {
+        "canonical_name": "the strongest",
+        "official_name": "The Strongest",
+        "aliases": ["strongest", "the strongest", "the strongest bolivia", "millonarios altiplano", "pumas"]
+    },
+    {
+        "canonical_name": "barcelona",
+        "official_name": "Barcelona Sporting Club",
+        "aliases": ["barcelona", "barcelona ecuador", "barcelona sc", "toreros", "canario"]
+    },
+    {
+        "canonical_name": "estudiantes de mérida",
+        "official_name": "Estudiantes de Mérida",
+        "aliases": ["estudiantes", "estudiantes venezuela", "estudiantes merida", "blanco-azules", "blanco azules"]
+    },
+    {
+        "canonical_name": "cs independiente rivadavia",
+        "official_name": "CS Independiente Rivadavia",
+        "aliases": ["independiente rivadavia", "rivadavia", "cs rivadavia"]
+    },
+    {
+        "canonical_name": "club bolívar",
+        "official_name": "Club Bolívar",
+        "aliases": ["bolívar", "bolivar", "club bolivar", "bolívar bolivia", "bolivar bolivia"]
+    },
+    {
+        "canonical_name": "deportivo la guaira",
+        "official_name": "Deportivo La Guaira FC",
+        "aliases": ["la guaira", "deportivo la guaira", "guaira"]
+    },
+    {
+        "canonical_name": "barcelona",
+        "official_name": "Barcelona SC",
+        "aliases": ["barcelona ecuador", "barcelona sc", "barcelona sporting", "toreros", "amarillo"]
+    },
+    {
+        "canonical_name": "libertad",
+        "official_name": "Club Libertad",
+        "aliases": ["libertad", "libertad paraguay", "libertad pa", "azulgrana"]
+    },
+    {
+        "canonical_name": "universitario",
+        "official_name": "Universitario de Deportes",
+        "aliases": ["universitario", "universitario peru", "crema", "costado"]
+    },
+    {
+        "canonical_name": "melgar",
+        "official_name": "Fútbol Club Melgar",
+        "aliases": ["melgar", "melgar peru", "rojo dominante", "rojinegro"]
+    },
+    {
+        "canonical_name": "defensa y justicia",
+        "official_name": "Club de Defensa y Justicia",
+        "aliases": ["defensa y justicia", "defensa", "halcón rojo"]
+    },
+    {
+        "canonical_name": "flamengo",
+        "official_name": "Clube de Regatas do Flamengo",
+        "aliases": ["flamengo", "flamengo rio", "rubro negro", "mangueira"]
+    },
+    {
+        "canonical_name": "saprissa",
+        "official_name": "Deportivo Saprissa",
+        "aliases": ["saprissa", "saprissa costa rica", "morado"]
+    },
+    {
+        "canonical_name": "cartaginés",
+        "official_name": "Cartaginés Football Club",
+        "aliases": ["cartaginés", "cartaginex", "cartagenica"]
+    },
+    {
+        "canonical_name": "emelec",
+        "official_name": "Club de El Fútbol Emelec",
+        "aliases": ["emelec", "emelec ecuador", "millonario"]
+    },
+    {
+        "canonical_name": "américa",
+        "official_name": "América de Cali",
+        "aliases": ["américa", "america", "américa de cali", "america de cali", "rojo", "scarlet"]
+    },
+    {
+        "canonical_name": "deportivo pasto",
+        "official_name": "Deportivo Pasto",
+        "aliases": ["pasto", "deportivo pasto", "pasto colombia"]
+    },
+    {
+        "canonical_name": "estudiantes de la plata",
+        "official_name": "Club Estudiantes de La Plata",
+        "aliases": ["estudiantes lp", "el pincha", "estudiantes", "pincha", "lp"]
+    },
+    {
+        "canonical_name": "cusco fc",
+        "official_name": "Cusco Fútbol Club",
+        "aliases": ["cusco", "real garcilaso", "cusco peru", "los dorados"]
+    },
+    {
+        "canonical_name": "ldu quito",
+        "official_name": "Liga Deportiva Universitaria de Quito",
+        "aliases": ["ldu", "liga de quito", "liga", "albos", "rey de copas ecuador"]
+    },
+    {
+        "canonical_name": "coquimbo unido",
+        "official_name": "Coquimbo Unido",
+        "aliases": ["coquimbo", "los piratas", "el pirata", "aurinegro"]
+    },
+    {
+        "canonical_name": "mirassol sp",
+        "official_name": "Mirassol Futebol Clube",
+        "aliases": ["mirassol", "mirassol fc", "leão da alta", "leao da alta"]
+    }
+]

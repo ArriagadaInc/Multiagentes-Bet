@@ -92,8 +92,14 @@ def evaluate_signal_suspicion(
     elif subject_type in {"coach", "case"} and sig_type in {"form", "recent_form"}:
         mismatch_triggered = True
     elif subject_type == "unknown":
-        if re.search(r'\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\b', str(sig.get("signal", ""))):
-            mismatch_triggered = True
+        low_risk_unknown_types = {
+            "motivation", "motivacion", "motivación", "narrativa", "psychological",
+            "contexto_tactico", "tactical", "form", "forma_reciente", "forma reciente",
+            "momentum", "institutional", "institucional", "contexto_jornada"
+        }
+        if sig_type.lower() not in low_risk_unknown_types:
+            if re.search(r'\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\b', str(sig.get("signal", ""))):
+                mismatch_triggered = True
             
     if mismatch_triggered:
         opponent_types = {"opponent_form", "opponent_crisis", "opponent_strength", "opponent_availability", "opponent_schedule"}
@@ -215,8 +221,8 @@ def normalize_signal_fields(sig: Dict[str, Any], target_team: str, is_home: bool
 
 def extract_observed_players(team_dict: Dict) -> Set[str]:
     players = set()
-    if not team_dict or "insights" not in team_dict: return players
-    for sig in team_dict["insights"].get("context_signals", []):
+    if not team_dict or not team_dict.get("insights"): return players
+    for sig in (team_dict["insights"].get("context_signals") or []):
         pl = sig.get("player")
         if pl and str(pl).strip().lower() not in ["none", "null", ""]:
             players.add(str(pl).strip().lower())
@@ -245,7 +251,8 @@ def partition_match_signals(match_context: Dict[str, Any], force_recompute: bool
     # Recolectar señales
     for side, team_name in [("home", home_team), ("away", away_team)]:
         side_dict = match_context.get(side, {})
-        signals = side_dict.get("insights", {}).get("context_signals", [])
+        ins_dict = side_dict.get("insights") or {}
+        signals = ins_dict.get("context_signals") or []
         
         for sig in signals:
             if not isinstance(sig, dict): continue

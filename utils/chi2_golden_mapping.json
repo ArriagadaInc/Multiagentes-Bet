@@ -1,0 +1,107 @@
+[
+    {
+        "canonical_name": "magallanes",
+        "official_name": "Club Deportivo Magallanes",
+        "aliases": ["deportes magallanes", "manojito de claveles", "la academia", "carabeleros", "albicelestes"]
+    },
+    {
+        "canonical_name": "rangers",
+        "official_name": "Rangers de Talca",
+        "aliases": ["rangers de talca", "piducanos", "los rojinegros", "el ranguerito"]
+    },
+    {
+        "canonical_name": "deportes la serena",
+        "official_name": "Club de Deportes La Serena",
+        "aliases": ["la serena", "granates", "papayeros", "los granates", "los papayeros"]
+    },
+    {
+        "canonical_name": "deportes limache",
+        "official_name": "Deportes Limache",
+        "aliases": ["limache", "tomateros", "los tomateros"]
+    },
+    {
+        "canonical_name": "curicó unido",
+        "official_name": "Club de Deportes Curicó Unido",
+        "aliases": ["provincial curico unido", "curico unido", "curico", "torteros", "los albirrojos", "el curi"]
+    },
+    {
+        "canonical_name": "san marcos de arica",
+        "official_name": "Club Deportivo San Marcos de Arica",
+        "aliases": ["san marcos", "arica", "los bravos del morro", "el santo", "arica fc"]
+    },
+    {
+        "canonical_name": "deportes antofagasta",
+        "official_name": "Club de Deportes Antofagasta",
+        "aliases": ["antofagasta", "los pumas", "cda", "el cuadro nortino", "cd antofagasta", "antofagasta portuario"]
+    },
+    {
+        "canonical_name": "deportes recoleta",
+        "official_name": "Deportes Recoleta",
+        "aliases": ["recoleta", "el recole", "reco", "los albiazules"]
+    },
+    {
+        "canonical_name": "santiago morning",
+        "official_name": "santiago morning",
+        "aliases": ["el morning", "chaguito", "chaguito morning", "bohemios", "microbuseros"]
+    },
+    {
+        "canonical_name": "universidad de concepción",
+        "official_name": "Club Deportivo Universidad de Concepción",
+        "aliases": ["u de concepcion", "u. de concepcion", "univ de concepcion", "u concepcion", "udc", "el campanil", "u de conce"]
+    },
+    {
+        "canonical_name": "deportes santa cruz",
+        "official_name": "Deportes Santa Cruz",
+        "aliases": ["santa cruz", "union santa cruz", "los unionistas", "comerciantes"]
+    },
+    {
+        "canonical_name": "ac barnechea",
+        "official_name": "Athletic Club Barnechea",
+        "aliases": ["barnechea", "el barne", "huaicocheros", "los de lo barnechea", "acb"]
+    },
+    {
+        "canonical_name": "san luis de quillota",
+        "official_name": "San Luis de Quillota",
+        "aliases": ["san luis", "canarios", "los de quillota", "quillotanos", "cd san luis", "san luis quillota"]
+    },
+    {
+        "canonical_name": "unión san felipe",
+        "official_name": "Club de Deportes Unión San Felipe",
+        "aliases": ["union san felipe", "san felipe", "el uní uní", "el uni uni", "aconcagüinos"]
+    },
+    {
+        "canonical_name": "deportes temuco",
+        "official_name": "Club de Deportes Temuco",
+        "aliases": ["temuco", "el pije", "albiverdes", "los de la araucania", "pijes", "cd temuco", "club deportes temuco"]
+    },
+    {
+        "canonical_name": "santiago wanderers",
+        "official_name": "Club de Deportes Santiago Wanderers",
+        "aliases": ["wanderers", "los caturros", "el decano", "el vagabundo", "wanderers de valparaiso"]
+    },
+    {
+        "canonical_name": "unión española",
+        "official_name": "Unión Española",
+        "aliases": ["union española", "los hispanos", "el cuadro de santa laura", "la furia roja"]
+    },
+    {
+        "canonical_name": "puerto montt",
+        "official_name": "Club de Deportes Puerto Montt",
+        "aliases": ["deportes puerto montt", "los delfines", "el velero", "los hijos del temporal"]
+    },
+    {
+        "canonical_name": "deportes copiapó",
+        "official_name": "Club de Deportes Copiapó",
+        "aliases": ["copiapo", "el leon de atacama", "el leon", "deportes copiapo"]
+    },
+    {
+        "canonical_name": "deportes iquique",
+        "official_name": "Club de Deportes Iquique",
+        "aliases": ["iquique", "los dragones celestes", "el cdi", "dragones"]
+    },
+    {
+        "canonical_name": "cobreloa",
+        "official_name": "Club de Deportes Cobreloa",
+        "aliases": ["cobreloa calama", "los loínos", "el zorro del desierto", "los naranjas"]
+    }
+]

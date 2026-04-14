@@ -33,6 +33,8 @@ from langgraph.graph import StateGraph, START, END
 from langchain_core.messages import AIMessage
 
 from state import AgentState
+from agents.fixtures_agent import fixtures_fetcher_node
+from agents.web_fixtures_agent import web_fixtures_fetcher_node, web_odds_fetcher_node
 from agents.odds_agent import odds_fetcher_node
 from agents.journalist_agent import journalist_agent_node
 from agents.insights_agent import insights_agent_node
@@ -46,36 +48,124 @@ from agents.bettor_agent import bettor_agent_node
 logger = logging.getLogger(__name__)
 
 
+
+def prune_fixtures_node(state: AgentState) -> dict:
+    """
+    Guillotina Temprana (v14.14): Tras agotar los fallbacks de cuotas (API/OCR/Web), 
+    descarta de state["fixtures"] a cualquier partido que matemáticamente
+    carezca de cuotas. Esto previene que Agentes costosos (YouTube/Stats) se cobren
+    investigación sobre partidos que no se pueden apostar.
+    """
+    from utils.normalizer import TeamNormalizer
+    normalizer = TeamNormalizer()
+    
+    odds = state.get("odds_canonical") or []
+    fixtures = state.get("fixtures") or []
+    
+    if not fixtures:
+        return {"fixtures": []}
+        
+    if not odds:
+        # No hay mercado total
+        logger.warning(f"  🔪 CRIBADORA: Eliminados todos los {len(fixtures)} partidos por falta global de mercado.")
+        return {"fixtures": []}
+        
+    odds_slugs = set()
+    for o in odds:
+        h = normalizer.clean(o.get("home_team", "")) or o.get("home_team", "").lower()
+        a = normalizer.clean(o.get("away_team", "")) or o.get("away_team", "").lower()
+        odds_slugs.add(f"{h} vs {a}")
+        if o.get("match_key"):
+            odds_slugs.add(o.get("match_key"))
+            
+    survivors = []
+    dropped = 0
+    
+    for fix in fixtures:
+        f_h = normalizer.clean(fix.get("home_team", "")) or fix.get("home_team", "").lower()
+        f_a = normalizer.clean(fix.get("away_team", "")) or fix.get("away_team", "").lower()
+        f_slug = f"{f_h} vs {f_a}"
+        
+        match_found = False
+        if f_slug in odds_slugs:
+            match_found = True
+        else:
+            # Reintento parcial fallback (subcadena de nombres ya normalizados)
+            for slug in odds_slugs:
+                if f_h in slug and f_a in slug:
+                    match_found = True
+                    break
+                    
+        if match_found:
+            survivors.append(fix)
+        else:
+            short_name = f"{fix.get('home_team')} vs {fix.get('away_team')}"
+            logger.info(f"    - Drop temprano (Sin Mercado): {short_name}")
+            dropped += 1
+            
+    if dropped > 0:
+        logger.warning(f"  🔪 CRIBADORA: {dropped} partidos purgados previo al Análisis profundo (Quedan: {len(survivors)}).")
+        
+    return {"fixtures": survivors}
+
+
+def should_continue(state: AgentState) -> str:
+    """
+    Router que decide continuar o abortar el pipeline.
+    Nueva regla v13.7: si NO hay cuotas (odds) tras los fetchers iniciales,
+    se DETIENE el pipeline para evitar predicciones sin mercado.
+    """
+    has_odds = state.get("odds_canonical") and len(state["odds_canonical"]) > 0
+    has_fixtures = state.get("fixtures") and len(state["fixtures"]) > 0
+
+    logger.info(
+        f"PIPELINE CHECK: Fixtures count={len(state.get('fixtures') or [])} | Odds count={len(state.get('odds_canonical') or [])}"
+    )
+
+    # Abort total si no hay ni fixtures ni odds
+    if not has_odds and not has_fixtures:
+        logger.warning("\n" + "!" * 80)
+        logger.warning("PIPELINE ABORTED: No matches found in any competition.")
+        logger.warning(
+            "Tried: [Agente #1 API-Football, Agente #1.1 Web Scraper, Agente #2 The Odds API, Agente #2.1 Web Odds]"
+        )
+        logger.warning("!" * 80 + "\n")
+        return END
+
+    # v13.7: Abortar si no hay odds (aunque existan fixtures)
+    if not has_odds:
+        logger.warning("\n" + "!" * 80)
+        logger.warning("PIPELINE ABORTED: No market odds available after initial agents.")
+        logger.warning("Regla v13.7: sin cuotas → no hay predicciones ni etapas posteriores.")
+        logger.warning("!" * 80 + "\n")
+        return END
+
+    return "stats_agent"
+
+
 def build_pipeline() -> StateGraph:
     """
     Build and return the LangGraph StateGraph for the multiagent pipeline.
     
     Topology:
-    - START -> fixtures_fetcher_node (Agente #1)
-    - fixtures_fetcher_node -> odds_fetcher_node (Agente #2)
-    - odds_fetcher_node -> END
-    
-    Data Flow:
-    Each node:
-    1. Reads from state (shared dictionary)
-    2. Performs its operation
-    3. Updates state with results
-    4. Returns modified state
+    - START -> odds_fetcher (Agente #1)
+    - odds_fetcher -> should_continue (router)
+    - should_continue -> stats_agent (if matches) OR END (if empty)
+    - stats_agent onwards (linear flow until END)
     
     Returns:
         StateGraph object ready to compile and invoke
-    
-    Example:
-        >>> graph = build_pipeline()
-        >>> compiled = graph.compile()
-        >>> result = compiled.invoke(initial_state)
     """
     
     # Create state graph
     graph = StateGraph(AgentState)
 
     # ── Nodos ─────────────────────────────────────────────────────────────────
-    graph.add_node("odds_fetcher",     odds_fetcher_node)      # Agente #1: partidos + cuotas
+    graph.add_node("fixtures_fetcher", fixtures_fetcher_node)  # Agente #1: fixtures oficiales
+    graph.add_node("web_fixtures_fetcher", web_fixtures_fetcher_node) # Agente #1.1: respaldo web
+    graph.add_node("odds_fetcher",     odds_fetcher_node)      # Agente #2: partidos + cuotas
+    graph.add_node("web_odds_fetcher", web_odds_fetcher_node)  # Agente #2.1: respaldo web de cuotas
+    graph.add_node("prune_fixtures", prune_fixtures_node)    # Agente Guardián: Guillotina de Fixtures
     graph.add_node("stats_agent",      stats_agent_node)       # Agente #2: estadísticas ESPN
     graph.add_node("journalist_agent", journalist_agent_node)  # Agente #3: descubrimiento YouTube
     graph.add_node("web_agent",        web_agent_node)         # Agente #3.5: contexto web por torneo
@@ -85,9 +175,24 @@ def build_pipeline() -> StateGraph:
     graph.add_node("analyst_agent",    analyst_agent_node)     # Agente #6: predicciones
     graph.add_node("bettor_agent",     bettor_agent_node)      # Agente #7: tips de apuesta
 
-    # ── Aristas (flujo lineal) ─────────────────────────────────────────────────
-    graph.add_edge(START,               "odds_fetcher")
-    graph.add_edge("odds_fetcher",      "stats_agent")
+    # ── Aristas y Router ───────────────────────────────────────────────────────
+    graph.add_edge(START,               "fixtures_fetcher")
+    graph.add_edge("fixtures_fetcher",  "web_fixtures_fetcher")
+    graph.add_edge("web_fixtures_fetcher", "odds_fetcher")
+    graph.add_edge("odds_fetcher",     "web_odds_fetcher")
+    
+    graph.add_edge("web_odds_fetcher", "prune_fixtures")
+    
+    # Router después de fetcher/poda para abortar si no nos quedan partidos apostables
+    graph.add_conditional_edges(
+        "prune_fixtures",
+        should_continue,
+        {
+            "stats_agent": "stats_agent",
+            END: END
+        }
+    )
+    
     graph.add_edge("stats_agent",       "journalist_agent")
     graph.add_edge("journalist_agent",  "web_agent")
     graph.add_edge("web_agent",         "insights_agent")
@@ -98,9 +203,8 @@ def build_pipeline() -> StateGraph:
     graph.add_edge("bettor_agent",      END)
 
     logger.info(
-        "Pipeline: START → odds → stats → journalist → web_agent → insights → normalizer → gate → analyst → bettor → END"
+        "Pipeline: START → odds → [router] → stats → journalist → web_agent → insights → normalizer → gate → analyst → bettor → END"
     )
-
 
     return graph
 

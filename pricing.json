@@ -1,0 +1,26 @@
+{
+  "gpt-5.1": {
+    "prompt_per_1m_usd": 15.0,
+    "completion_per_1m_usd": 45.0,
+    "web_search_input_per_1m_usd": 15.0,
+    "_comment": "Estimated public pricing (preview model)"
+  },
+  "gpt-4.1": {
+    "prompt_per_1m_usd": 2.0,
+    "completion_per_1m_usd": 10.0,
+    "web_search_input_per_1m_usd": 2.0,
+    "_comment": "OpenAI Oct 2024 pricing"
+  },
+  "gpt-4.1-mini": {
+    "prompt_per_1m_usd": 0.40,
+    "completion_per_1m_usd": 1.60,
+    "web_search_input_per_1m_usd": 0.40,
+    "_comment": "OpenAI Oct 2024 pricing - CORRECT UNIT: USD per 1M tokens"
+  },
+  "gemini-flash-latest": {
+    "prompt_per_1m_usd": 0.035,
+    "completion_per_1m_usd": 0.30,
+    "web_search_input_per_1m_usd": 0.035,
+    "_comment": "Google pricing (1M = 1_000_000 tokens)"
+  }
+}

@@ -68,12 +68,41 @@ class TeamStatsCanonical(BaseModel):
     lineup: Optional[Lineup] = None
     match_facts: List[MatchFact] = []
     
-    # Nombre canónico normalizado (sin variaciones de proveedores)
-    canonical_name: Optional[str] = None
-    
-    # Metadatos de calidad sugeridos por Gepeto
+    # Metadatos de calidad sugeridos para el pipeline
     data_quality_score: float = Field(default=1.0, ge=0.0, le=1.0)
     quality_notes: List[str] = []
     
     # Campos avanzados para UCL (FBref/Understat)
     advanced_stats: Dict[str, Any] = {}
+
+
+class CanonicalSignal(BaseModel):
+    """Contrato canónico para señales contextuales consumibles por el pipeline."""
+    team: str
+    competition: str
+    type: str
+    signal: str
+    evidence: Optional[str] = ""
+    date: Optional[str] = None
+    confidence: float = Field(default=0.4, ge=0.0, le=1.0)
+    is_rumor: bool = False
+    provenance: List[str] = []
+    source_urls: List[str] = []
+
+    subject_type: str = "unknown"
+    epistemic_status: str = "HECHO"
+    impact_axis: str = "general"
+    impact_level: str = "medio"
+    source_type: str = "unknown"
+    source_quality: float = Field(default=0.5, ge=0.0, le=1.0)
+    time_horizon: str = "short_term"
+    relevance_to_match: str = "direct"
+    relevance_to_1x2: str = "medium"
+    freshness_score: float = Field(default=0.5, ge=0.0, le=1.0)
+    trust_score: float = Field(default=0.5, ge=0.0, le=1.0)
+    conflict_score: float = Field(default=0.0, ge=0.0, le=1.0)
+    final_signal_score: float = Field(default=0.5, ge=0.0, le=1.0)
+    resolution_status: str = "active"
+    raw_excerpt: str = ""
+    reasoning_note: str = ""
+    impact_note: str = ""

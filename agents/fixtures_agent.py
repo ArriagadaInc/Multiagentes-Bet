@@ -16,10 +16,12 @@ import os
 import logging
 from typing import Optional, Any
 from datetime import datetime, timedelta
+from copy import deepcopy
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from state import AgentState
 from utils.http import HTTPClient
 from utils.cache import CacheManager
+from utils.normalizer import TeamNormalizer
 
 logger = logging.getLogger(__name__)
 
@@ -166,8 +168,10 @@ class FixturesFetcher:
             f"status={status}, date_from={date_from}, date_to={date_to}"
         )
         
-        # Try cache first
-        cached = self.cache.load("fixtures", competition_code, status)
+        # Try cache first (include date window in cache key to avoid stale ranges)
+        window_sig = f"{date_from or 'none'}_{date_to or 'none'}"
+        cache_key = f"{competition_code}_{window_sig}"
+        cached = self.cache.load("fixtures", cache_key, status)
         if cached is not None:
             logger.debug(f"Cache hit for fixtures_{competition_code}_{status}")
             return {
@@ -210,8 +214,8 @@ class FixturesFetcher:
                 "cache_hit": False
             }
         
-        # Save to cache
-        self.cache.save(data, "fixtures", competition_code, status)
+        # Save to cache (keyed by competition + date window)
+        self.cache.save(data, "fixtures", cache_key, status)
         
         return {
             "success": True,
@@ -252,9 +256,9 @@ class FixturesFetcher:
             return {"success": False, "error": err or f"HTTP {status}", "league_id": None, "season": None}
 
         resp = data.get("response", []) if isinstance(data, dict) else []
-        # Heuristic: prefer top-tier names, avoid "Primera B"
-        preferred_substrings = ["campeonato nacional", "primera division", "primera división", "primera" ]
-        exclude_substrings = ["primera b", "segunda", "copa", "supercopa"]
+        # Heuristic: prefer top-tier names
+        preferred_substrings = ["campeonato nacional", "primera division", "primera división", "primera", "primera b", "ascenso" ]
+        exclude_substrings = ["segunda", "copa", "supercopa"]
 
         league_id = None
         season = None
@@ -543,6 +547,142 @@ class FixturesFetcher:
         logger.info(f"Normalized {len(normalized)} fixtures for {competition_label}")
         return normalized
 
+# --- Temporal Integrity Filter (TIF) ---
+
+def _is_null_fixture(fx: dict) -> bool:
+    nulls = {"None", "TBD", "Unknown", "", "-", "null"}
+    h = str(fx.get("home_team", "")).strip()
+    a = str(fx.get("away_team", "")).strip()
+    if not h or not a or h in nulls or a in nulls or h.lower() == "none" or a.lower() == "none":
+        return True
+    return False
+
+def _build_series_key(fx: dict, normalizer: TeamNormalizer) -> str:
+    comp = str(fx.get("competition", "")).upper()
+    h = normalizer.clean(fx.get("home_team", ""))
+    a = normalizer.clean(fx.get("away_team", ""))
+    pair = "__".join(sorted([h, a]))
+    return f"{comp}::{pair}"
+
+def _safe_parse_utc_date(fx: dict) -> Optional[datetime]:
+    d = str(fx.get("utc_date", ""))
+    if not d: return None
+    try:
+        return datetime.fromisoformat(d.replace('Z', '+00:00'))
+    except Exception:
+        return None
+
+def _fixture_in_window(fx: dict, date_from: Optional[str], date_to: Optional[str]) -> bool:
+    """
+    Defensive local date filter for fixtures.
+
+    Some providers/endpoints may ignore or widen the remote date window.
+    We re-apply the requested range locally so downstream agents never see
+    out-of-window fixtures and therefore do not trigger useless odds/web work.
+    """
+    if not (date_from and date_to):
+        return True
+    parsed = _safe_parse_utc_date(fx)
+    if not parsed:
+        return False
+    try:
+        start = datetime.fromisoformat(f"{date_from}T00:00:00+00:00")
+        end = datetime.fromisoformat(f"{date_to}T23:59:59+00:00")
+    except Exception:
+        return True
+    return start <= parsed <= end
+
+def _source_rank(fx: dict) -> int:
+    p = str(fx.get("provider", "")).lower()
+    if p in ["api-football", "football-data"]: return 3
+    if p == "web_fallback": return 2
+    return 1
+
+def _completeness_score(fx: dict) -> int:
+    score = 0
+    for k, v in fx.items():
+        if v is not None and v != "" and v != "UNKNOWN":
+            score += 1
+    return score
+
+def postprocess_fixtures_temporal_integrity(fixtures: list[dict]) -> tuple[list[dict], list[dict]]:
+    """
+    Temporal Integrity Filter (TIF).
+    Elimina fixtures nulos, deduplica legs futuras asumiendo que un mismo
+    par de equipos no debería jugar > 1 vez en una ventana corta.
+    Sobrevive sólo el fixture más próximo.
+    """
+    dropped = []
+    valid = []
+    normalizer = TeamNormalizer()
+
+    for fx in fixtures:
+        if _is_null_fixture(fx):
+            dropped.append({"fixture": deepcopy(fx), "reason": "null_slot", "pair_key": "null"})
+            continue
+        
+        fx_copy = deepcopy(fx)
+        fx_copy["series_key"] = _build_series_key(fx_copy, normalizer)
+        fx_copy["parsed_utc_date"] = _safe_parse_utc_date(fx_copy)
+        
+        if not fx_copy["parsed_utc_date"]:
+            dropped.append({"fixture": deepcopy(fx), "reason": "invalid_date", "pair_key": fx_copy["series_key"]})
+            continue
+            
+        valid.append(fx_copy)
+
+    valid.sort(key=lambda x: x["parsed_utc_date"])
+
+    selected = {}
+    for fx in valid:
+        key = fx["series_key"]
+        if key not in selected:
+            selected[key] = fx
+            continue
+
+        current = selected[key]
+        should_replace = False
+        
+        if fx["parsed_utc_date"] < current["parsed_utc_date"]:
+            should_replace = True
+        elif fx["parsed_utc_date"] == current["parsed_utc_date"]:
+            if _source_rank(fx) > _source_rank(current):
+                should_replace = True
+            elif _completeness_score(fx) > _completeness_score(current):
+                should_replace = True
+
+        if should_replace:
+            dropped.append({
+                "dropped_fixture_id": current.get("fixture_id"),
+                "reason": "duplicate_future_leg",
+                "competition_key": current.get("competition"),
+                "pair_key": key,
+                "kept_fixture_id": fx.get("fixture_id"),
+                "dropped_utc_date": current.get("utc_date"),
+                "kept_utc_date": fx.get("utc_date"),
+                "source": current.get("provider")
+            })
+            selected[key] = fx
+        else:
+            dropped.append({
+                "dropped_fixture_id": fx.get("fixture_id"),
+                "reason": "duplicate_future_leg",
+                "competition_key": fx.get("competition"),
+                "pair_key": key,
+                "kept_fixture_id": current.get("fixture_id"),
+                "dropped_utc_date": fx.get("utc_date"),
+                "kept_utc_date": current.get("utc_date"),
+                "source": fx.get("provider")
+            })
+
+    cleaned = []
+    for fx in selected.values():
+        clean_fx = {k: v for k, v in fx.items() if k not in ["series_key", "parsed_utc_date"]}
+        cleaned.append(clean_fx)
+
+    cleaned.sort(key=lambda x: str(x.get("utc_date", "")))
+    return cleaned, dropped
+
 
 def fixtures_fetcher_node(state: AgentState) -> AgentState:
     """
@@ -590,11 +730,24 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
         return state
     
     # Initialize containers
-    state["fixtures"] = []
-    state["fixtures_raw"] = {}
-    state["meta"]["fixtures_counts"] = {}
-    state["meta"]["errors"]["fixtures"] = {}
-    state["meta"]["cache_hits"]["fixtures"] = 0
+    if state.get("fixtures") is None:
+        state["fixtures"] = []
+    
+    if state.get("fixtures_raw") is None:
+        state["fixtures_raw"] = {}
+        
+    if "fixtures_counts" not in state["meta"]:
+        state["meta"]["fixtures_counts"] = {}
+        
+    if "errors" not in state["meta"]:
+        state["meta"]["errors"] = {}
+    if "fixtures" not in state["meta"]["errors"]:
+        state["meta"]["errors"]["fixtures"] = {}
+        
+    if "cache_hits" not in state["meta"]:
+        state["meta"]["cache_hits"] = {}
+    if "fixtures" not in state["meta"]["cache_hits"]:
+        state["meta"]["cache_hits"]["fixtures"] = 0
     
     start_time = datetime.now()
     
@@ -612,7 +765,7 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
         logger.info(f"\n>>> Fetching {comp_label} (code={comp_code})...")
 
         provider = (comp.get("fixtures_provider") or "football-data").lower()
-        if comp_label == "CHI1" and provider == "api-football":
+        if (comp_label == "CHI1" or comp_label == "CHI2") and provider == "api-football":
             # Explicit override or automatic resolution
             league_id = comp.get("api_football_league_id")
             season = comp.get("api_football_season")
@@ -620,7 +773,7 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
                 res = fetcher._api_football_get_league_and_season(country="Chile", search="Primera")
                 if not res.get("success"):
                     err = res.get("error") or "league/season resolution failed"
-                    logger.error(f"Error resolving CHI1 league via API-FOOTBALL: {err}")
+                    logger.error(f"Error resolving {comp_label} league via API-FOOTBALL: {err}")
                     state["meta"]["errors"]["fixtures"][comp_label] = err
                     state["meta"]["fixtures_counts"][comp_label] = 0
                     continue
@@ -631,7 +784,7 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
             fetch = fetcher._api_football_fetch_fixtures(league_id, season, date_from, date_to)
             if not fetch.get("success"):
                 err = fetch.get("error") or "API-FOOTBALL fetch failed"
-                logger.error(f"Error fetching CHI1 fixtures: {err}")
+                logger.error(f"Error fetching {comp_label} fixtures: {err}")
                 state["meta"]["errors"]["fixtures"][comp_label] = err
                 state["meta"]["fixtures_counts"][comp_label] = 0
                 continue
@@ -644,7 +797,7 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
             # Fallback to next=N when range empty
             if not normalized:
                 next_count = comp.get("api_football_next") or 20
-                logger.info(f"No CHI1 fixtures in range, trying next={next_count}")
+                logger.info(f"No {comp_label} fixtures in range, trying next={next_count}")
                 fetch2 = fetcher._api_football_fetch_fixtures(league_id, season, None, None, next_count=next_count)
                 if fetch2.get("success"):
                     state["fixtures_raw"][comp_label] = fetch2["data"]
@@ -652,7 +805,7 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
 
             # Ultimate fallback: next=50 without status filter (some plans/leagues)
             if not normalized:
-                logger.info("No CHI1 fixtures after next fallback, trying next=50 without status filter")
+                logger.info(f"No {comp_label} fixtures after next fallback, trying next=50 without status filter")
                 fetch3 = fetcher._api_football_fetch_fixtures(league_id, season, None, None, next_count=50, include_status=False)
                 if fetch3.get("success"):
                     state["fixtures_raw"][comp_label] = fetch3["data"]
@@ -664,7 +817,7 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
                     start_dt = datetime.fromisoformat(f"{date_from}T00:00:00")
                     end_dt = datetime.fromisoformat(f"{date_to}T00:00:00")
                     days = (end_dt - start_dt).days + 1
-                    logger.info(f"No CHI1 fixtures yet, probing per-day for {days} days")
+                    logger.info(f"No {comp_label} fixtures yet, probing per-day for {days} days")
                     combined = {"response": []}
                     for i in range(max(1, min(days, 7))):
                         d = (start_dt + timedelta(days=i)).date().isoformat()
@@ -680,7 +833,7 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
 
             # Full-season fetch and local filter as a final robust path
             if not normalized:
-                logger.info("No CHI1 fixtures found; fetching full season and filtering locally")
+                logger.info(f"No {comp_label} fixtures found; fetching full season and filtering locally")
                 full_fetch = fetcher._api_football_fetch_full_season(league_id, season, include_status=False)
                 if full_fetch.get("success") and isinstance(full_fetch.get("data"), dict):
                     full_raw = full_fetch["data"]
@@ -729,9 +882,24 @@ def fixtures_fetcher_node(state: AgentState) -> AgentState:
         state["fixtures_raw"][comp_label] = result["data"]
         raw_matches = result["data"].get("matches", [])
         normalized = fetcher.normalize_fixtures(raw_matches, comp_label, comp_code)
+        if date_from and date_to:
+            before = len(normalized)
+            normalized = [
+                fx for fx in normalized
+                if _fixture_in_window(fx, date_from, date_to)
+            ]
+            logger.info(
+                f"Applied local fixture date filter for {comp_label}: "
+                f"{before} -> {len(normalized)} fixtures in window"
+            )
         state["fixtures"].extend(normalized)
         state["meta"]["fixtures_counts"][comp_label] = len(normalized)
         logger.info(f"✓ {comp_label}: {len(normalized)} fixtures")
+    
+    # Apply Temporal Integrity Filter (TIF)
+    cleaned_fixtures, dropped_audit = postprocess_fixtures_temporal_integrity(state.get("fixtures", []))
+    state["fixtures"] = cleaned_fixtures
+    state["meta"]["fixtures_dropped_audit"] = dropped_audit
     
     # Update metadata
     state["meta"]["total_fixtures"] = len(state["fixtures"])

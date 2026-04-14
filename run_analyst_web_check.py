@@ -19,6 +19,8 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from utils.network_env import sanitize_process_proxy_env
+
 from agents.analyst_web_check import run_analyst_web_check
 
 
@@ -62,6 +64,7 @@ def _load_context_file(path_str: str) -> dict[str, Any]:
 
 
 def main() -> int:
+    sanitize_process_proxy_env()
     args = _parse_args()
     _setup_logging(verbose=not args.quiet)
     logger = logging.getLogger(__name__)

@@ -28,12 +28,21 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 from graph_pipeline import PipelineExecutor, create_initial_state
+from utils.pipeline_reporter import print_pipeline_report
+from utils.network_env import sanitize_process_proxy_env
+from utils.trace_report import build_trace_report
+from agents.manual_odds_agent import get_recent_manual_match_keys
 
 # Configure logging
+LOG_FILE = "pipeline_last_run.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)-8s] %(name)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler(LOG_FILE, mode='w', encoding='utf-8')
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -61,6 +70,19 @@ def print_header(text: str, width: int = 80):
     print("\n" + "=" * width)
     print(f"  {text}".ljust(width - 2))
     print("=" * width)
+
+def load_fixtures(fixtures_path: str) -> list:
+    """Load fixtures from a JSON file."""
+    if not os.path.exists(fixtures_path):
+        return []
+    try:
+        with open(fixtures_path, 'r', encoding='utf-8') as f:
+            fixtures = json.load(f)
+        logger.info(f"Loaded {len(fixtures)} fixtures from {fixtures_path}")
+        return fixtures
+    except Exception as e:
+        logger.error(f"Error loading fixtures from {fixtures_path}: {e}")
+        return []
 
 
 def print_metadata(meta: dict, width: int = 80):
@@ -90,6 +112,12 @@ def print_metadata(meta: dict, width: int = 80):
     print(f"  Fixtures cache hits: {cache_hits.get('fixtures', 0)}")
     print(f"  Odds cache hits: {cache_hits.get('odds', 0)}")
     print()
+    
+    dropped = meta.get("fixtures_dropped_audit", [])
+    if dropped:
+        print(f"🧹 TEMPORAL FILTER (TIF)")
+        print(f"  Dropped duplicate/future/null slots: {len(dropped)}")
+        print()
     
     # Show errors if any
     errors = meta.get("errors", {})
@@ -295,6 +323,12 @@ def save_results(result, output_prefix: str = "pipeline"):
         json.dump(result.get("odds_canonical", []), f, indent=2)
     logger.info(f"✓ Odds saved to {odds_file}")
 
+    # Journalist file
+    journalist_file = f"{output_prefix}_journalist.json"
+    with open(journalist_file, "w", encoding="utf-8") as f:
+        json.dump(result.get("journalist_videos", {}), f, indent=2)
+    logger.info(f"✓ Journalist saved to {journalist_file}")
+
     # Insights file
     insights_file = f"{output_prefix}_insights.json"
     with open(insights_file, "w", encoding="utf-8") as f:
@@ -325,6 +359,19 @@ def save_results(result, output_prefix: str = "pipeline"):
         json.dump(result.get("analyst_web_checks", []), f, indent=2, ensure_ascii=False)
     logger.info(f"✓ Analyst Web Checks saved to {analyst_web_checks_file}")
 
+    # Fixtures Dropped Audit file
+    dropped_audit_file = f"{output_prefix}_fixtures_dropped_audit.json"
+    dropped_audit = result.get("meta", {}).get("fixtures_dropped_audit", [])
+    with open(dropped_audit_file, "w", encoding="utf-8") as f:
+        json.dump(dropped_audit, f, indent=2, ensure_ascii=False)
+    logger.info(f"✓ Fixtures Dropped Audit saved to {dropped_audit_file} ({len(dropped_audit)} dropped)")
+
+    # Trace report file
+    trace_report_file = f"{output_prefix}_trace_report.json"
+    with open(trace_report_file, "w", encoding="utf-8") as f:
+        json.dump(build_trace_report(result), f, indent=2, ensure_ascii=False)
+    logger.info(f"??? Trace report saved to {trace_report_file}")
+
 
 def main():
     """Main execution entry point."""
@@ -334,6 +381,7 @@ def main():
     # Load environment
     print("\n📝 Loading environment configuration...")
     load_dotenv()
+    sanitize_process_proxy_env()
 
     # Validate environment
     is_valid, errors = validate_environment()
@@ -363,17 +411,41 @@ def main():
             "api_football_next": 20,
             "espn_slug": "chi.1"
         },
+        "CHI2": {
+            "competition": "CHI2",
+            "fixtures_provider": "api-football",
+            "competition_code": None,
+            "api_football_league_id": 266,
+            "api_football_season": 2026,
+            "api_football_next": 20,
+            "espn_slug": "chi.2"
+        },
+        "COPA": {
+            "competition": "COPA",
+            "fixtures_provider": "football-data",
+            "competition_code": "CLI",
+            "espn_slug": "copa.libertadores",
+            "api_football_league_id": 1091,
+            "api_football_season": 2026
+        },
     }
 
     # ── Selección de ligas: CLI > entorno > default (ambas) ───────────────────
-    parser = argparse.ArgumentParser(add_help=False)
+    parser = argparse.ArgumentParser(description="Football Prediction Pipeline (v13.2)")
+    # Alias --leagues añadido para conveniencia (v13.2)
     parser.add_argument(
-        "--liga", nargs="+",
-        choices=["CHI1", "UCL", "chi1", "ucl"],
+        "--liga", "--leagues", nargs="+",
+        dest="liga",
+        choices=["CHI1", "CHI2", "UCL", "COPA", "chi1", "chi2", "ucl", "copa"],
         default=None,
-        help="Liga(s) a ejecutar: CHI1, UCL o ambas"
+        help="Liga(s) a ejecutar: CHI1, CHI2, UCL, COPA o combinaciones"
     )
-    args, _ = parser.parse_known_args()
+    
+    # Argumentos extra para evitar que parse_args falle si se pasan por error
+    parser.add_argument("--ignore-cache", action="store_true", help="Ignorar cache de fixtures/odds")
+    parser.add_argument("--verbose", action="store_true", help="Log detallado")
+    
+    args = parser.parse_args()
 
     liga_env = os.getenv("PIPELINE_LIGA", "").strip()
 
@@ -396,8 +468,65 @@ def main():
 
     # Create initial state
     print("\n🔧 Initializing pipeline state...")
-    print(f"   Fetching fixtures from today up to 30 days ahead...")
-    initial_state = create_initial_state(competitions, fixtures_days_ahead=30)
+    fixtures_file = "fixtures.json"
+    all_mock_fixtures = load_fixtures(fixtures_file)
+
+    # Filter by selected active competitions
+    active_comp_names = [c["competition"] for c in competitions]
+    raw_mock_fixtures = [f for f in all_mock_fixtures if f.get("competition") in active_comp_names]
+
+    # COPA/CHI2 no deben ampliar artificialmente la ventana por usar fixtures.json.
+    # En esas ligas preferimos ventana real + cuotas manuales recientes si existen.
+    restricted_mock_competitions = {"COPA", "CHI2"}
+    manual_scoped_competitions = {
+        comp for comp in restricted_mock_competitions
+        if get_recent_manual_match_keys(comp)
+    }
+    mock_fixtures = [
+        f for f in raw_mock_fixtures
+        if f.get("competition") not in restricted_mock_competitions
+    ]
+
+    if raw_mock_fixtures and not mock_fixtures:
+        skipped = sorted({f.get("competition") for f in raw_mock_fixtures if f.get("competition") in restricted_mock_competitions})
+        print(
+            f"   Ignorando fixtures.json para {skipped}: "
+            f"se respetará ventana real del pipeline"
+        )
+        if manual_scoped_competitions:
+            print(
+                f"   Universo manual detectado para {sorted(manual_scoped_competitions)}; "
+                f"no se ampliará la corrida con fixtures mock"
+            )
+
+    # Ventanas temporales por competición
+    # Regla operativa: COPA Libertadores y CHI2 no deben ensanchar la corrida
+    # por fixtures mock; respetan ventana corta real.
+    FIXTURES_DAYS_AHEAD = int(os.getenv("FIXTURES_DAYS_AHEAD", "7"))
+    COPA_FIXTURES_DAYS_AHEAD = int(os.getenv("COPA_FIXTURES_DAYS_AHEAD", "5"))
+    CHI2_FIXTURES_DAYS_AHEAD = int(os.getenv("CHI2_FIXTURES_DAYS_AHEAD", os.getenv("FIXTURES_DAYS_AHEAD", "7")))
+
+    if len(competitions) == 1 and competitions[0].get("competition") == "COPA":
+        days_ahead = COPA_FIXTURES_DAYS_AHEAD
+        print(f"   [COPA] Overriding fixtures window to {days_ahead} days ahead (env COPA_FIXTURES_DAYS_AHEAD)")
+    elif len(competitions) == 1 and competitions[0].get("competition") == "CHI2":
+        days_ahead = CHI2_FIXTURES_DAYS_AHEAD
+        print(f"   [CHI2] Overriding fixtures window to {days_ahead} days ahead (env CHI2_FIXTURES_DAYS_AHEAD)")
+    elif mock_fixtures:
+        print(f"   Using {len(mock_fixtures)} mock fixtures for {[f.get('competition') for f in mock_fixtures[:5]]} from {fixtures_file}")
+        days_ahead = 30
+    else:
+        days_ahead = FIXTURES_DAYS_AHEAD
+        print(f"   Fetching fixtures from today up to {days_ahead} days ahead...")
+        
+    initial_state = create_initial_state(competitions, fixtures_days_ahead=days_ahead)
+    if mock_fixtures:
+        initial_state["fixtures"] = mock_fixtures
+        initial_state["meta"]["total_fixtures"] = len(mock_fixtures)
+        for f in mock_fixtures:
+            comp = f.get("competition", "UNKNOWN")
+            initial_state["meta"]["fixtures_counts"][comp] = initial_state["meta"]["fixtures_counts"].get(comp, 0) + 1
+            
     logger.info("✓ Initial state created")
 
     # Execute pipeline
@@ -441,6 +570,9 @@ def main():
     tips = result.get("betting_tips", [])
     print(f"\n💰 {len(tips)} apuestas sugeridas:\n")
     print_betting_tips_sample(tips, count=10)
+
+    # Reporte Operativo (Tarea 5 - Observabilidad)
+    print_pipeline_report(result)
 
     # Save results
     print_header("SAVING RESULTS", 80)

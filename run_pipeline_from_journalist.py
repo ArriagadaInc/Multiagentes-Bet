@@ -7,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
+from utils.network_env import sanitize_process_proxy_env
 
 from graph_pipeline import create_initial_state
 from agents.insights_agent import insights_agent_node
@@ -129,7 +130,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='Ejecuta pipeline parcial desde insights usando la salida persistida del periodista.'
     )
-    parser.add_argument('--journalist', default='journalist_test_output.json', help='JSON de salida del periodista')
+    parser.add_argument('--journalist', default='pipeline_journalist.json', help='JSON de salida del periodista')
     parser.add_argument('--odds', default='pipeline_odds.json', help='JSON de odds canónicas')
     parser.add_argument('--stats', default='pipeline_stats.json', help='JSON de stats por equipo')
     parser.add_argument('--fixtures', default='pipeline_fixtures.json', help='JSON de fixtures (opcional, para contexto)')
@@ -140,6 +141,7 @@ def parse_args():
 
 def main():
     load_dotenv()
+    sanitize_process_proxy_env()
     args = parse_args()
 
     fixtures_path = None if args.no_fixtures else args.fixtures

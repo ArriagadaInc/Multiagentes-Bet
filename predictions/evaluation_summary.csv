@@ -1,6 +1,0 @@
-﻿Category,Target,Accuracy %,Total,Correct
-Model,gpt5,20.0,30,6
-Model,gpt-5,56.25,16,9
-League,CHI1,29.17,24,7
-League,UCL,36.36,22,8
-Overall,Global,32.61,46,15

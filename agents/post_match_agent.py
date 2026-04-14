@@ -44,6 +44,7 @@ EVALUATION_SUMMARY_FILE = os.path.join("predictions", "evaluation_summary.json")
 
 COMPETITION_MAP = {
     "CHI1": "chi.1",
+    "CHI2": "chi.1",  # Usamos chi.1 como fallback/unificado según run_pipeline.py
     "UCL":  "uefa.champions",
 }
 
@@ -424,6 +425,33 @@ def _update_evaluation_summary(predictions: List[Dict]) -> None:
         s = p.get("evaluation_status", "PENDING")
         status_counts[s] = status_counts.get(s, 0) + 1
 
+    # --- Métricas de Calibración (solo para auditoría, no afectan decisiones) ---
+    calibration_data = []
+    for p in evaluated:
+        raw = p.get("confidence_raw")
+        calibrated = p.get("confidence_calibrated")
+        delta_vs_market = p.get("confidence_delta_vs_market")
+        if raw is not None:
+            calibration_data.append({
+                "raw": float(raw),
+                "calibrated": float(calibrated) if calibrated is not None else None,
+                "delta_raw_vs_calibrated": round(float(raw) - float(calibrated), 2) if calibrated is not None else None,
+                "delta_vs_market": float(delta_vs_market) if delta_vs_market is not None else None,
+                "correct": p.get("correct"),
+            })
+
+    calibration_stats = {}
+    if calibration_data:
+        deltas_cal = [d["delta_raw_vs_calibrated"] for d in calibration_data if d["delta_raw_vs_calibrated"] is not None]
+        deltas_mkt = [d["delta_vs_market"] for d in calibration_data if d["delta_vs_market"] is not None]
+        calibration_stats = {
+            "count_with_calibration": len(calibration_data),
+            "avg_confidence_raw": round(sum(d["raw"] for d in calibration_data) / len(calibration_data), 2),
+            "avg_delta_raw_vs_calibrated": round(sum(deltas_cal) / len(deltas_cal), 2) if deltas_cal else None,
+            "avg_delta_vs_market": round(sum(deltas_mkt) / len(deltas_mkt), 2) if deltas_mkt else None,
+            "note": "delta positivo = modelo más optimista que mercado/calibrador",
+        }
+
     summary = {
         "evaluated_at": datetime.now(timezone.utc).isoformat(),
         "total_evaluated": len(evaluated),
@@ -446,6 +474,7 @@ def _update_evaluation_summary(predictions: List[Dict]) -> None:
             for model, d in by_model.items()
         },
         "status_counts": status_counts,
+        "calibration_audit": calibration_stats,  # Para análisis retrospectivo (no toca decisiones financieras)
     }
 
     os.makedirs("predictions", exist_ok=True)
