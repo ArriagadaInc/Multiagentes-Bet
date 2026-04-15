@@ -1,361 +1,186 @@
-"""
-# 🎯 Multiagent Sports Betting Pipeline
+﻿# README Pipeline
 
-Multiagent LangGraph pipeline para análisis de apuestas deportivas.
+Documento operativo del pipeline principal de `Multiagentes-Bet`.
 
-## 📊 Arquitectura
+Este archivo describe el flujo real de procesamiento, sus entradas, sus salidas y las reglas importantes que condicionan la ejecución.
 
-Pipeline orchestration:
-```
-START → Agente #1 (Fixtures) → Agente #2 (Odds) → END
-```
+## Propósito
+El pipeline existe para transformar un conjunto heterogéneo de datos de fútbol en un `match_context` confiable por partido y, a partir de eso, producir:
+- predicciones 1X2
+- score estimado
+- trazabilidad de decisiones
+- recomendaciones de apuesta
 
-### Agente #1: Fixtures Fetcher
-- **Provider**: football-data.org API v4
-- **Output**: Partidos programados (fixtures)
-- **Competencias**: 
-  - ✅ UEFA Champions League (CL)
-  - ⚠️ Campeonato Chileno (si disponible en tier)
+No todo partido que aparece en fixtures termina siendo analizado. El sistema filtra por cuotas, calidad y contexto disponible.
 
-### Agente #2: Odds Fetcher
-- **Provider**: The Odds API v4
-- **Output**: Cuotas de apuestas normalizadas
-- **Mercados**: h2h (1X2), decimales
-- **Bookmakers**: 50+ operadores por evento
-
-## 🛠️ Instalación
-
-### 1. Crear Virtual Environment
-
-```bash
-python -m venv venv
-
-# Windows
-.\\venv\\Scripts\\Activate.ps1
-
-# macOS/Linux
-source venv/bin/activate
+## Flujo real
+```text
+Fixtures
+  -> Web Fixtures / Web Odds fallback
+  -> Odds
+  -> prune_fixtures_node
+  -> Stats
+  -> Journalist
+  -> Web
+  -> Insights
+  -> Normalizer
+  -> Gate
+  -> Analyst
+  -> Bettor
+  -> Reporter / persistencia
 ```
 
-### 2. Instalar Dependencias
+## Resumen por etapa
+### 1. Fixtures Agent
+- obtiene fixtures por competencia
+- aplica ventanas por torneo
+- normaliza partidos
 
-```bash
-pip install -r requirements.txt
-```
+### 1.1 Web Fixtures / Web Odds Fallback
+- contingencia si faltan fixtures u odds
+- útil en torneos con cobertura parcial
 
-### 3. Configurar Variables de Entorno
+### 2. Odds Agent
+- genera `odds_canonical`
+- define el universo realmente apostable
+- regla operativa: un partido no debe llegar al analista sin cuotas
 
-#### Obtener API Keys
+### 3. `prune_fixtures_node`
+- elimina fixtures sin cobertura real de cuotas
+- evita que el pipeline completo se ensanche inútilmente
 
-**Football-Data.org:**
-1. Registrarse en https://www.football-data.org/client/register
-2. Copiar API key
-3. Agregar a `.env`:
-   ```
-   FOOTBALL_DATA_API_KEY=tu_clave_aqui
-   ```
+### 4. Stats Agent
+- tabla, posición, GF/GC, forma y estadísticas verificables
+- evita mezclar ligas o competencias distintas
 
-**The Odds API:**
-- Configurar en `.env`: `ODDS_API_KEY=YOUR_ODDS_API_KEY_HERE`
+### 5. Journalist Agent
+- descubre videos y fuentes recientes
+- usa bypass de caché para ahorrar consumo cuando ya existe análisis previo
 
-#### Ejemplo .env completo
+### 6. Web Agent
+- búsqueda web y scraping complementario
+- actúa como respaldo contextual
 
-```bash
-# Fixtures
-FOOTBALL_DATA_API_KEY=YOUR_KEY
-FOOTBALL_DATA_BASE_URL=https://api.football-data.org
-FIXTURES_STATUS=SCHEDULED
-FIXTURES_TIMEOUT_SECONDS=20
-FIXTURES_RETRIES=2
-FIXTURES_CACHE_TTL_SECONDS=900
+### 7. Insights Agent
+- fusiona señales desde:
+  - YouTube
+  - Web
+  - noticia manual
+  - historial persistente
+- sanea y atomiza señales antes de consolidarlas
 
-# Odds
-ODDS_API_KEY=YOUR_ODDS_API_KEY_HERE
-ODDS_BASE_URL=https://api.odds.to
-ODDS_REGIONS=eu
-ODDS_MARKETS=h2h
-ODDS_TIMEOUT_SECONDS=20
-ODDS_RETRIES=2
-ODDS_CACHE_TTL_SECONDS=600
-```
+### 8. Normalizer Agent
+- arma `match_contexts` canónicos
+- cruza fixtures, odds, stats e insights
+- reinserta historial persistente con filtros de higiene
 
-## 🚀 Ejecución Rápida
+### 9. Gate Agent
+- filtro de calidad previo al analista
+- estados habituales:
+  - `clean`
+  - `degraded`
+  - `observation`
+  - `dropped`
 
-### Ejecutar pipeline completo
+### 10. Analyst Agent
+- genera predicción 1X2 y marcador sugerido
+- usa el contexto consolidado y el estado del gate
+- puede apoyarse en `Analyst Web Check`
 
-```bash
+### 11. Bettor Agent
+- compara mercado vs probabilidad estimada
+- detecta edge
+- propone value bets y stakes
+- además existe un flujo paralelo UI para `Betano Optimizer`
+
+## Artefactos principales
+El pipeline persiste artefactos intermedios para trazabilidad.
+
+Ejemplos:
+- `pipeline_fixtures.json`
+- `pipeline_odds.json`
+- `pipeline_stats.json`
+- `pipeline_insights.json`
+- `pipeline_match_contexts.json`
+- `pipeline_predictions.json`
+- `pipeline_bets.json`
+- `pipeline_trace_report.json`
+
+Flujos adicionales recientes:
+- `pipeline_manual_odds.json`
+- `pipeline_betano_ocr.json`
+- `pipeline_betano_normalized.json`
+- `pipeline_betting_portfolio.json`
+
+## Inputs manuales soportados
+### Noticias manuales
+Archivo operativo:
+- `data/inputs/manual_news_input.json`
+
+Compatibilidad actual:
+- texto libre
+- texto guiado por equipo
+- JSON válido
+
+### Cuotas manuales desde imagen
+- disponibles en la UI
+- se persistían y luego se fusionan a `odds_canonical`
+
+### Betano Optimizer
+- OCR de boleta Betano
+- cruce con predicciones vigentes
+- optimización de bankroll desde UI
+
+## Reglas operativas importantes
+### 1. Cuotas mandan
+Si no hay cuotas, el partido no debería llegar al analista.
+
+### 2. El historial no se reinyecta ciegamente
+Las señales persistentes pasan por filtros para evitar:
+- pseudo-JSON
+- blobs de calendario
+- contexto macro mal guardado
+- ruido histórico de bajo valor
+
+### 3. El gate no es decorativo
+Aunque el analista pueda trabajar con `degraded` u `observation`, el estado del gate afecta la lectura de confianza y la decisión de apuesta.
+
+### 4. `COPA` y `CHI2` tienen reglas especiales de universo
+Cuando existe universo manual de cuotas, el pipeline se restringe para no abrir partidos ajenos a la boleta/corrida deseada.
+
+## Ejecución
+### Pipeline principal
+```powershell
 python run_pipeline.py
 ```
 
-### Salida esperada
-
-```
-================================================================================
-  SPORTS BETTING ANALYSIS - MULTIAGENT PIPELINE
-================================================================================
-
-📝 Loading environment configuration...
-  ✓ All required environment variables are set
-
-🔧 Initializing pipeline state...
-  ✓ Initial state created
-
-🚀 Executing multiagent pipeline...
-============================================================
-AGENTE #1: FIXTURES FETCHER (football-data.org)
-============================================================
-
->>> Fetching UCL (code=CL)...
-✓ UCL: 85 fixtures
-
->>> Fetching CHI1 (code=None)...
-Skipping CHI1: No competition code available (may not be in free tier)
-
-============================================================
-AGENTE #2: ODDS FETCHER (The Odds API)
-============================================================
-
->>> Fetching odds for UCL...
-✓ UCL: 150 odds events
-
->>> Fetching odds for CHI1...
-✓ CHI1: 123 odds events
-
-📊 EXECUTION METADATA
-  Total Fixtures: 85
-  Total Odds Events: 273
-  Processing time: 3.42s
-
-✅ PIPELINE EXECUTION SUCCESSFUL
+### Desde Streamlit
+```powershell
+streamlit run app.py
 ```
 
-## 📂 Estructura de Directorios
-
-```
-Futbol/
-├── agents/                      # Agentes del pipeline
-│   ├── __init__.py
-│   ├── fixtures_agent.py        # Agente #1 - Fixtures Fetcher
-│   └── odds_agent.py            # Agente #2 - Odds Fetcher
-├── utils/                       # Utilidades compartidas
-│   ├── __init__.py
-│   ├── cache.py                 # Caché en disco con TTL
-│   └── http.py                  # Cliente HTTP resiliente
-├── cache/                       # Caché de API (auto-generado)
-│   ├── fixtures_CL_SCHEDULED.json
-│   └── odds_UCL_h2h.json
-├── state.py                     # Estado compartido (TypedDict)
-├── graph_pipeline.py            # Orchestración LangGraph
-├── run_pipeline.py              # Script de ejecución
-├── requirements.txt
-├── .env                         # Variables de entorno
-├── .env.example                 # Template
-└── README.md                    # Este archivo
+### Bettor on-demand
+```powershell
+python run_bettor.py
 ```
 
-## 📋 Formato de Datos
+## Configuración
+Copiar `.env.example` a `.env` y completar según el entorno.
 
-### Fixtures (Salida Agente #1)
+Variables típicas:
+- `OPENAI_API_KEY`
+- `GEMINI_API_KEY` o `GOOGLE_API_KEY`
+- `ODDS_API_KEY`
+- `FOOTBALL_DATA_API_KEY`
 
-```json
-{
-  "competition": "UCL",
-  "provider": "football-data",
-  "competition_code": "CL",
-  "fixture_id": "300123456",
-  "utc_date": "2024-01-15T20:00:00Z",
-  "status": "SCHEDULED",
-  "matchday": 1,
-  "home_team": "Real Madrid",
-  "away_team": "AC Milan",
-  "venue": "Estádio de Luz",
-  "season": 2023
-}
-```
+No versionar:
+- `.env`
+- caches de ejecución
+- inputs manuales del usuario
+- memoria operativa persistente
+- uploads de imágenes
 
-### Odds (Salida Agente #2)
-
-```json
-{
-  "competition": "UCL",
-  "provider": "the_odds_api",
-  "event_id": "evt_12345",
-  "sport_key": "soccer_uefa_champs_league",
-  "commence_time": "2024-01-15T20:00:00Z",
-  "home_team": "Real Madrid",
-  "away_team": "AC Milan",
-  "bookmakers_count": 50,
-  "bookmakers": [
-    {
-      "key": "bet365",
-      "title": "Bet365",
-      "home_odds": 2.50,
-      "draw_odds": 3.20,
-      "away_odds": 1.90
-    },
-    {
-      "key": "betfair",
-      "title": "Betfair",
-      "home_odds": 2.45,
-      "draw_odds": 3.25,
-      "away_odds": 1.95
-    }
-  ]
-}
-```
-
-### Estado Compartido (AgentState)
-
-```python
-{
-  "messages": [...],                # Audit trail de LangChain
-  "fixtures": [...],                # Fixtures normalizados
-  "fixtures_raw": {"UCL": {...}},  # Raw responses por competencia
-  "odds_raw": {"UCL": {...}},      # Raw responses por competencia
-  "odds_canonical": [...],          # Odds normalizados
-  "competitions": [...],            # Configuración
-  "meta": {
-    "total_fixtures": 85,
-    "total_odds": 273,
-    "fixtures_counts": {"UCL": 85, "CHI1": 0},
-    "odds_counts": {"UCL": 150, "CHI1": 123},
-    "cache_hits": {"fixtures": 1, "odds": 0},
-    "errors": {
-      "fixtures": {"CHI1": "No coverage..."},
-      "odds": {}
-    },
-    "processing_time_seconds": 3.42
-  }
-}
-```
-
-## 🔄 Archivos de Caché
-
-El sistema guarda respuestas en disco para minimizar llamadas API:
-
-```bash
-cache/
-├── fixtures_CL_SCHEDULED.json     # 5 min (900s)
-├── fixtures_CHI1_SCHEDULED.json
-├── odds_UCL_h2h.json             # 10 min (600s)
-└── odds_CHI1_h2h.json
-```
-
-### Limpiar caché
-
-```python
-from utils.cache import CacheManager
-
-cache = CacheManager()
-cache.clear()  # Borrar todo
-cache.clear("fixtures")  # Borrar solo fixtures
-```
-
-## 💻 Uso Programático
-
-```python
-from graph_pipeline import PipelineExecutor, create_initial_state
-
-# Definir competencias
-competitions = [
-    {"competition": "UCL", "fixtures_provider": "football-data", "competition_code": "CL"},
-    {"competition": "CHI1", "fixtures_provider": "football-data", "competition_code": None}
-]
-
-# Crear estado inicial
-initial_state = create_initial_state(competitions)
-
-# Ejecutar pipeline
-executor = PipelineExecutor()
-result = executor.execute(initial_state)
-
-# Acceder resultados
-print(f"Fixtures: {len(result['fixtures'])}")
-print(f"Odds: {len(result['odds_canonical'])}")
-print(f"Errors: {result['meta']['errors']}")
-```
-
-## 🐛 Troubleshooting
-
-### Error: "FOOTBALL_DATA_API_KEY not set"
-
-**Solución**: Agregar a `.env`:
-```bash
-FOOTBALL_DATA_API_KEY=tu_clave_aqui
-```
-
-### Error: "No coverage available"
-
-**Causa**: Campeonato Chileno no está disponible en el tier free de football-data.
-
-**Solución**: 
-- El pipeline continúa sin botar error
-- Verifica `meta['errors']['fixtures']['CHI1']` para detalles
-- Considera upgrade de plan o usar otro proveedor
-
-### Error: 429 (Rate Limited)
-
-**Causa**: API respondió con rate limit.
-
-**Solución**:
-- Aumenta `FIXTURES_CACHE_TTL_SECONDS` o `ODDS_CACHE_TTL_SECONDS`
-- El sistema reintenta automáticamente
-- Espera antes de siguiente invocación
-
-### Cache inválido
-
-```bash
-# Borrar caché problemático
-python -c "from utils.cache import CacheManager; CacheManager().clear()"
-```
-
-## 📊 Monitoreo
-
-Ver estado del caché:
-
-```python
-from utils.cache import CacheManager
-
-cache = CacheManager()
-info = cache.get_cache_info()
-print(f"Archivos en caché: {info['total_files']}")
-for file in info['files']:
-    print(f"  {file['name']}: {file['size_kb']}KB, {file['age_seconds']}s atrás")
-```
-
-## 🔐 Seguridad
-
-- **Never** commit `.env` (incluido en `.gitignore`)
-- **Never** hardcode API keys en código
-- **Always** use environment variables
-- **Rotate** API keys si están comprometidas
-
-## 📈 Próximos Pasos
-
-### Agente #3 (Analyzer)
-- Input: fixtures + odds normalizados
-- Output: predicciones sin recomendaciones de apuestas
-- Status: Programado
-
-### Extensiones
-- Más competencias (La Liga, Serie A, etc.)
-- Más mercados (spreads, totales, etc.)
-- WebSocket para odds en vivo
-- Persistencia en MongoDB
-
-## 📞 Soporte
-
-Para issues:
-1. Verificar `.env` está correcto
-2. Verificar API keys son válidas
-3. Ver logs en `run_pipeline.py` output
-4. Borrar caché y reintentar
-
-## 📜 Licencia
-
-Internal use only.
-
----
-
-**Última actualización**: Febrero 2024
-**Versión**: 2.0 (Multiagent Architecture)
+## Archivos de referencia
+- `README.md`: visión general del sistema
+- `agentes_flow.md`: descripción detallada del flujo actual
+- `bitacora.md`: decisiones, fixes y cambios de arquitectura

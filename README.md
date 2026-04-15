@@ -1,38 +1,176 @@
-# ⚽ Agente de Apuestas IA
+﻿# Multiagentes-Bet
 
-Este proyecto es un ecosistema multi-agente diseñado para encontrar valor en apuestas deportivas de fútbol mediante el análisis avanzado de datos e Inteligencia Artificial.
+Sistema multiagente para análisis pre-partido de fútbol, generación de predicciones 1X2 y apoyo a decisiones de apuesta con guardrails de calidad.
 
-💻 **Repositorio Oficial:** [ArriagadaInc/Multiagentes-Bet](https://github.com/ArriagadaInc/Multiagentes-Bet)
+Repositorio oficial:
+- `https://github.com/ArriagadaInc/Multiagentes-Bet`
 
-## 🚀 Resumen del Proyecto
-El sistema procesa múltiples fuentes de datos (cuotas de mercado, estadísticas en tiempo real e insights tácticos de YouTube) utilizando agentes especializados coordinados por **LangGraph**. El objetivo final es identificar el "Edge" o ventaja teórica sobre las casas de apuestas para sugerir pronósticos con alta probabilidad de éxito.
+## Qué hace
+El sistema toma fixtures, cuotas, estadísticas y contexto cualitativo, construye un `match_context` canónico por partido, controla la calidad de la información antes del análisis y luego genera:
+- predicciones 1X2
+- score estimado
+- trazabilidad completa del pipeline
+- sugerencias de apuesta
+- herramientas UI para carga manual de noticias y cuotas
+- un optimizador Betano basado en OCR + bankroll
 
-## ⚙️ Funcionamiento General
+No está diseñado como un scraper aislado ni como un predictor “caja negra”. La arquitectura separa ingestión, contexto, control de calidad, predicción y decisión de apuesta.
 
-El pipeline se divide en agentes con roles específicos:
+## Esquema general
+```text
+Fixtures -> Odds -> Stats -> Journalist -> Web -> Insights -> Normalizer -> Gate -> Analyst -> Bettor
+                              |            |         |            |         |
+                              |            |         |            |         +-> recomendaciones / value / portafolio
+                              |            |         |            +-> match_context canónico
+                              |            |         +-> señales YouTube / web / manuales / history
+                              |            +-> investigación web complementaria
+                              +-> descubrimiento de fuentes y videos
+```
 
-1.  **📊 Agente de Cuotas**: Establece la fuente de verdad y el `match_key` determinista.
-2.  **📈 Agente de Estadísticas (Modular)**: Estructura multifuente (ESPN, UEFA, FBref) validada por Pydantic.
-3.  **🎙️ Agente Periodista**: Descubrimiento dinámico de análisis táctico en YouTube.
-4.  **🧠 Agente de Insights**: Extracción de claves tácticas y bajas mediante transcripciones e IA.
-5.  **🔗 Normalizador**: Cruza consolidado de datos usando identificadores únicos.
-6.  **🛡️ Gate Agent**: Filtro de seguridad que valida la calidad de datos antes del análisis.
-7.  **🔮 Agente Analista (IAG)**: Generación de predicciones de alta fidelidad.
-8.  **💰 Agente Apostador**: Cálculo de valor (EV) y gestión de Stake.
+## Agentes
+### 1. Fixtures Agent
+- obtiene partidos por competencia
+- normaliza fixtures
+- respeta ventanas de tiempo por torneo
 
-## 🛠️ Inicio Rápido (Windows)
+### 2. Web Fixtures / Web Odds Fallback
+- contingencia si faltan fixtures u odds
+- especialmente relevante en competencias con cobertura débil
 
-Para ejecutar el dashboard interactivo de Streamlit:
+### 3. Odds Agent
+- construye `odds_canonical`
+- define el universo real apostable
+- regla vigente: un partido no debe llegar al analista sin cuotas
 
-1.  Asegúrate de tener tu archivo `.env` configurado con las API Keys necesarias.
-2.  Haz doble clic en: `iniciar_proyecto.bat`
-3.  El navegador se abrirá automáticamente con el Dashboard.
+### 4. Stats Agent
+- agrega tabla, posición, GF/GC, forma y otros datos verificables
+- evita contaminación entre competencias
 
-## 📂 Estructura Principal
-- `app.py`: Interfaz de usuario (Streamlit).
-- `graph_pipeline.py`: Lógica de coordinación de los agentes.
-- `agents/`: Carpeta con el código individual de cada agente.
-- `bitacora.md`: Historial de desarrollo y cambios recientes.
+### 5. Journalist Agent
+- descubre videos y fuentes de contexto recientes
+- usa cache y bypass para ahorrar consumo cuando ya existe trabajo previo
 
----
-*Desarrollado para Álvaro por Germán.*
+### 6. Web Agent
+- agrega investigación web cuando YouTube no alcanza
+- sirve de respaldo contextual
+
+### 7. Insights Agent
+- fusiona señales desde:
+  - YouTube
+  - Web
+  - noticias manuales
+  - historial persistente
+- atomiza, sanea y estructura señales
+- hoy es uno de los núcleos del sistema
+
+### 8. Normalizer Agent
+- arma `match_contexts` canónicos
+- cruza fixtures, odds, stats e insights
+- reinyecta historial persistente con filtros de higiene
+
+### 9. Gate Agent
+- controla calidad y riesgo informativo antes del análisis
+- clasifica partidos como:
+  - `clean`
+  - `degraded`
+  - `observation`
+  - `dropped`
+
+### 10. Analyst Agent
+- genera predicción 1X2 y score estimado
+- usa el `match_context` ya validado
+- puede apoyarse en verificaciones web puntuales
+
+### 11. Bettor Agent
+- compara probabilidad del analista vs mercado
+- detecta edge / value bets
+- propone stakes y recomendaciones
+- incluye una extensión UI para optimizar bankroll a partir de una boleta Betano
+
+## Capacidades relevantes actuales
+- pipeline multiagente orquestado con `LangGraph`
+- UI Streamlit para operación y auditoría
+- soporte para `noticia manual` en texto libre, texto guiado y JSON válido
+- persistencia de señales por equipo
+- mantenedor UI de señales persistentes
+- carga manual de cuotas desde imagen
+- optimizador `Betano Optimizer`:
+  - OCR de cuotas 1X2
+  - cruce con predicciones vigentes
+  - calibración simple de probabilidad
+  - distribución de bankroll
+  - simples + combinadas limitadas
+
+## Interfaz
+La UI principal está en:
+- `app.py`
+
+Pestañas relevantes:
+- `Pronósticos`
+- `Predicciones`
+- `Resultados`
+- `Rastreo de Agentes`
+- `Trace Report`
+- `Insights Persistentes`
+- `Cuotas Manuales`
+- `Betano Optimizer`
+- `Logs`
+
+## Estructura principal
+- `app.py`: dashboard Streamlit
+- `graph_pipeline.py`: grafo principal del pipeline
+- `run_pipeline.py`: ejecución principal por ligas
+- `run_bettor.py`: ejecución del bettor on-demand
+- `agents/`: agentes del sistema
+- `utils/`: normalización, calibración, partición de señales, reporter, etc.
+- `prompts/`: prompts reutilizables
+- `bitacora.md`: log de desarrollo y decisiones
+- `agentes_flow.md`: arquitectura operativa del flujo
+
+## Configuración
+Crear un `.env` local a partir de `.env.example` y definir las claves necesarias según el modo de uso.
+
+Claves típicas:
+- `OPENAI_API_KEY`
+- `GEMINI_API_KEY` o `GOOGLE_API_KEY`
+- `ODDS_API_KEY`
+- `FOOTBALL_DATA_API_KEY`
+
+No se deben versionar:
+- `.env`
+- caches locales
+- historial operativo generado por usuario
+- noticias manuales
+- boletas/capturas subidas
+
+El repositorio ya contiene exclusiones en `.gitignore` para evitar subir esos artefactos.
+
+## Ejecución rápida
+### Streamlit
+```powershell
+streamlit run app.py
+```
+
+### Pipeline principal
+```powershell
+python run_pipeline.py
+```
+
+### Bettor on-demand
+```powershell
+python run_bettor.py
+```
+
+## Documentación complementaria
+- `agentes_flow.md`: descripción operativa del pipeline
+- `README_PIPELINE.md`: detalles de ejecución y componentes
+- `bitacora.md`: historial de cambios y decisiones técnicas
+
+## Estado del proyecto
+El sistema está en evolución activa. La arquitectura actual prioriza:
+- trazabilidad
+- control de calidad
+- saneamiento de señales
+- flexibilidad para operar con fuentes API, web y manuales
+
+No asume que toda fuente externa sea confiable ni que toda señal deba pasar al analista sin filtros.

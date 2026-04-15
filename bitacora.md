@@ -4523,3 +4523,41 @@ ya no se marcan automáticamente como severas solo por `subject_type=unknown`.
 - Tradeoff aceptado:
   - puede haber combinadas sugeridas con confianza baja y EV negativo
   - esto es deliberado y debe quedar visible en UI para no confundir una sugerencia recreativa con una apuesta ?ptima
+
+
+### Actualizaci?n de `README.md`
+- Se reescribi? el `README.md` para que refleje el estado actual del sistema en t?rminos generales.
+- Objetivo:
+  - alinear la documentaci?n de entrada con la arquitectura real vigente
+  - evitar que el repositorio se vea como un MVP antiguo o un predictor gen?rico sin guardrails
+- Cambios introducidos:
+  - overview fiel del prop?sito del sistema
+  - esquema corto del flujo multiagente
+  - resumen de responsabilidades por agente
+  - menci?n expl?cita de capacidades actuales relevantes:
+    - noticias manuales
+    - se?ales persistentes
+    - cuotas manuales
+    - `Betano Optimizer`
+  - estructura principal del repositorio
+  - configuraci?n b?sica y advertencia sobre secretos
+- Criterio aplicado:
+  - descripci?n general y fiel
+  - sin bajar al detalle fino de implementaci?n, que ya vive en `agentes_flow.md` y `bitacora.md`
+
+
+### Actualizaci?n de `README_PIPELINE.md`
+- Se reescribi? `README_PIPELINE.md` para que deje de describir un pipeline antiguo de 2 agentes.
+- Objetivo:
+  - reflejar el flujo real vigente del sistema
+  - alinear la documentaci?n con la arquitectura actual multiagente
+- Contenido actualizado:
+  - flujo real de ejecuci?n
+  - resumen por etapa
+  - artefactos principales
+  - inputs manuales soportados
+  - reglas operativas importantes
+  - notas de configuraci?n y ejecuci?n
+- Criterio:
+  - mantenerlo operativo y general
+  - sin duplicar todo el detalle fino que ya existe en `agentes_flow.md`
